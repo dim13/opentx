@@ -179,47 +179,31 @@ void usbJoystickUpdate()
 #else
   if (USBD_HID_SendReport(&USB_OTG_dev, 0, 0) == USBD_OK) {
 #endif
-    //buttons
-    HID_Buffer[0] = 0;
-    HID_Buffer[1] = 0;
-    HID_Buffer[2] = 0;
-    for (int i = 0; i < 8; ++i) {
-      if ( channelOutputs[i+8] > 0 ) {
-        HID_Buffer[0] |= (1 << i);
-      }
-      if ( MAX_OUTPUT_CHANNELS>=24 && channelOutputs[i+16] > 0 ) {
-        HID_Buffer[1] |= (1 << i);
-      }
-      if ( MAX_OUTPUT_CHANNELS>=32 && channelOutputs[i+24] > 0 ) {
-        HID_Buffer[2] |= (1 << i);
-      }
-    }
 
-    //analog values
-    //uint8_t * p = HID_Buffer + 1;
+    // 8 analog values
     for (int i = 0; i < 8; ++i) {
-
       int16_t value = channelOutputs[i] + 1024;
       if ( value > 2047 ) value = 2047;
       else if ( value < 0 ) value = 0;
-#if defined(PCBI6X)
-      HID_Buffer[i*2 +2] = static_cast<uint8_t>(value & 0xFF);
-      HID_Buffer[i*2 +3] = static_cast<uint8_t>((value >> 8) & 0x07);
-#else
-      HID_Buffer[i*2 +3] = static_cast<uint8_t>(value & 0xFF);
-      HID_Buffer[i*2 +4] = static_cast<uint8_t>((value >> 8) & 0x07);
-#endif
-
+      HID_Buffer[i*2 + 0] = uint8_t(value);
+      HID_Buffer[i*2 + 1] = uint8_t(value >> 8);
     }
 
-#if defined(PCBI6X)
-    // HID_Buffer index 8 & 9 causes mess. Looks like clock issue but cannot confirm.
-    // i reduced buttons to 16 so it will affect only one analog and remapped it [3] -> [5]
-    HID_Buffer[12] = HID_Buffer[8]; // ch[3] remap to ch[5]  // channel 5 void
-    HID_Buffer[13] = HID_Buffer[9];
-    HID_Buffer[8] = 0;
-    HID_Buffer[9] = 0;
-#endif
+    // buttons
+    HID_Buffer[8*2+1] = 0;
+    HID_Buffer[8*2+2] = 0;
+    HID_Buffer[8*2+3] = 0;
+    for (int i = 0; i < 8; ++i) {
+      if (channelOutputs[i+8] > 0) {
+        HID_Buffer[8*2+1] |= 1 << i;
+      }
+      if (channelOutputs[i+16] > 0) {
+        HID_Buffer[8*2+2] |= 1 << i;
+      }
+      if (channelOutputs[i+24] > 0) {
+        HID_Buffer[8*2+3] |= 1 << i;
+      }
+    }
 
 #if defined(STM32F0)
     USBD_HID_SendReport(&USB_Device_dev, HID_Buffer, HID_IN_PACKET);
