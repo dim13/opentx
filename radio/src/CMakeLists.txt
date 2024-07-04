@@ -18,7 +18,7 @@ set(DEFAULT_MODE "" CACHE STRING "Default sticks mode")
 set(FONT "STD" CACHE STRING "Choose font : STD or SQT5")
 set_property(CACHE FONT PROPERTY STRINGS SQT5)
 
-option(HELI "Heli menu" ON)
+option(HELI "Heli menu" OFF)
 option(FLIGHT_MODES "Flight Modes" ON)
 option(CURVES "Curves" ON)
 option(GVARS "Global variables" ON)
