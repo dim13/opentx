@@ -75,8 +75,6 @@ static uint8_t  USBD_HID_Setup (void  *pdev,
                                 USB_SETUP_REQ *req);
 
 static const uint8_t  *USBD_HID_GetCfgDesc (uint8_t speed, uint16_t *length);
-
-static uint8_t  USBD_HID_DataIn (void  *pdev, uint8_t epnum);
 /**
   * @}
   */ 
