@@ -57,8 +57,12 @@
 #define HID_IN_EP                    0x81
 #define HID_OUT_EP                   0x01
 
-#define HID_IN_PACKET                64
-#define HID_OUT_PACKET               64
+#if defined(PCBI6X)
+#define HID_IN_PACKET                18
+#else
+#define HID_IN_PACKET                19
+#endif
+#define HID_OUT_PACKET               9
 
 #define CDC_IN_EP                    0x81  /* EP1 for data IN */
 #define CDC_OUT_EP                   0x01  /* EP1 for data OUT */
