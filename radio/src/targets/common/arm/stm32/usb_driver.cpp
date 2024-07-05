@@ -180,7 +180,7 @@ void usbJoystickUpdate()
   if (USBD_HID_SendReport(&USB_OTG_dev, 0, 0) == USBD_OK) {
 #endif
 
-    // 8 analog values
+    // 4 axes
     for (int i = 0; i < 8; ++i) {
       int16_t value = channelOutputs[i] + 1024;
       if ( value > 2047 ) value = 2047;
@@ -188,6 +188,8 @@ void usbJoystickUpdate()
       HID_Buffer[i*2 + 0] = uint8_t(value);
       HID_Buffer[i*2 + 1] = uint8_t(value >> 8);
     }
+    // 2 sliders
+    // 4 switches
 
     // buttons
     HID_Buffer[8*2+1] = 0;
