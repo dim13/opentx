@@ -110,7 +110,7 @@ static const uint8_t  *USBD_HID_GetCfgDesc (uint8_t speed, uint16_t *length);
 __ALIGN_BEGIN static const uint8_t HID_JOYSTICK_ReportDesc[] __ALIGN_END =
 {
     0x05, 0x01,                    //     USAGE_PAGE (Generic Desktop)
-    0x09, 0x05,                    //     USAGE (Game Pad)
+    0x09, 0x04,                    //     USAGE (Joystick)
     0xa1, 0x01,                    //     COLLECTION (Application)
     0xa1, 0x00,                    //       COLLECTION (Physical)
 
