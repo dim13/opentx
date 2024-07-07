@@ -28,6 +28,7 @@ extern "C" {
 #endif
 
 #include "opentx.h"
+#include "board.h"
 #include "debug.h"
 
 static bool usbDriverStarted = false;
@@ -162,6 +163,8 @@ bool usbStarted()
 }
 
 #if !defined(BOOT)
+
+#define PACKET_SIZE 8
 /*
   Prepare and send new USB data packet
 
@@ -171,7 +174,7 @@ bool usbStarted()
 */
 void usbJoystickUpdate()
 {
-  static uint8_t HID_Buffer[HID_IN_PACKET];
+  static uint8_t HID_Buffer[PACKET_SIZE];
 
   // test to see if TX buffer is free
 #if defined(STM32F0)
@@ -181,36 +184,28 @@ void usbJoystickUpdate()
 #endif
 
     // 4 axes
-    for (int i = 0; i < 8; ++i) {
-      int16_t value = channelOutputs[i] + 1024;
-      if ( value > 2047 ) value = 2047;
-      else if ( value < 0 ) value = 0;
-      HID_Buffer[i*2 + 0] = uint8_t(value);
-      HID_Buffer[i*2 + 1] = uint8_t(value >> 8);
-    }
-    // 2 sliders
-    // 4 switches
+    HID_Buffer[0] = uint8_t(adcValues[STICK1] >> 4) - 0x80;
+    HID_Buffer[1] = uint8_t(adcValues[STICK2] >> 4) - 0x80;
+    HID_Buffer[2] = uint8_t(adcValues[STICK3] >> 4) - 0x80;
+    HID_Buffer[3] = uint8_t(adcValues[STICK4] >> 4) - 0x80;
 
-    // buttons
-    HID_Buffer[8*2+1] = 0;
-    HID_Buffer[8*2+2] = 0;
-    HID_Buffer[8*2+3] = 0;
-    for (int i = 0; i < 8; ++i) {
-      if (channelOutputs[i+8] > 0) {
-        HID_Buffer[8*2+1] |= 1 << i;
-      }
-      if (channelOutputs[i+16] > 0) {
-        HID_Buffer[8*2+2] |= 1 << i;
-      }
-      if (channelOutputs[i+24] > 0) {
-        HID_Buffer[8*2+3] |= 1 << i;
-      }
-    }
+    // 2 pots
+    HID_Buffer[4] = uint8_t(adcValues[POT1] >> 4) - 0x80;
+    HID_Buffer[5] = uint8_t(adcValues[POT2] >> 4) - 0x80;
+
+    // 4 switches
+    // up:  10
+    // mid: 00
+    // dn:  01
+    HID_Buffer[6] = (~(uint8_t(adcValues[SW_A] >> 10) - 2) & 0x03)
+		  | (~(uint8_t(adcValues[SW_B] >> 10) - 2) & 0x03) << 2
+		  | (~(uint8_t(adcValues[SW_C] >> 10) - 2) & 0x03) << 4
+		  | (~(uint8_t(adcValues[SW_D] >> 10) - 2) & 0x03) << 6;
 
 #if defined(STM32F0)
-    USBD_HID_SendReport(&USB_Device_dev, HID_Buffer, HID_IN_PACKET);
+    USBD_HID_SendReport(&USB_Device_dev, HID_Buffer, PACKET_SIZE);
 #else
-    USBD_HID_SendReport(&USB_OTG_dev, HID_Buffer, HID_IN_PACKET);
+    USBD_HID_SendReport(&USB_OTG_dev, HID_Buffer, PACKET_SIZE);
 #endif
   }
 }
