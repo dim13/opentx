@@ -184,14 +184,14 @@ void usbJoystickUpdate()
 #endif
 
     // 4 axes
-    HID_Buffer[0] = uint8_t(adcValues[STICK1] >> 4) - 0x80;
-    HID_Buffer[1] = uint8_t(adcValues[STICK2] >> 4) - 0x80;
-    HID_Buffer[2] = uint8_t(adcValues[STICK3] >> 4) - 0x80;
-    HID_Buffer[3] = uint8_t(adcValues[STICK4] >> 4) - 0x80;
+    HID_Buffer[0] = uint8_t(adcValues[STICK1] >> 4) - 0x7f;
+    HID_Buffer[1] = uint8_t(adcValues[STICK2] >> 4) - 0x7f;
+    HID_Buffer[2] = uint8_t(adcValues[STICK3] >> 4) - 0x7f;
+    HID_Buffer[3] = uint8_t(adcValues[STICK4] >> 4) - 0x7f;
 
     // 2 pots
-    HID_Buffer[4] = uint8_t(adcValues[POT1] >> 4) - 0x80;
-    HID_Buffer[5] = uint8_t(adcValues[POT2] >> 4) - 0x80;
+    HID_Buffer[4] = uint8_t(adcValues[POT1] >> 4) - 0x7f;
+    HID_Buffer[5] = uint8_t(adcValues[POT2] >> 4) - 0x7f;
 
     // 4 switches
     // up:  10
