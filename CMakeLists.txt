@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 project(OpenTX)
 
-set(APPLE FALSE)
 set(VERSION_MAJOR "1")
 set(VERSION_MINOR "11")
 set(VERSION_REVISION "1")

@@ -1,15 +1,19 @@
 include(CMakeForceCompiler)
 include(Bitmaps)
 
+set(APPLE FALSE)
 set(PCB_TYPES X7 XLITE X9D X9D+ X9E X10 X12S SKY9X 9XRPRO AR9X I6X)
 set(GUI_LANGUAGES CZ DE EN ES FR IT PT SK SE PL HU NL)
 #set(TTS_LANGUAGES CZ DE EN ES FR IT PT SK SE PL HU NL RU)
 set(TTS_LANGUAGES EN) # i6X dfplayer
+set(JOYSTICK_SOURCES OUTPUTS INPUTS)
 
 set(PCB "I6X" CACHE STRING "Radio type, one of: ${PCB_TYPES}")
 set_property(CACHE PCB PROPERTY STRINGS ${PCB_TYPES})
 set(TRANSLATIONS "EN" CACHE STRING "Radio language, one of: ${GUI_LANGUAGES}")
 set_property(CACHE TRANSLATIONS PROPERTY STRINGS ${GUI_LANGUAGES})
+set(JOYSTICK "INPUTS" CACHE STRING "Joystick input source, one of: ${JOYSTICK_SOURCES}")
+set_property(CACHE JOYSTICK PROPERTY STRINGS ${JOYSTICK_SOURCES})
 set(SPLASH "DEFAULT" CACHE STRING "Splash (DEFAULT/OFF/FRSKY)")
 set_property(CACHE SPLASH PROPERTY STRINGS DEFAULT OFF FRSKY)
 set(PPM_UNIT "PERCENT_PREC1" CACHE STRING "PPM display unit (US/PERCENT_PREC1/PERCENT_PREC0)")
@@ -18,7 +22,7 @@ set(DEFAULT_MODE "" CACHE STRING "Default sticks mode")
 set(FONT "STD" CACHE STRING "Choose font : STD or SQT5")
 set_property(CACHE FONT PROPERTY STRINGS SQT5)
 
-option(HELI "Heli menu" OFF)
+option(HELI "Heli menu" ON)
 option(FLIGHT_MODES "Flight Modes" ON)
 option(CURVES "Curves" ON)
 option(GVARS "Global variables" ON)
@@ -197,6 +201,10 @@ endif()
 
 if(HELI)
   add_definitions(-DHELI)
+endif()
+
+if(JOYSTICK STREQUAL INPUTS)
+  add_definitions(-DADC_JOYSTICK)
 endif()
 
 if(FLIGHT_MODES)
