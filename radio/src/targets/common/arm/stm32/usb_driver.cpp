@@ -28,8 +28,10 @@ extern "C" {
 #endif
 
 #include "opentx.h"
-#include "board.h"
 #include "debug.h"
+#if defined(ADC_JOYSTICK)
+#include "board.h"
+#endif
 
 static bool usbDriverStarted = false;
 #if defined(BOOT)
@@ -163,8 +165,6 @@ bool usbStarted()
 }
 
 #if !defined(BOOT)
-
-#define PACKET_SIZE 8
 /*
   Prepare and send new USB data packet
 
@@ -174,7 +174,7 @@ bool usbStarted()
 */
 void usbJoystickUpdate()
 {
-  static uint8_t HID_Buffer[PACKET_SIZE];
+  static uint8_t HID_Buffer[HID_IN_PACKET];
 
   // test to see if TX buffer is free
 #if defined(STM32F0)
@@ -183,6 +183,7 @@ void usbJoystickUpdate()
   if (USBD_HID_SendReport(&USB_OTG_dev, 0, 0) == USBD_OK) {
 #endif
 
+#if defined(ADC_JOYSTICK)
     // 4 axes
     HID_Buffer[0] = uint8_t(adcValues[STICK1] >> 4) - 0x7f;
     HID_Buffer[1] = uint8_t(adcValues[STICK2] >> 4) - 0x7f;
@@ -201,11 +202,54 @@ void usbJoystickUpdate()
 		  | (~(uint8_t(adcValues[SW_B] >> 10) - 2) & 0x03) << 2
 		  | (~(uint8_t(adcValues[SW_C] >> 10) - 2) & 0x03) << 4
 		  | (~(uint8_t(adcValues[SW_D] >> 10) - 2) & 0x03) << 6;
+#else
+    //buttons
+    HID_Buffer[0] = 0;
+    HID_Buffer[1] = 0;
+    HID_Buffer[2] = 0;
+    for (int i = 0; i < 8; ++i) {
+      if ( channelOutputs[i+8] > 0 ) {
+        HID_Buffer[0] |= (1 << i);
+      }
+      if ( MAX_OUTPUT_CHANNELS>=24 && channelOutputs[i+16] > 0 ) {
+        HID_Buffer[1] |= (1 << i);
+      }
+      if ( MAX_OUTPUT_CHANNELS>=32 && channelOutputs[i+24] > 0 ) {
+        HID_Buffer[2] |= (1 << i);
+      }
+    }
+
+    //analog values
+    //uint8_t * p = HID_Buffer + 1;
+    for (int i = 0; i < 8; ++i) {
+
+      int16_t value = channelOutputs[i] + 1024;
+      if ( value > 2047 ) value = 2047;
+      else if ( value < 0 ) value = 0;
+#if defined(PCBI6X)
+      HID_Buffer[i*2 +2] = static_cast<uint8_t>(value & 0xFF);
+      HID_Buffer[i*2 +3] = static_cast<uint8_t>((value >> 8) & 0x07);
+#else
+      HID_Buffer[i*2 +3] = static_cast<uint8_t>(value & 0xFF);
+      HID_Buffer[i*2 +4] = static_cast<uint8_t>((value >> 8) & 0x07);
+#endif
+
+    }
+
+#if defined(PCBI6X)
+    // HID_Buffer index 8 & 9 causes mess. Looks like clock issue but cannot confirm.
+    // i reduced buttons to 16 so it will affect only one analog and remapped it [3] -> [5]
+    HID_Buffer[12] = HID_Buffer[8]; // ch[3] remap to ch[5]  // channel 5 void
+    HID_Buffer[13] = HID_Buffer[9];
+    HID_Buffer[8] = 0;
+    HID_Buffer[9] = 0;
+#endif
+#endif
 
 #if defined(STM32F0)
-    USBD_HID_SendReport(&USB_Device_dev, HID_Buffer, PACKET_SIZE);
+    USBD_HID_SendReport(&USB_Device_dev, HID_Buffer, HID_IN_PACKET);
 #else
-    USBD_HID_SendReport(&USB_OTG_dev, HID_Buffer, PACKET_SIZE);
+    USBD_HID_SendReport(&USB_OTG_dev, HID_Buffer, HID_IN_PACKET);
 #endif
   }
 }
