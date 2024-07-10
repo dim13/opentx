@@ -291,7 +291,6 @@ PACK(struct RssiAlarmData {
 
 typedef int16_t ls_telemetry_value_t;
 
-#if !defined(COLORLCD)
 PACK(struct FrSkyBarData {
   source_t source;
   ls_telemetry_value_t barMin;  // minimum for bar display
@@ -302,32 +301,11 @@ PACK(struct FrSkyLineData {
   source_t sources[NUM_LINE_ITEMS];
 });
 
-#if defined(PCBTARANIS)
-PACK(struct TelemetryScriptData {
-  char file[LEN_SCRIPT_FILENAME];
-  int16_t inputs[MAX_TELEM_SCRIPT_INPUTS];
-});
-#endif
-
 union FrSkyScreenData {
   FrSkyBarData bars[4];
   FrSkyLineData lines[4];
-#if defined(PCBTARANIS)
-  TelemetryScriptData script;
-#endif
 };
-#endif
 
-#if defined(COLORLCD)
-PACK(struct FrSkyTelemetryData {  // TODO EEPROM change, rename to VarioData
-  uint8_t varioSource : 7;
-  uint8_t varioCenterSilent : 1;
-  int8_t varioCenterMax;
-  int8_t varioCenterMin;
-  int8_t varioMin;
-  int8_t varioMax;
-});
-#else
 // TODO remove this also on Taranis
 PACK(struct FrSkyTelemetryData {
   uint8_t voltsSource;
@@ -341,7 +319,6 @@ PACK(struct FrSkyTelemetryData {
   int8_t varioMin;
   int8_t varioMax;
 });
-#endif
 
 /*
  * Telemetry Sensor structure
@@ -486,34 +463,13 @@ PACK(struct ModelHeader {
   MODEL_HEADER_BITMAP_FIELD
 });
 
-#if defined(COLORLCD)
-typedef uint16_t swconfig_t;
-typedef uint32_t swarnstate_t;
-#elif defined(PCBX9E)
-typedef uint64_t swconfig_t;
-typedef uint64_t swarnstate_t;
-typedef uint32_t swarnenable_t;
-#elif defined(PCBTARANIS)
-typedef uint16_t swconfig_t;
-typedef uint16_t swarnstate_t;
-typedef uint8_t swarnenable_t;
-#elif defined(PCBI6X)
 typedef uint8_t swconfig_t;
 typedef uint8_t swarnstate_t;
 typedef uint8_t swarnenable_t;
-#else
-typedef uint8_t swarnstate_t;
-typedef uint8_t swarnenable_t;
-#endif
 
-#if defined(COLORLCD)
-#define SWITCHES_WARNING_DATA \
-  NOBACKUP(swarnstate_t switchWarningState);
-#else
 #define SWITCHES_WARNING_DATA      \
   swarnstate_t switchWarningState; \
   swarnenable_t switchWarningEnable;
-#endif
 
 #define MODEL_GVARS_DATA GVarData gvars[MAX_GVARS];
 #define TELEMETRY_DATA                \

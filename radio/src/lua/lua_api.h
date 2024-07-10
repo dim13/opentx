@@ -44,9 +44,6 @@ extern "C" {
 extern lua_State * lsScripts;
 extern lua_State * lsWidgets;
 extern bool luaLcdAllowed;
-#if defined(COLORLCD)
-extern uint32_t luaExtraMemoryUsage;
-#endif
 
 void luaInit();
 void luaInitThemesAndWidgets();

@@ -72,10 +72,6 @@ bool isSensorAvailable(int sensor);
 
 bool modelHasNotes();
 
-#if defined(COLORLCD)
-bool isSwitch2POSWarningStateAvailable(int state);
-#endif
-
 #if defined(GUI)
 #define IS_INSTANT_TRIM_ALLOWED()      (IS_MAIN_VIEW_DISPLAYED() || IS_TELEMETRY_VIEW_DISPLAYED() || IS_OTHER_VIEW_DISPLAYED())
 #else
@@ -100,15 +96,6 @@ void drawSourceCustomValue(coord_t x, coord_t y, source_t channel, int32_t val, 
 void drawSourceValue(coord_t x, coord_t y, source_t channel, LcdFlags flags=0);
 
 void drawCurve(coord_t offset=0);
-
-#if defined(COLORLCD)
-void drawStringWithIndex(coord_t x, coord_t y, const char * str, int idx, LcdFlags flags=0, const char * prefix=NULL, const char * suffix=NULL);
-int editChoice(coord_t x, coord_t y, const char * values, int value, int min, int max, LcdFlags flags, event_t event);
-uint8_t editCheckBox(uint8_t value, coord_t x, coord_t y, LcdFlags flags, event_t event);
-swsrc_t editSwitch(coord_t x, coord_t y, swsrc_t value, LcdFlags flags, event_t event);
-void drawFatalErrorScreen(const char * message);
-void runFatalErrorScreen(const char * message);
-#endif
 
 void lcdDrawMMM(coord_t x, coord_t y, LcdFlags flags=0);
 

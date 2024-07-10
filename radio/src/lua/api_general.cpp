@@ -879,7 +879,7 @@ static int luaKillEvents(lua_State * L)
   return 0;
 }
 
-#if LCD_DEPTH > 1 && !defined(COLORLCD)
+#if LCD_DEPTH > 1
 /*luadoc
 @function GREY()
 
@@ -1300,7 +1300,7 @@ const luaL_Reg opentxLib[] = {
   { "loadScript", luaLoadScript },
   { "getUsage", luaGetUsage },
   { "resetGlobalTimer", luaResetGlobalTimer },
-#if LCD_DEPTH > 1 && !defined(COLORLCD)
+#if LCD_DEPTH > 1
   { "GREY", luaGrey },
 #endif
   { "sportTelemetryPop", luaSportTelemetryPop },
@@ -1349,49 +1349,7 @@ const luaR_value_entry opentxConstants[] = {
 #endif
   { "MIXSRC_CH1", MIXSRC_CH1 },
   { "SWSRC_LAST", SWSRC_LAST_LOGICAL_SWITCH },
-#if defined(COLORLCD)
-  { "SHADOWED", SHADOWED },
-  { "COLOR", ZoneOption::Color },
-  { "BOOL", ZoneOption::Bool },
-  { "CUSTOM_COLOR", CUSTOM_COLOR },
-  { "TEXT_COLOR", TEXT_COLOR },
-  { "TEXT_BGCOLOR", TEXT_BGCOLOR },
-  { "TEXT_INVERTED_COLOR", TEXT_INVERTED_COLOR },
-  { "TEXT_INVERTED_BGCOLOR", TEXT_INVERTED_BGCOLOR },
-  { "LINE_COLOR", LINE_COLOR },
-  { "SCROLLBOX_COLOR", SCROLLBOX_COLOR },
-  { "MENU_TITLE_BGCOLOR", MENU_TITLE_BGCOLOR },
-  { "MENU_TITLE_COLOR", MENU_TITLE_COLOR },
-  { "MENU_TITLE_DISABLE_COLOR", MENU_TITLE_DISABLE_COLOR },
-  { "ALARM_COLOR", ALARM_COLOR },
-  { "WARNING_COLOR", WARNING_COLOR },
-  { "TEXT_DISABLE_COLOR", TEXT_DISABLE_COLOR },
-  { "HEADER_COLOR", HEADER_COLOR },
-  { "CURVE_AXIS_COLOR", CURVE_AXIS_COLOR },
-  { "CURVE_COLOR", CURVE_COLOR },
-  { "CURVE_CURSOR_COLOR", CURVE_CURSOR_COLOR },
-  { "TITLE_BGCOLOR", TITLE_BGCOLOR },
-  { "TRIM_BGCOLOR", TRIM_BGCOLOR },
-  { "TRIM_SHADOW_COLOR", TRIM_SHADOW_COLOR },
-  { "MAINVIEW_PANES_COLOR", MAINVIEW_PANES_COLOR },
-  { "MAINVIEW_GRAPHICS_COLOR", MAINVIEW_GRAPHICS_COLOR },
-  { "HEADER_BGCOLOR", HEADER_BGCOLOR },
-  { "HEADER_ICON_BGCOLOR", HEADER_ICON_BGCOLOR },
-  { "HEADER_CURRENT_BGCOLOR", HEADER_CURRENT_BGCOLOR },
-  { "OVERLAY_COLOR", OVERLAY_COLOR },
-  { "MENU_HEADER_HEIGHT", MENU_HEADER_HEIGHT },
-  { "WHITE", (double)WHITE },
-  { "GREY", (double)GREY },
-  { "DARKGREY", (double)DARKGREY },
-  { "BLACK", (double)BLACK },
-  { "YELLOW", (double)YELLOW },
-  { "BLUE", (double)BLUE },
-  { "LIGHTGREY", (double)LIGHTGREY },
-  { "RED", (double)RED },
-  { "DARKRED", (double)DARKRED },
-#else
   { "FIXEDWIDTH", FIXEDWIDTH },
-#endif
 #if defined(PCBHORUS)
   { "EVT_PAGEUP_FIRST",  EVT_KEY_FIRST(KEY_PGUP) },
   { "EVT_PAGEDN_FIRST",  EVT_KEY_FIRST(KEY_PGDN) },

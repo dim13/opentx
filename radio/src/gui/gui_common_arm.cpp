@@ -341,12 +341,6 @@ bool isSwitchAvailableInMixes(int swtch) {
   return isSwitchAvailable(swtch, MixesContext);
 }
 
-#if defined(COLORLCD)
-bool isSwitch2POSWarningStateAvailable(int state) {
-  return (state != 2);  // two pos switch - middle state not available
-}
-#endif  // #if defined(COLORLCD)
-
 bool isSwitchAvailableInTimers(int swtch) {
   if (swtch >= 0) {
     if (swtch < TMRMODE_COUNT)

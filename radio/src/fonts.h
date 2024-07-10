@@ -21,23 +21,6 @@
 #ifndef _FONTS_H_
 #define _FONTS_H_
 
-#if defined(COLORLCD)
-
-#if !defined(BOOT)
-#define FONT_TABLE_SIZE 16
-#else
-#define FONT_TABLE_SIZE 1
-#endif
-
-extern const uint16_t * const fontspecsTable[FONT_TABLE_SIZE];
-extern const uint8_t * fontsTable[FONT_TABLE_SIZE];
-extern BitmapBuffer *  fontCache[2];
-
-void loadFontCache();
-void loadFonts();
-
-#else
-
 extern const unsigned char font_5x7[];
 extern const unsigned char font_10x14[];
 
@@ -53,7 +36,5 @@ extern const unsigned char font_22x38_num[];
 extern const unsigned char font_5x7_extra[];
 extern const unsigned char font_10x14_extra[];
 extern const unsigned char font_4x6_extra[];
-
-#endif
 
 #endif // _FONTS_H_

@@ -47,9 +47,6 @@ bool luaLcdAllowed;
 uint8_t instructionsPercent = 0;
 char lua_warning_info[LUA_WARNING_INFO_LEN+1];
 struct our_longjmp * global_lj = 0;
-#if defined(COLORLCD)
-uint32_t luaExtraMemoryUsage = 0;
-#endif
 
 #if defined(LUA_ALLOCATOR_TRACER)
 
@@ -262,9 +259,6 @@ void luaClose(lua_State ** L)
 void luaRegisterLibraries(lua_State * L)
 {
   luaL_openlibs(L);
-#if defined(COLORLCD)
-  registerBitmapClass(L);
-#endif
 }
 
 #define GC_REPORT_TRESHOLD    (2*1024)
@@ -288,24 +282,11 @@ void luaDoGc(lua_State * L, bool full)
           TRACE("GC Use Scripts: %u bytes", gc);
         }
       }
-#if defined(COLORLCD)
-      if (L == lsWidgets) {
-        static uint32_t lastgcWidgets = 0;
-        uint32_t gc = luaGetMemUsed(L);
-        if (gc > (lastgcWidgets + GC_REPORT_TRESHOLD) || (gc + GC_REPORT_TRESHOLD) < lastgcWidgets) {
-          lastgcWidgets = gc;
-          TRACE("GC Use Widgets: %u bytes + Extra %u", gc, luaExtraMemoryUsage);
-        }
-      }
-#endif
 #endif
     }
     else {
       // we disable Lua for the rest of the session
       if (L == lsScripts) luaDisable();
-#if defined(COLORLCD)
-      if (L == lsWidgets) lsWidgets = 0;
-#endif
     }
     UNPROTECT_LUA();
   }
@@ -732,9 +713,7 @@ void luaLoadPermanentScripts()
 
 void displayLuaError(const char * title)
 {
-#if !defined(COLORLCD)
   DRAW_MESSAGE_BOX(title);
-#endif
   if (lua_warning_info[0]) {
     char * split = strstr(lua_warning_info, ": ");
     if (split) {
@@ -852,15 +831,12 @@ void luaDoOneRunStandalone(event_t evt)
           return;
         }
         else if (luaDisplayStatistics) {
-#if defined(COLORLCD)
-#else
           lcdDrawSolidHorizontalLine(0, 7*FH-1, lcdLastRightPos+6, ERASE);
           lcdDrawText(0, 7*FH, "GV Use: ");
           lcdDrawNumber(lcdLastRightPos, 7*FH, luaGetMemUsed(lsScripts), LEFT);
           lcdDrawChar(lcdLastRightPos, 7*FH, 'b');
           lcdDrawSolidHorizontalLine(0, 7*FH-2, lcdLastRightPos+6, FORCE);
           lcdDrawVerticalLine(lcdLastRightPos+6, 7*FH-2, FH+2, SOLID, FORCE);
-#endif
         }
       }
     }
@@ -1038,9 +1014,6 @@ bool luaTask(event_t evt, uint8_t scriptType, bool allowLcdUsage)
     }
   }
   luaDoGc(lsScripts, false);
-#if defined(COLORLCD)
-  luaDoGc(lsWidgets, false);
-#endif
   return scriptWasRun;
 }
 
@@ -1048,19 +1021,11 @@ void checkLuaMemoryUsage()
 {
 #if (LUA_MEM_MAX > 0)
   uint32_t totalMemUsed = luaGetMemUsed(lsScripts);
-#if defined(COLORLCD)
-  totalMemUsed += luaGetMemUsed(lsWidgets);
-  totalMemUsed += luaExtraMemoryUsage;
-#endif
   if (totalMemUsed > LUA_MEM_MAX) {
     TRACE("checkLuaMemoryUsage(): max limit reached (%u), killing Lua", totalMemUsed);
     // disable Lua scripts
     luaClose(&lsScripts);
     luaDisable();
-#if defined(COLORLCD)
-    // disable widgets
-    luaClose(&lsWidgets);
-#endif
   }
 #endif
 }

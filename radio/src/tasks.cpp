@@ -185,10 +185,6 @@ TASK_FUNCTION(mixerTask) {
 
 #define MENU_TASK_PERIOD_TICKS (50 / RTOS_MS_PER_TICK)   // 50ms
 
-#if defined(COLORLCD) && defined(CLI)
-bool perMainEnabled = true;
-#endif
-
 TASK_FUNCTION(menusTask) {
   opentxInit();
 
@@ -206,13 +202,7 @@ TASK_FUNCTION(menusTask) {
 #endif
     uint32_t start = (uint32_t)RTOS_GET_TIME();
     DEBUG_TIMER_START(debugTimerPerMain);
-#if defined(COLORLCD) && defined(CLI)
-    if (perMainEnabled) {
-      perMain();
-    }
-#else
     perMain();
-#endif
     DEBUG_TIMER_STOP(debugTimerPerMain);
     // TODO remove completely massstorage from sky9x firmware
     uint32_t runtime = ((uint32_t)RTOS_GET_TIME() - start);

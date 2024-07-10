@@ -82,10 +82,6 @@
   #define IS_PREVIOUS_EVENT(event)     (event==EVT_KEY_FIRST(KEY_UP) || event==EVT_KEY_REPT(KEY_UP))
 #endif
 
-#if defined(COLORLCD)
-  #define EVT_REFRESH                  0xDD00
-#endif
-
 class Key
 {
   private:

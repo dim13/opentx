@@ -51,12 +51,6 @@
 
 #define LEN_FILE_PATH_MAX   (sizeof(SCRIPTS_TELEM_PATH)+1)  // longest + "/"
 
-#if defined(COLORLCD)
-const char RADIO_MODELSLIST_PATH[] = RADIO_PATH "/models.txt";
-const char RADIO_SETTINGS_PATH[] = RADIO_PATH "/radio.bin";
-#define    SPLASH_FILE             "splash.png"
-#endif
-
 #define MODELS_EXT          ".bin"
 #define LOGS_EXT            ".csv"
 #define SOUNDS_EXT          ".wav"

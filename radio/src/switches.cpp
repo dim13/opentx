@@ -568,29 +568,6 @@ void checkSwitches()
     getMovedSwitch();
 
     bool warn = false;
-#if defined(COLORLCD)
-    for (int i=0; i<NUM_SWITCHES; i++) {
-      if (SWITCH_WARNING_ALLOWED(i)) {
-        unsigned int state = ((states >> (3*i)) & 0x07);
-        if (state && state-1 != ((switches_states >> (i*2)) & 0x03)) {
-          warn = true;
-        }
-      }
-    }
-    if (g_model.potsWarnMode) {
-      evalFlightModeMixes(e_perout_mode_normal, 0);
-      bad_pots = 0;
-      for (int i=0; i<NUM_POTS+NUM_SLIDERS; i++) {
-        if (!IS_POT_SLIDER_AVAILABLE(POT1+i)) {
-          continue;
-        }
-        if (!(g_model.potsWarnEnabled & (1 << i)) && (abs(g_model.potsWarnPosition[i] - GET_LOWRES_POT_POSITION(i)) > 1)) {
-          warn = true;
-          bad_pots |= (1<<i);
-        }
-      }
-    }
-#elif defined(PCBTARANIS) || defined(PCBI6X)
     for (int i=0; i<NUM_SWITCHES; i++) {
       if (SWITCH_WARNING_ALLOWED(i) && !(g_model.switchWarningEnable & (1<<i))) {
         swarnstate_t mask = ((swarnstate_t)0x03 << (i*2));
@@ -599,35 +576,6 @@ void checkSwitches()
         }
       }
     }
-#if !defined(PCBI6X)
-    if (g_model.potsWarnMode) {
-      evalFlightModeMixes(e_perout_mode_normal, 0);
-      bad_pots = 0;
-      for (int i=0; i<NUM_POTS+NUM_SLIDERS; i++) {
-        if (!IS_POT_SLIDER_AVAILABLE(POT1+i)) {
-          continue;
-        }
-        if (!(g_model.potsWarnEnabled & (1 << i)) && (abs(g_model.potsWarnPosition[i] - GET_LOWRES_POT_POSITION(i)) > 1)) {
-          warn = true;
-          bad_pots |= (1<<i);
-        }
-      }
-    }
-#endif
-#else
-    for (int i=0; i<NUM_SWITCHES-1; i++) {
-      if (!(g_model.switchWarningEnable & (1<<i))) {
-      	if (i == 0) {
-      	  if ((states & 0x03) != (switches_states & 0x03)) {
-      	    warn = true;
-      	  }
-      	}
-        else if ((states & (1<<(i+1))) != (switches_states & (1<<(i+1)))) {
-          warn = true;
-        }
-      }
-    }
-#endif
 
     if (!warn) {
       break;
@@ -637,7 +585,6 @@ void checkSwitches()
     resetBacklightTimeout();
 
     // first - display warning
-#if defined(PCBTARANIS) || defined(PCBHORUS)|| defined(PCBI6X)
     if ((last_bad_switches != switches_states) /*|| (last_bad_pots != bad_pots)*/) {
       drawAlertBox(STR_SWITCHWARN, NULL, STR_PRESSANYKEYTOSKIP);
       if (last_bad_switches == 0xff /*|| last_bad_pots == 0xff*/) {
@@ -646,104 +593,18 @@ void checkSwitches()
       int x = SWITCH_WARNING_LIST_X, y = SWITCH_WARNING_LIST_Y;
       int numWarnings = 0;
       for (int i=0; i<NUM_SWITCHES; ++i) {
-#if defined(COLORLCD)
-        if (SWITCH_WARNING_ALLOWED(i)) {
-          unsigned int state = ((g_model.switchWarningState >> (3*i)) & 0x07);
-          if (state && state-1 != ((switches_states >> (i*2)) & 0x03)) {
-            if (++numWarnings < 6) {
-              // LcdFlags attr = ((states & mask) == (switches_states & mask)) ? TEXT_COLOR : ALARM_COLOR;
-              LcdFlags attr = ALARM_COLOR;
-              drawSwitch(x, y, SWSRC_FIRST_SWITCH+i*3+state-1, attr);
-              x += SWITCH_WARNING_LIST_INTERVAL;
-            }
-            else if (numWarnings == 6) {
-              lcdDrawText(x, y, "...", ALARM_COLOR);
-            }
-          }
-        }
-#else
         if (SWITCH_WARNING_ALLOWED(i) && !(g_model.switchWarningEnable & (1<<i))) {
           swarnstate_t mask = ((swarnstate_t)0x03 << (i*2));
           LcdFlags attr = ((states & mask) == (switches_states & mask)) ? 0 : INVERS;
           if (attr) {
-#if defined(PCBI6X)
             UNUSED(numWarnings);
             char c = "\300-\301"[(states & mask) >> (i*2)];
             drawSource(x, y, MIXSRC_FIRST_SWITCH+i, attr);
             lcdDrawChar(lcdNextPos, y, c, attr);
             x = lcdNextPos + 3;
-#else
-            if (++numWarnings < 7) {
-              char c = "\300-\301"[(states & mask) >> (i*2)];
-              drawSource(x, y, MIXSRC_FIRST_SWITCH+i, attr);
-              lcdDrawChar(lcdNextPos, y, c, attr);
-              x = lcdNextPos + 3;
-            }
-            else if (numWarnings == 7) {
-              lcdDrawText(x, y, "...", 0);
-            }
-#endif // PCBI6X
-          }
-        }
-#endif
-      }
-#if !defined(PCBI6X)
-      if (g_model.potsWarnMode) {
-        if (y == 4*FH+3) {
-          y = 6*FH-2;
-          x = 60;
-        }
-        for (int i=0; i<NUM_POTS+NUM_SLIDERS; i++) {
-          if (!IS_POT_SLIDER_AVAILABLE(POT1+i)) {
-            continue;
-          }
-          if (!(g_model.potsWarnEnabled & (1 << i))) {
-            if (abs(g_model.potsWarnPosition[i] - GET_LOWRES_POT_POSITION(i)) > 1) {
-#if defined(COLORLCD)
-              char s[8];
-              // TODO add an helper
-              strncpy(s, &STR_VSRCRAW[1+(NUM_STICKS+1+i)*STR_VSRCRAW[0]], STR_VSRCRAW[0]);
-              s[int(STR_VSRCRAW[0])] = '\0';
-#else
-              lcdDrawTextAtIndex(x, y, STR_VSRCRAW, NUM_STICKS+1+i, INVERS);
-              if (IS_POT(POT1+i))
-                lcdDrawChar(lcdNextPos, y, g_model.potsWarnPosition[i] > GET_LOWRES_POT_POSITION(i) ? 126 : 127, INVERS);
-              else
-                lcdDrawChar(lcdNextPos, y, g_model.potsWarnPosition[i] > GET_LOWRES_POT_POSITION(i) ? '\300' : '\301', INVERS);
-#endif
-#if defined(COLORLCD)
-              if (++numWarnings < 6) {
-                lcdDrawText(x, y, s, ALARM_COLOR);
-              }
-              else if (numWarnings == 6) {
-                lcdDrawText(x, y, "...", ALARM_COLOR);
-              }
-              x += 40;
-#else
-              x = lcdNextPos + 3;
-#endif
-            }
-
           }
         }
       }
-      last_bad_pots = bad_pots;
-#endif // PCBI6X
-#else
-    if (last_bad_switches != switches_states) {
-      RAISE_ALERT(STR_SWITCHWARN, nullptr, STR_PRESSANYKEYTOSKIP, last_bad_switches == 0xff ? AU_SWITCH_ALERT : AU_NONE);
-      uint8_t x = 2;
-      for (uint8_t i=0; i<NUM_SWITCHES-1; i++) {
-        uint8_t attr;
-        if (i == 0)
-          attr = ((states & 0x03) != (switches_states & 0x03)) ? INVERS : 0;
-        else
-          attr = (states & (1 << (i+1))) == (switches_states & (1 << (i+1))) ? 0 : INVERS;
-        if (!(g_model.switchWarningEnable & (1<<i)))
-          drawSwitch(x, 5*FH, (i>0?(i+3):(states&0x3)+1), attr);
-        x += 3*FW+FW/2;
-      }
-#endif
 
       lcdRefresh();
       lcdSetContrast();

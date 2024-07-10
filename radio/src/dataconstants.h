@@ -112,18 +112,7 @@ enum CurveType {
   #define NUM_ROTARY_ENCODERS          0
 #endif
 
-#if defined(COLORLCD)
-enum MainViews {
-  VIEW_BLANK,
-  VIEW_TIMERS_ALTITUDE,
-  VIEW_CHANNELS,
-  VIEW_TELEM1,
-  VIEW_TELEM2,
-  VIEW_TELEM3,
-  VIEW_TELEM4,
-  VIEW_COUNT
-};
-#elif LCD_W >= 212
+#if LCD_W >= 212
 enum MainViews {
   VIEW_TIMERS,
   VIEW_INPUTS,

@@ -26,13 +26,11 @@ void displayKeyState(uint8_t x, uint8_t y, uint8_t key)
   lcdDrawChar(x, y, t+'0', t ? INVERS : 0);
 }
 
-#if !defined(PCBTARANIS)
 void displaySwitchState(uint8_t x, uint8_t y, uint8_t sw)
 {
   swsrc_t t = switchState(sw);
   lcdDrawChar(x, y, (t ? '1' : '0'), t ? INVERS : 0);
 }
-#endif
 
 #if defined(MENU_DIAG_ANAS_KEYS)
 void menuRadioDiagKeys(event_t event)
@@ -73,7 +71,9 @@ void menuRadioDiagKeys(event_t event)
     lcdDrawTextAtIndex(14*FW, y, STR_VRENCODERS, i, 0);
   #if defined(ROTARY_ENCODERS)
     lcdDrawNumber(x, y, rotencValue[i], LEFT|(keyState(BTN_REa+i) ? INVERS : 0));
+  #else
     lcdDrawNumber(x, y, rotencValue[i], LEFT);
+  #endif
   }
 #endif
 

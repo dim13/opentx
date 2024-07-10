@@ -563,11 +563,7 @@ extern uint16_t maxMixerDuration;
 #define DURATION_MS_PREC2(x) ((x)/20)
 
 #if defined(THRTRACE)
-  #if defined(COLORLCD)
-    #define MAXTRACE (LCD_W-2*10)
-  #else
-    #define MAXTRACE (LCD_W - 8)
-  #endif
+  #define MAXTRACE (LCD_W - 8)
   extern uint8_t  s_traceBuf[MAXTRACE];
   extern uint16_t s_traceWr;
   extern uint8_t  s_cnt_10s;
@@ -698,15 +694,7 @@ inline int calcRESXto100(int x)
   return divRoundClosest(x*100, RESX);
 }
 
-
-#if defined(COLORLCD)
 extern const char vers_stamp[];
-extern const char date_stamp[];
-extern const char time_stamp[];
-extern const char eeprom_stamp[];
-#else
-extern const char vers_stamp[];
-#endif
 
 /**
  * Tries to find opentx version in the first 1024 byte of either firmware/bootloader (the one not running) or the buffer

@@ -123,11 +123,6 @@ bool redirectToSettingsDirectory(const std::string & path)
       * model (*.bin) files in /MODELS directory
   */
   if (!simuSettingsDirectory.empty()) {
-#if defined(COLORLCD)
-    if (path == RADIO_MODELSLIST_PATH || path == RADIO_SETTINGS_PATH) {
-      return true;
-    }
-#endif
     if (startsWith(path, "/MODELS") && endsWith(path, MODELS_EXT)) {
       return true;
     }

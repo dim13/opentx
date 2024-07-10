@@ -52,12 +52,7 @@ Clear the LCD screen
 static int luaLcdClear(lua_State *L)
 {
   if (luaLcdAllowed) {
-#if defined(COLORLCD)
-    LcdFlags color = luaL_optunsigned(L, 1, TEXT_BGCOLOR);
-    lcd->clear(color);
-#else
     lcdClear();
-#endif
   }
   return 0;
 }
@@ -132,7 +127,6 @@ static int luaLcdDrawLine(lua_State *L)
   return 0;
 }
 
-#if !defined(COLORLCD)
 /*luadoc
 @function lcd.getLastPos()
 
@@ -184,8 +178,6 @@ static int luaLcdGetLeftPos(lua_State *L)
   return 1;
 }
 
-#endif // COLORLCD
-
 /*luadoc
 @function lcd.drawText(x, y, text [, flags])
 
@@ -216,9 +208,6 @@ static int luaLcdDrawText(lua_State *L)
   int y = luaL_checkinteger(L, 2);
   const char * s = luaL_checkstring(L, 3);
   unsigned int att = luaL_optunsigned(L, 4, 0);
-  #if defined(COLORLCD)
-  if ((att&SHADOWED) && !(att&INVERS)) lcdDrawText(x+1, y+1, s, att&0xFFFF);
-  #endif
   lcdDrawText(x, y, s, att);
   return 0;
 }
@@ -247,12 +236,7 @@ static int luaLcdDrawTimer(lua_State *L)
   int y = luaL_checkinteger(L, 2);
   int seconds = luaL_checkinteger(L, 3);
   unsigned int att = luaL_optunsigned(L, 4, 0);
-#if defined(COLORLCD)
-  if (att&SHADOWED) drawTimer(x+1, y+1, seconds, (att&0xFFFF)|LEFT);
-  drawTimer(x, y, seconds, att|LEFT);
-#else
   drawTimer(x, y, seconds, att|LEFT, att);
-#endif
   return 0;
 }
 
@@ -281,9 +265,6 @@ static int luaLcdDrawNumber(lua_State *L)
   int y = luaL_checkinteger(L, 2);
   int val = luaL_checkinteger(L, 3);
   unsigned int att = luaL_optunsigned(L, 4, 0);
-  #if defined(COLORLCD)
-  if ((att&SHADOWED) && !(att&INVERS)) lcdDrawNumber(x, y, val, att&0xFFFF);
-  #endif
   lcdDrawNumber(x, y, val, att);
   return 0;
 }
@@ -374,164 +355,6 @@ static int luaLcdDrawSource(lua_State *L)
   return 0;
 }
 
-#if defined(COLORLCD)
-
-#define LUA_BITMAPHANDLE          "BITMAP*"
-
-/*luadoc
-@function Bitmap.open(name)
-
-Loads a bitmap in memory, for later use with lcd.drawBitmap(). Bitmaps should be loaded only
-once, returned object should be stored and used for drawing. If loading fails for whatever
-reason the resulting bitmap object will have width and height set to zero.
-
-Bitmap loading can fail if:
- * File is not found or contains invalid image
- * System is low on memory
- * Combined memory usage of all Lua script bitmaps exceeds certain value
-
-@param name (string) full path to the bitmap on SD card (i.e. “/IMAGES/test.bmp”)
-
-@retval bitmap (object) a bitmap object that can be used with other bitmap functions
-
-@notice Only available on Horus
-
-@status current Introduced in 2.2.0
-*/
-static int luaOpenBitmap(lua_State * L)
-{
-  const char * filename = luaL_checkstring(L, 1);
-
-  BitmapBuffer ** b = (BitmapBuffer **)lua_newuserdata(L, sizeof(BitmapBuffer *));
-
-  if (luaExtraMemoryUsage > LUA_MEM_EXTRA_MAX) {
-    // already allocated more than max allowed, fail
-    TRACE("luaOpenBitmap: Error, using too much memory %u/%u", luaExtraMemoryUsage, LUA_MEM_EXTRA_MAX);
-    *b = 0;
-  }
-  else {
-    *b = BitmapBuffer::load(filename);
-    if (*b == NULL && G(L)->gcrunning) {
-      luaC_fullgc(L, 1);  /* try to free some memory... */
-      *b = BitmapBuffer::load(filename);  /* try again */
-    }
-  }
-
-  if (*b) {
-    uint32_t size = (*b)->getDataSize();
-    luaExtraMemoryUsage += size;
-    TRACE("luaOpenBitmap: %p (%u)", *b, size);
-  }
-
-  luaL_getmetatable(L, LUA_BITMAPHANDLE);
-  lua_setmetatable(L, -2);
-
-  return 1;
-}
-
-static BitmapBuffer * checkBitmap(lua_State * L, int index)
-{
-  BitmapBuffer ** b = (BitmapBuffer **)luaL_checkudata(L, index, LUA_BITMAPHANDLE);
-  return *b;
-}
-
-/*luadoc
-@function Bitmap.getSize(name)
-
-Return width, height of a bitmap object
-
-@param bitmap (pointer) point to a bitmap previously opened with Bitmap.open()
-
-@retval multiple returns 2 values:
- * (number) width in pixels
- * (number) height in pixels
-
-@notice Only available on Horus
-
-@status current Introduced in 2.2.0
-*/
-static int luaGetBitmapSize(lua_State * L)
-{
-  const BitmapBuffer * b = checkBitmap(L, 1);
-  if (b) {
-    lua_pushinteger(L, b->getWidth());
-    lua_pushinteger(L, b->getHeight());
-  }
-  else {
-    lua_pushinteger(L, 0);
-    lua_pushinteger(L, 0);
-  }
-  return 2;
-}
-
-static int luaDestroyBitmap(lua_State * L)
-{
-  BitmapBuffer * b = checkBitmap(L, 1);
-  if (b) {
-    uint32_t size = b->getDataSize();
-    TRACE("luaDestroyBitmap: %p (%u)", b, size);
-    if (luaExtraMemoryUsage >= size) {
-      luaExtraMemoryUsage -= size;
-    }
-    else {
-      luaExtraMemoryUsage = 0;
-    }
-    delete b;
-  }
-  return 0;
-}
-
-const luaL_Reg bitmapFuncs[] = {
-  { "open", luaOpenBitmap },
-  { "getSize", luaGetBitmapSize },
-  { "__gc", luaDestroyBitmap },
-  { NULL, NULL }
-};
-
-void registerBitmapClass(lua_State * L)
-{
-  luaL_newmetatable(L, LUA_BITMAPHANDLE);
-  luaL_setfuncs(L, bitmapFuncs, 0);
-  lua_pushvalue(L, -1);
-  lua_setfield(L, -2, "__index");
-  lua_setglobal(L, "Bitmap");
-}
-
-/*luadoc
-@function lcd.drawBitmap(bitmap, x, y [, scale])
-
-Displays a bitmap at (x,y)
-
-@param bitmap (pointer) point to a bitmap previously opened with Bitmap.open()
-
-@param x,y (positive numbers) starting coordinates
-
-@param scale (positive numbers) scale in %, 50 divides size by two, 100 is unchanged, 200 doubles size.
-Omitting scale draws image in 1:1 scale and is faster than specifying 100 for scale.
-
-@notice Only available on Horus
-
-@status current Introduced in 2.2.0
-*/
-static int luaLcdDrawBitmap(lua_State *L)
-{
-  if (!luaLcdAllowed) return 0;
-  const BitmapBuffer * b = checkBitmap(L, 1);
-
-  if (b) {
-    unsigned int x = luaL_checkunsigned(L, 2);
-    unsigned int y = luaL_checkunsigned(L, 3);
-    unsigned int scale = luaL_optunsigned(L, 4, 0);
-    if (scale) {
-      lcd->drawBitmap(x, y, b, 0, 0, 0, 0, scale/100.0f);
-    }
-    else {
-      lcd->drawBitmap(x, y, b);
-    }
-  }
-  return 0;
-}
-#else
 /*luadoc
 @function lcd.drawPixmap(x, y, name)
 
@@ -559,7 +382,6 @@ static int luaLcdDrawPixmap(lua_State *L)
 
   return 0;
 }
-#endif
 
 /*luadoc
 @function lcd.drawRectangle(x, y, w, h [, flags [, t]])
@@ -663,7 +485,6 @@ static int luaLcdDrawGauge(lua_State *L)
 }
 
 
-#if !defined(COLORLCD)
 /*luadoc
 @function lcd.drawScreenTitle(title, page, pages)
 
@@ -695,9 +516,7 @@ static int luaLcdDrawScreenTitle(lua_State *L)
 
   return 0;
 }
-#endif
 
-#if !defined(COLORLCD)
 /*luadoc
 @function lcd.drawCombobox(x, y, w, list, idx [, flags])
 
@@ -767,93 +586,6 @@ static int luaLcdDrawCombobox(lua_State *L)
 
   return 0;
 }
-#endif
-
-#if defined(COLORLCD)
-/*luadoc
-@function lcd.setColor(area, color)
-
-Set a color for specific area
-
-@param area (unsigned number) specific screen area in the list bellow
- * `CUSTOM_COLOR`
- * `TEXT_COLOR`
- * `TEXT_BGCOLOR`
- * `TEXT_INVERTED_COLOR`
- * `TEXT_INVERTED_BGCOLOR`
- * `LINE_COLOR`
- * `SCROLLBOX_COLOR`
- * `MENU_TITLE_BGCOLOR`
- * `MENU_TITLE_COLOR`
- * `MENU_TITLE_DISABLE_COLOR`
- * `HEADER_COLOR`
- * `ALARM_COLOR`
- * `WARNING_COLOR`
- * `TEXT_DISABLE_COLOR`
- * `HEADER_COLOR`
- * `CURVE_AXIS_COLOR`
- * `CURVE_CURSOR_COLOR`
- * `TITLE_BGCOLOR`
- * `TRIM_BGCOLOR`
- * `TRIM_SHADOW_COLOR`
- * `MAINVIEW_PANES_COLOR`
- * `MAINVIEW_GRAPHICS_COLOR`
- * `HEADER_BGCOLOR`
- * `HEADER_ICON_BGCOLOR`
- * `HEADER_CURRENT_BGCOLOR`
- * `OVERLAY_COLOR`
-
-@param color (number) color in 5/6/5 rgb format. The following prefined colors are available
- * `WHITE`
- * `GREY`
- * `LIGHTGREY`
- * `DARKGREY`
- * `BLACK`
- * `YELLOW`
- * `BLUE`
- * `RED`
- * `DARKRED`
-
-@notice Only available on Horus
-
-@status current Introduced in 2.2.0
-*/
-static int luaLcdSetColor(lua_State *L)
-{
-  if (!luaLcdAllowed) return 0;
-  unsigned int index = luaL_checkunsigned(L, 1) >> 16;
-  unsigned int color = luaL_checkunsigned(L, 2);
-  lcdColorTable[index] = color;
-  return 0;
-}
-
-/*luadoc
-@function lcd.RGB(r, g, b)
-
-Returns a 5/6/5 rgb color code, that can be used with lcd.setColor
-
-@param r (integer) a number between 0x00 and 0xff that expresses te amount of red in the color
-
-@param g (integer) a number between 0x00 and 0xff that expresses te amount of green in the color
-
-@param b (integer) a number between 0x00 and 0xff that expresses te amount of blue in the color
-
-@retval number (integer) rgb color expressed in 5/6/5 format
-
-@notice Only available on Horus
-
-@status current Introduced in 2.2.0
-*/
-static int luaRGB(lua_State *L)
-{
-  if (!luaLcdAllowed) return 0;
-  int r = luaL_checkinteger(L, 1);
-  int g = luaL_checkinteger(L, 2);
-  int b = luaL_checkinteger(L, 3);
-  lua_pushinteger(L, RGB(r, g, b));
-  return 1;
-}
-#endif
 
 const luaL_Reg lcdLib[] = {
   { "refresh", luaLcdRefresh },
@@ -869,17 +601,11 @@ const luaL_Reg lcdLib[] = {
   { "drawSwitch", luaLcdDrawSwitch },
   { "drawSource", luaLcdDrawSource },
   { "drawGauge", luaLcdDrawGauge },
-#if defined(COLORLCD)
-  { "drawBitmap", luaLcdDrawBitmap },
-  { "setColor", luaLcdSetColor },
-  { "RGB", luaRGB },
-#else
   { "getLastPos", luaLcdGetLastPos },
   { "getLastRightPos", luaLcdGetLastPos },
   { "getLastLeftPos", luaLcdGetLeftPos },
   { "drawPixmap", luaLcdDrawPixmap },
   { "drawScreenTitle", luaLcdDrawScreenTitle },
   { "drawCombobox", luaLcdDrawCombobox },
-#endif
   { NULL, NULL }  /* sentinel */
 };

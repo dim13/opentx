@@ -30,8 +30,6 @@
 #include "location.h"
 #include "targets/simu/simulcd.h"
 
-#if defined(COLORLCD)
-
 void doPaint_480x272(QPainter & p)
 {
   QRgb rgb = qRgb(0, 0, 0);
@@ -173,6 +171,3 @@ TEST(Lcd_480x272, fonts)
 
   EXPECT_TRUE(checkScreenshot_480x272("fonts"));
 }
-
-
-#endif

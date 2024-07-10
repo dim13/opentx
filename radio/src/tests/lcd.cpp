@@ -96,9 +96,6 @@ bool checkScreenshot(const QString & test)
   }
 }
 
-#if defined(COLORLCD)
-// TODO
-#else
 TEST(outdezNAtt, test_unsigned)
 {
   lcdClear();
@@ -460,5 +457,4 @@ TEST(Lcd, lcdDrawLine)
 
   EXPECT_TRUE(checkScreenshot("lcdDrawLine"));
 }
-#endif
 #endif
