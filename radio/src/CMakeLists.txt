@@ -72,7 +72,6 @@ configure_file(stamp.h.in stamp.h @ONLY)
 
 add_subdirectory(translations)
 add_subdirectory(bitmaps)
-add_subdirectory(fonts)
 
 set(EEPROM_VARIANT  0)
 set(GVARS_VARIANT   1)
