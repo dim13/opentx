@@ -306,9 +306,6 @@ void evalFunctions(const CustomFunctionData * functions, CustomFunctionsContext 
           case FUNC_PLAY_TRACK:
           case FUNC_PLAY_VALUE:
 #endif
-#if defined(HAPTIC)
-          case FUNC_HAPTIC:
-#endif
           {
             if (isRepeatDelayElapsed(functions, functionsContext, i)) {
               if (!IS_PLAYING(PLAY_INDEX)) {
@@ -324,11 +321,6 @@ void evalFunctions(const CustomFunctionData * functions, CustomFunctionsContext 
 #if defined(DFPLAYER)
                 else if (CFN_FUNC(cfn) == FUNC_PLAY_VALUE) {
                   PLAY_VALUE(CFN_PARAM(cfn), PLAY_INDEX);
-                }
-#endif
-#if defined(HAPTIC)
-                else if (CFN_FUNC(cfn) == FUNC_HAPTIC) {
-                  haptic.event(AU_SPECIAL_SOUND_LAST+CFN_PARAM(cfn));
                 }
 #endif
                 else {

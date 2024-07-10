@@ -56,12 +56,6 @@ void interrupt5ms()
 
   ++pre_scale;
 
-#if defined(HAPTIC)
-  DEBUG_TIMER_START(debugTimerHaptic);
-  HAPTIC_HEARTBEAT();
-  DEBUG_TIMER_STOP(debugTimerHaptic);
-#endif
-
   if (pre_scale == 2) {
     pre_scale = 0;
     BUZZER_HEARTBEAT();

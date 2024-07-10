@@ -919,11 +919,6 @@ void audioKeyPress()
   if (g_eeGeneral.beepMode == e_mode_all) {
     audioQueue.playTone(BEEP_DEFAULT_FREQ, 40, 20, PLAY_NOW);
   }
-#if defined(HAPTIC)
-  if (g_eeGeneral.hapticMode == e_mode_all) {
-    haptic.play(5, 0, PLAY_NOW);
-  }
-#endif
 }
 
 void audioKeyError()
@@ -931,12 +926,6 @@ void audioKeyError()
   if (g_eeGeneral.beepMode >= e_mode_nokeys) {
     audioQueue.playTone(BEEP_DEFAULT_FREQ, 160, 20, PLAY_NOW);
   }
-
-#if defined(HAPTIC)
-  if (g_eeGeneral.hapticMode >= e_mode_nokeys) {
-    haptic.play(15, 3, PLAY_NOW);
-  }
-#endif
 }
 
 void audioTrimPress(int value)
@@ -974,35 +963,12 @@ void audioTimerCountdown(uint8_t timer, int value)
       audioQueue.playTone(BEEP_DEFAULT_FREQ + 150, 120, 20, PLAY_NOW);
     }
   }
-#if defined(HAPTIC)
-  else if (g_model.timers[timer].countdownBeep == COUNTDOWN_HAPTIC) {
-    if (value == 0) {
-      haptic.play(15, 3, PLAY_NOW);
-    }
-    else if (value > 0 && value <= TIMER_COUNTDOWN_START(timer)) {
-      haptic.play(10, 0, PLAY_NOW);
-    }
-    else if (value == 30) {
-      haptic.play(10, 3, PLAY_REPEAT(2) | PLAY_NOW);
-    }
-    else if (value == 20) {
-      haptic.play(10, 3, PLAY_REPEAT(1) | PLAY_NOW);
-    }
-    else if (value == 10) {
-      haptic.play(10, 3, PLAY_NOW);
-    }
-  }
-#endif
 }
 
 void audioEvent(unsigned int index)
 {
   if (index == AU_NONE)
     return;
-
-#if defined(HAPTIC)
-  haptic.event(index); // do this before audio to help sync timings
-#endif
 
   if (index <= AU_ERROR) {
     if (g_eeGeneral.alarmsFlash) {

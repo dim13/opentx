@@ -198,10 +198,6 @@ const char STR_SOUND_LABEL[]  = TR_SOUND_LABEL;
 const char STR_LENGTH[]  = TR_LENGTH;
 const char STR_BEEP_LENGTH[]  = TR_BEEP_LENGTH;
 const char STR_SPKRPITCH[]  = TR_SPKRPITCH;
-#if defined(HAPTIC)
-const char STR_HAPTIC_LABEL[]  = TR_HAPTIC_LABEL;
-const char STR_HAPTICSTRENGTH[]  = TR_HAPTICSTRENGTH;
-#endif
 const char STR_CONTRAST[]  = TR_CONTRAST;
 const char STR_ALARMS_LABEL[]  = TR_ALARMS_LABEL;
 const char STR_BATTERY_RANGE[]  = TR_BATTERY_RANGE;

@@ -360,9 +360,7 @@ bool isAssignableFunctionAvailable(int function) {
       return false;
 #endif
     case FUNC_VOLUME: // volume function unsupported
-#if !defined(HAPTIC)
     case FUNC_HAPTIC:
-#endif
     case FUNC_RESERVE4:
 #if !defined(DANGEROUS_MODULE_FUNCTIONS)
     case FUNC_RANGECHECK:

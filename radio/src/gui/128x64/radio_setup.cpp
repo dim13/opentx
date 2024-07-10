@@ -354,24 +354,6 @@ void menuRadioSetup(event_t event)
         break;
 #endif
 
-#if defined(HAPTIC)
-      case ITEM_SETUP_HAPTIC_LABEL:
-        lcdDrawTextAlignedLeft(y, STR_HAPTIC_LABEL);
-        break;
-
-      case ITEM_SETUP_HAPTIC_MODE:
-        g_eeGeneral.hapticMode = editChoice(RADIO_SETUP_2ND_COLUMN, y, INDENT TR_MODE, STR_VBEEPMODE, g_eeGeneral.hapticMode, -2, 1, attr, event);
-        break;
-
-      case ITEM_SETUP_HAPTIC_LENGTH:
-        SLIDER_5POS(y, g_eeGeneral.hapticLength, STR_LENGTH, event, attr);
-        break;
-
-      case ITEM_SETUP_HAPTIC_STRENGTH:
-        SLIDER_5POS(y, g_eeGeneral.hapticStrength, STR_HAPTICSTRENGTH, event, attr);
-        break;
-#endif
-
       case ITEM_SETUP_CONTRAST:
         lcdDrawTextAlignedLeft(y, STR_CONTRAST);
         lcdDrawNumber(RADIO_SETUP_2ND_COLUMN, y, g_eeGeneral.contrast, attr|LEFT);

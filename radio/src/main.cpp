@@ -198,27 +198,7 @@ void handleGui(event_t event) {
   // if Lua standalone, run it and don't clear the screen (Lua will do it)
   // else if Lua telemetry view, run it and don't clear the screen
   // else clear scren and show normal menus
-#if defined(LUA)
-  if (luaTask(event, RUN_STNDAL_SCRIPT, true)) {
-    // standalone script is active
-  }
-  else if (luaTask(event, RUN_TELEM_FG_SCRIPT, true)) {
-    // the telemetry screen is active
-    // prevent events from keys MENU, UP, DOWN, ENT(short) and EXIT(short) from reaching the normal menus,
-    // so Lua telemetry script can fully use them
-    if (event) {
-      uint8_t key = EVT_KEY_MASK(event);
-      // no need to filter out MENU and ENT(short), because they are not used by menuViewTelemetryFrsky()
-      if (key == KEY_PLUS || key == KEY_MINUS || (!IS_KEY_LONG(event) && key == KEY_EXIT)) {
-        // TRACE("Telemetry script event 0x%02x killed", event);
-        event = 0;
-      }
-    }
-    menuHandlers[menuLevel](event);
-    // todo     drawStatusLine(); here???
-  }
-  else
-#elif defined(PCBI6X) && defined(RADIO_TOOLS)
+#if defined(PCBI6X) && defined(RADIO_TOOLS)
   if (globalData.cToolRunning == 1) {
     // standalone c script is active
     menuHandlers[menuLevel](event);
@@ -236,25 +216,6 @@ bool inPopupMenu = false;
 
 void guiMain(event_t evt)
 {
-#if defined(LUA)
-  // TODO better lua stopwatch
-  uint32_t t0 = get_tmr10ms();
-  static uint32_t lastLuaTime = 0;
-  uint16_t interval = (lastLuaTime == 0 ? 0 : (t0 - lastLuaTime));
-  lastLuaTime = t0;
-  if (interval > maxLuaInterval) {
-    maxLuaInterval = interval;
-  }
-
-  // run Lua scripts that don't use LCD (to use CPU time while LCD DMA is running)
-  luaTask(0, RUN_MIX_SCRIPT | RUN_FUNC_SCRIPT | RUN_TELEM_BG_SCRIPT, false);
-
-  t0 = get_tmr10ms() - t0;
-  if (t0 > maxLuaDuration) {
-    maxLuaDuration = t0;
-  }
-#endif //#if defined(LUA)
-
   // wait for LCD DMA to finish before continuing, because code from this point
   // is allowed to change the contents of LCD buffer
   //

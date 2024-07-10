@@ -79,24 +79,6 @@ inline uint8_t DISPLAY_CURRENT_SCREEN(uint8_t line)
     return 3;
 }
 
-#if defined(LUA)
-void onTelemetryScriptFileSelectionMenu(const char * result)
-{
-  int screenIndex = DISPLAY_CURRENT_SCREEN(menuVerticalPosition - HEADER_LINE);
-
-  if (result == STR_UPDATE_LIST) {
-    if (!sdListFiles(SCRIPTS_TELEM_PATH, SCRIPTS_EXT, sizeof(g_model.frsky.screens[screenIndex].script.file), NULL)) {
-      POPUP_WARNING(STR_NO_SCRIPTS_ON_SD);
-    }
-  }
-  else {
-    // The user choosed a file in the list
-    memcpy(g_model.frsky.screens[screenIndex].script.file, result, sizeof(g_model.frsky.screens[screenIndex].script.file));
-    storageDirty(EE_MODEL);
-  }
-}
-#endif
-
 int skipHiddenLines(int noRows, const uint8_t * mstate_tab, int row)
 {
   for(int i=0; i<noRows; ++i) {
@@ -142,28 +124,6 @@ void menuModelDisplay(event_t event)
           g_model.frsky.screensType = (g_model.frsky.screensType & (~(0x03 << (2*screenIndex)))) | (newScreenType << (2*screenIndex));
           memset(&g_model.frsky.screens[screenIndex], 0, sizeof(g_model.frsky.screens[screenIndex]));
         }
-#if defined(LUA)
-        if (newScreenType == TELEMETRY_SCREEN_TYPE_SCRIPT) {
-          TelemetryScriptData & scriptData = g_model.frsky.screens[screenIndex].script;
-
-          // TODO better function name for ---
-          // TODO function for these lines
-          if (ZEXIST(scriptData.file))
-            lcdDrawSizedText(DISPLAY_COL2+7*FW, y, scriptData.file, sizeof(scriptData.file), (menuHorizontalPosition==1 ? attr : 0));
-          else
-            lcdDrawTextAtIndex(DISPLAY_COL2+7*FW, y, STR_VCSWFUNC, 0, (menuHorizontalPosition==1 ? attr : 0));
-
-          if (menuHorizontalPosition==1 && attr && event==EVT_KEY_BREAK(KEY_ENTER) && READ_ONLY_UNLOCKED()) {
-            s_editMode = 0;
-            if (sdListFiles(SCRIPTS_TELEM_PATH, SCRIPTS_EXT, sizeof(g_model.frsky.screens[screenIndex].script.file), g_model.frsky.screens[screenIndex].script.file)) {
-              POPUP_MENU_START(onTelemetryScriptFileSelectionMenu);
-            }
-            else {
-              POPUP_WARNING(STR_NO_SCRIPTS_ON_SD);
-            }
-          }
-        }
-#endif
         break;
       }
 

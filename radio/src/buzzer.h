@@ -29,10 +29,6 @@ enum FragmentTypes {
 
 extern bool isPlaying(uint8_t id = 0);
 
-#if defined(HAPTIC)
-extern uint8_t hapticTick;
-#endif /* HAPTIC */
-
 void audioEvent(unsigned int index);
 
 #if defined(DFPLAYER)

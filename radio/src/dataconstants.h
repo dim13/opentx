@@ -197,13 +197,7 @@ enum TelemetryScreenType {
   TELEMETRY_SCREEN_TYPE_VALUES,
   TELEMETRY_SCREEN_TYPE_BARS,
   TELEMETRY_SCREEN_TYPE_SCRIPT,
-#if defined(LUA)
   TELEMETRY_SCREEN_TYPE_MAX = TELEMETRY_SCREEN_TYPE_SCRIPT
-#elif defined(PCBI6X)
-  TELEMETRY_SCREEN_TYPE_MAX = TELEMETRY_SCREEN_TYPE_SCRIPT
-#else
-  TELEMETRY_SCREEN_TYPE_MAX = TELEMETRY_SCREEN_TYPE_BARS
-#endif
 };
 #define MAX_TELEMETRY_SCREENS 4
 #define TELEMETRY_SCREEN_TYPE(screenIndex) TelemetryScreenType((g_model.frsky.screensType >> (2*(screenIndex))) & 0x03)
@@ -358,11 +352,6 @@ enum MixSources {
   MIXSRC_FIRST_INPUT,                   LUA_EXPORT_MULTIPLE("input", "Input [I%d]", MAX_INPUTS)
   MIXSRC_LAST_INPUT = MIXSRC_FIRST_INPUT+MAX_INPUTS-1,
 
-#if defined(LUA_INPUTS)
-  MIXSRC_FIRST_LUA,                     LUA_EXPORT_MULTIPLE("lua", "Lua mix output %d", MAX_SCRIPTS*MAX_SCRIPT_OUTPUTS)
-  MIXSRC_LAST_LUA = MIXSRC_FIRST_LUA+(MAX_SCRIPTS*MAX_SCRIPT_OUTPUTS)-1,
-#endif
-
   MIXSRC_FIRST_STICK,
   MIXSRC_Rud = MIXSRC_FIRST_STICK,      LUA_EXPORT("rud", "Rudder")
   MIXSRC_Ele,                           LUA_EXPORT("ele", "Elevator")
@@ -506,9 +495,6 @@ enum CountDownModes {
   COUNTDOWN_BEEPS,
 #if defined(VOICE) || defined(DFPLAYER)
   COUNTDOWN_VOICE,
-#endif
-#if defined(HAPTIC)
-  COUNTDOWN_HAPTIC,
 #endif
   COUNTDOWN_COUNT
 };

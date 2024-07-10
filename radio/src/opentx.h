@@ -90,11 +90,7 @@
   #define CASE_VARIO(x)
 #endif
 
-#if defined(HAPTIC)
-  #define CASE_HAPTIC(x) x,
-#else
   #define CASE_HAPTIC(x)
-#endif
 
 #if defined(SPLASH)
   #define CASE_SPLASH(x) x,

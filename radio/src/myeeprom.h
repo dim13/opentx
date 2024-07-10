@@ -60,11 +60,7 @@
 #define IS_ADJUST_GV_FUNC(func) (0)
 #endif
 
-#if defined(HAPTIC)
-#define IS_HAPTIC_FUNC(func) ((func) == FUNC_HAPTIC)
-#else
 #define IS_HAPTIC_FUNC(func) (0)
-#endif
 
 #define HAS_ENABLE_PARAM(func) ((func) < FUNC_FIRST_WITHOUT_ENABLE || (func == FUNC_BACKLIGHT))
 #define HAS_REPEAT_PARAM(func) (IS_PLAY_FUNC(func) || IS_HAPTIC_FUNC(func))
