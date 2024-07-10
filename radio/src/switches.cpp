@@ -22,11 +22,7 @@
 
 #define CS_LAST_VALUE_INIT -32768
 
-#if defined(PCBHORUS)
-  #define SWITCH_WARNING_LIST_X        WARNING_LINE_X
-  #define SWITCH_WARNING_LIST_Y        WARNING_LINE_Y+3*FH
-  #define SWITCH_WARNING_LIST_INTERVAL 35
-#elif LCD_W >= 212
+#if LCD_W >= 212
   #define SWITCH_WARNING_LIST_X        60
   #define SWITCH_WARNING_LIST_Y        4*FH+3
 #else
@@ -421,14 +417,7 @@ bool getSwitch(swsrc_t swtch, uint8_t flags)
     result = true;
   }
   else if (cs_idx <= SWSRC_LAST_SWITCH) {
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-    if (flags & GETSWITCH_MIDPOS_DELAY)
-      result = SWITCH_POSITION(cs_idx-SWSRC_FIRST_SWITCH);
-    else
-      result = switchState(cs_idx-SWSRC_FIRST_SWITCH);
-#else
     result = switchState(cs_idx-SWSRC_FIRST_SWITCH);
-#endif
 
   }
 #if NUM_XPOTS > 0
@@ -547,10 +536,6 @@ void checkSwitches()
 {
   swarnstate_t last_bad_switches = 0xff;
   swarnstate_t states = g_model.switchWarningState;
-
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-  uint8_t bad_pots = 0, last_bad_pots = 0xff;
-#endif
 
   while (true) {
 

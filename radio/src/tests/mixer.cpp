@@ -476,14 +476,8 @@ TEST_F(MixerTest, SlowOnSwitchSource)
 {
   g_model.mixData[0].destCh = 0;
   g_model.mixData[0].mltpx = MLTPX_ADD;
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-  g_eeGeneral.switchConfig = 0x03;
-  g_model.mixData[0].srcRaw = MIXSRC_SA;
-  int switch_index = 0;
-#else
   g_model.mixData[0].srcRaw = MIXSRC_THR;
   int switch_index = 1;
-#endif
   g_model.mixData[0].weight = 100;
   g_model.mixData[0].speedUp = 50;
   g_model.mixData[0].speedDown = 50;
@@ -517,13 +511,8 @@ TEST_F(MixerTest, DelayOnSwitch)
   g_model.mixData[0].mltpx = MLTPX_ADD;
   g_model.mixData[0].srcRaw = MIXSRC_MAX;
   g_model.mixData[0].weight = 100;
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-  g_model.mixData[0].swtch = SWSRC_SA2;
-  int switch_index = 0;
-#else
   g_model.mixData[0].swtch = SWSRC_THR;
   int switch_index = 1;
-#endif
   g_model.mixData[0].delayUp = 50;
   g_model.mixData[0].delayDown = 50;
 

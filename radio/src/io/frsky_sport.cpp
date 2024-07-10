@@ -178,15 +178,6 @@ const char * sportUpdatePowerOn(ModuleIndex module)
 
   telemetryInit(PROTOCOL_FRSKY_SPORT);
 
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-  if (module == INTERNAL_MODULE)
-    INTERNAL_MODULE_ON();
-  else if (module == EXTERNAL_MODULE)
-    EXTERNAL_MODULE_ON();
-  else
-    SPORT_UPDATE_POWER_ON();
-#endif
-
   sportWaitState(SPORT_IDLE, 50); // Clear the fifo
 
   for (int i=0; i<10; i++) {
@@ -305,18 +296,6 @@ void sportFlashDevice(ModuleIndex module, const char * filename)
 {
   pausePulses();
 
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-  uint8_t intPwr = IS_INTERNAL_MODULE_ON();
-  uint8_t extPwr = IS_EXTERNAL_MODULE_ON();
-  INTERNAL_MODULE_OFF();
-  EXTERNAL_MODULE_OFF();
-  SPORT_UPDATE_POWER_OFF();
-
-  /* wait 2s off */
-  watchdogSuspend(2000);
-  RTOS_WAIT_MS(2000);
-#endif
-
   const char * result = sportUpdatePowerOn(module);
   if (!result) result = sportUpdateReqVersion();
   if (!result) result = sportUpdateUploadFile(filename);
@@ -327,20 +306,7 @@ void sportFlashDevice(ModuleIndex module, const char * filename)
     SET_WARNING_INFO(result, strlen(result), 0);
   }
 
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-  INTERNAL_MODULE_OFF();
-  EXTERNAL_MODULE_OFF();
-  SPORT_UPDATE_POWER_OFF();
-#endif
-
   sportWaitState(SPORT_IDLE, 500); // Clear the fifo
-
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-  if (intPwr)
-    INTERNAL_MODULE_ON();
-  if (extPwr)
-    EXTERNAL_MODULE_ON();
-#endif
 
   sportUpdateState = SPORT_IDLE;
 

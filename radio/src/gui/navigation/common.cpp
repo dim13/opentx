@@ -26,24 +26,12 @@ swsrc_t checkIncDecMovedSwitch(swsrc_t val)
   if (s_editMode>0) {
     swsrc_t swtch = getMovedSwitch();
     if (swtch) {
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-      div_t info = switchInfo(swtch);
-      if (IS_CONFIG_TOGGLE(info.quot)) {
-        if (info.rem != 0) {
-          val = (val == swtch ? swtch-2 : swtch);
-        }
-      }
-      else {
-        val = swtch;
-      }
-#else
       if (IS_CONFIG_TOGGLE(swtch) && swtch==val) {
         val = -val;
       }
       else {
         val = swtch;
       }
-#endif
     }
   }
   return val;

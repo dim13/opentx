@@ -27,11 +27,7 @@ uint8_t logDelay;
 
 void writeHeader();
 
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-  #define GET_2POS_STATE(sw) (switchState(SW_ ## sw ## 0) ? -1 : 1)
-#else
   #define GET_2POS_STATE(sw) (switchState(SW_ ## sw) ? -1 : 1)
-#endif
 
 #define GET_3POS_STATE(sw) (switchState(SW_ ## sw ## 0) ? -1 : (switchState(SW_ ## sw ## 2) ? 1 : 0))
 
@@ -156,27 +152,7 @@ void writeHeader()
   }
 #endif
 
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-  for (uint8_t i=1; i<NUM_STICKS+NUM_POTS+NUM_SLIDERS+1; i++) {
-    const char * p = STR_VSRCRAW + i * STR_VSRCRAW[0] + 2;
-    for (uint8_t j=0; j<STR_VSRCRAW[0]-1; ++j) {
-      if (!*p) break;
-      f_putc(*p, &g_oLogFile);
-      ++p;
-    }
-    f_putc(',', &g_oLogFile);
-  }
-#if defined(PCBX7)
-  #define STR_SWITCHES_LOG_HEADER  "SA,SB,SC,SD,SF,SH"
-#elif defined(PCBXLITE)
-  #define STR_SWITCHES_LOG_HEADER  "SA,SB,SC,SD"
-#else
-  #define STR_SWITCHES_LOG_HEADER  "SA,SB,SC,SD,SE,SF,SG,SH"
-#endif
-  f_puts(STR_SWITCHES_LOG_HEADER ",LSW,", &g_oLogFile);
-#else
   f_puts("Rud,Ele,Thr,Ail,P1,P2,P3,THR,RUD,ELE,3POS,AIL,GEA,TRN,", &g_oLogFile);
-#endif
 
   f_puts("TxBat(V)\n", &g_oLogFile);
 }
@@ -274,37 +250,6 @@ void logsWrite()
       }
 
 // TODO: use hardware config to populate
-#if defined(PCBXLITE)
-      f_printf(&g_oLogFile, "%d,%d,%d,%d,0x%08X%08X,",
-          GET_3POS_STATE(SA),
-          GET_3POS_STATE(SB),
-          GET_3POS_STATE(SC),
-          GET_3POS_STATE(SD),
-          getLogicalSwitchesStates(32),
-          getLogicalSwitchesStates(0));
-#elif defined(PCBX7)
-      f_printf(&g_oLogFile, "%d,%d,%d,%d,%d,%d,0x%08X%08X,",
-          GET_3POS_STATE(SA),
-          GET_3POS_STATE(SB),
-          GET_3POS_STATE(SC),
-          GET_3POS_STATE(SD),
-          GET_2POS_STATE(SF),
-          GET_2POS_STATE(SH),
-          getLogicalSwitchesStates(32),
-          getLogicalSwitchesStates(0));
-#elif defined(PCBTARANIS) || defined(PCBHORUS)
-      f_printf(&g_oLogFile, "%d,%d,%d,%d,%d,%d,%d,%d,0x%08X%08X,",
-          GET_3POS_STATE(SA),
-          GET_3POS_STATE(SB),
-          GET_3POS_STATE(SC),
-          GET_3POS_STATE(SD),
-          GET_3POS_STATE(SE),
-          GET_2POS_STATE(SF),
-          GET_3POS_STATE(SG),
-          GET_2POS_STATE(SH),
-          getLogicalSwitchesStates(32),
-          getLogicalSwitchesStates(0));
-#else
       f_printf(&g_oLogFile, "%d,%d,%d,%d,%d,%d,%d,",
           GET_2POS_STATE(THR),
           GET_2POS_STATE(RUD),
@@ -313,7 +258,6 @@ void logsWrite()
           GET_2POS_STATE(AIL),
           GET_2POS_STATE(GEA),
           GET_2POS_STATE(TRN));
-#endif
 
       div_t qr = div(g_vbat100mV, 10);
       int result = f_printf(&g_oLogFile, "%d.%d\n", abs(qr.quot), abs(qr.rem));

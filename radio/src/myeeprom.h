@@ -43,15 +43,7 @@
 #define GET_PPM_DELAY(idx) (g_model.moduleData[idx].ppm.delay * 50 + 300)
 #define SET_DEFAULT_PPM_FRAME_LENGTH(idx) g_model.moduleData[idx].ppm.frameLength = 4 * max((int8_t)0, g_model.moduleData[idx].channelsCount)
 
-#if defined(PCBHORUS)
 #define IS_TRAINER_EXTERNAL_MODULE() false
-#define HAS_WIRELESS_TRAINER_HARDWARE() (g_eeGeneral.auxSerialMode == UART_MODE_SBUS_TRAINER)
-#elif defined(PCBTARANIS)
-#define IS_TRAINER_EXTERNAL_MODULE() (g_model.trainerMode == TRAINER_MODE_MASTER_SBUS_EXTERNAL_MODULE || g_model.trainerMode == TRAINER_MODE_MASTER_CPPM_EXTERNAL_MODULE)
-#define HAS_WIRELESS_TRAINER_HARDWARE() (g_eeGeneral.auxSerialMode == UART_MODE_SBUS_TRAINER)
-#else
-#define IS_TRAINER_EXTERNAL_MODULE() false
-#endif
 
 #if defined(DFPLAYER)
 #define IS_PLAY_FUNC(func) ((func) >= FUNC_PLAY_SOUND && func <= FUNC_PLAY_VALUE)
@@ -119,13 +111,7 @@ enum SliderConfig {
 
 #define ALTERNATE_VIEW 0x10
 
-#if defined(PCBHORUS)
-#include "layout.h"
-#include "theme.h"
-#include "topbar.h"
-#else
 #define THEME_DATA
-#endif
 
 #define SWITCHES_DELAY() uint8_t(15 + g_eeGeneral.switchesDelay)
 #define SWITCHES_DELAY_NONE (-15)
@@ -159,13 +145,7 @@ enum CurveRefType {
 #define TRIM_ELE (-2)
 #define TRIM_THR (-3)
 #define TRIM_AIL (-4)
-#if defined(PCBHORUS)
-#define TRIM_T5 (-5)
-#define TRIM_T6 (-6)
-#define TRIM_LAST TRIM_T6
-#else
 #define TRIM_LAST TRIM_AIL
-#endif
 
 #define MLTPX_ADD 0
 #define MLTPX_MUL 1

@@ -51,18 +51,8 @@ void preModelLoad() {
 
   pauseMixerCalculations();
 }
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-static void fixUpModel() {
-  // Ensure that when rfProtocol is RF_PROTO_OFF the type of the module is MODULE_TYPE_NONE
-  if (g_model.moduleData[INTERNAL_MODULE].type == MODULE_TYPE_XJT && g_model.moduleData[INTERNAL_MODULE].rfProtocol == RF_PROTO_OFF)
-    g_model.moduleData[INTERNAL_MODULE].type = MODULE_TYPE_NONE;
-}
-#endif
 
 void postModelLoad(bool alarms) {
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-  fixUpModel();
-#endif
   AUDIO_FLUSH();
   flightReset(false);
 
@@ -95,10 +85,6 @@ void postModelLoad(bool alarms) {
 
 #if defined(SDCARD)
   referenceModelAudioFiles();
-#endif
-
-#if defined(PCBHORUS)
-  loadCustomScreens();
 #endif
 
   LOAD_MODEL_BITMAP();

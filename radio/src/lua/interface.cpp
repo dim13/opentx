@@ -52,12 +52,7 @@ struct our_longjmp * global_lj = 0;
 
 LuaMemTracer lsScriptsTrace;
 
-#if defined(PCBHORUS)
-  extern LuaMemTracer lsWidgetsTrace;
-  #define GET_TRACER(L)    (L == lsScripts) ? &lsScriptsTrace : &lsWidgetsTrace
-#else
   #define GET_TRACER(L)    &lsScriptsTrace
-#endif
 
 void *tracer_alloc(void * ud, void * ptr, size_t osize, size_t nsize)
 {

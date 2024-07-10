@@ -119,14 +119,6 @@ Open9xSim::Open9xSim(FXApp* a):
     knobs[i]= new FXKnob(hf11,NULL,0,KNOB_TICKS|LAYOUT_LEFT);
     knobs[i]->setValue(0);
 
-#if defined(PCBHORUS)
-    if (i == 1) {  // 6-pos switch
-      knobs[i]->setRange(0, 2048);
-      knobs[i]->setIncrement(2048 / 5);
-      knobs[i]->setTickDelta(2048 / 5);
-      continue;
-    }
-#endif
     knobs[i]->setRange(-1024, 1024);
   }
 
@@ -242,32 +234,6 @@ long Open9xSim::onKeypress(FXObject*,FXSelector,void*v)
 void Open9xSim::updateKeysAndSwitches(bool start)
 {
   static int keys1[] = {
-#if defined(PCBHORUS)
-    KEY_Page_Up,   KEY_PGUP,
-    KEY_Page_Down, KEY_PGDN,
-    KEY_Return,    KEY_ENTER,
-    KEY_Up,        KEY_UP,
-    KEY_Down,      KEY_DOWN,
-    KEY_Right,     KEY_RIGHT,
-    KEY_Left,      KEY_LEFT,
-#elif defined(PCBXLITE)
-    KEY_Shift_L,   KEY_SHIFT,
-    KEY_Return,    KEY_ENTER,
-    KEY_BackSpace, KEY_EXIT,
-    KEY_Right,     KEY_RIGHT,
-    KEY_Left,      KEY_LEFT,
-    KEY_Up,        KEY_UP,
-    KEY_Down,      KEY_DOWN,
-#elif defined(PCBTARANIS)
-    KEY_Page_Up,   KEY_MENU,
-  #if defined(KEYS_GPIO_REG_PAGE)
-    KEY_Page_Down, KEY_PAGE,
-  #endif
-    KEY_Return,    KEY_ENTER,
-    KEY_BackSpace, KEY_EXIT,
-    KEY_Up,        KEY_PLUS,
-    KEY_Down,      KEY_MINUS,
-#else
     KEY_Return,    KEY_MENU,
     KEY_BackSpace, KEY_EXIT,
     KEY_Right,     KEY_RIGHT,
@@ -276,7 +242,6 @@ void Open9xSim::updateKeysAndSwitches(bool start)
     KEY_Down,      KEY_DOWN,
 #if defined(ROTARY_ENCODER_NAVIGATION)
     KEY_F,         BTN_REa,
-#endif
 #endif
   };
 
@@ -314,35 +279,6 @@ void Open9xSim::updateKeysAndSwitches(bool start)
   } \
   simuSetSwitch(swtch, state_##swtch-states);
 
-#if defined(PCBX9E)
-  SWITCH_KEY(A, 0, 3);
-  SWITCH_KEY(B, 1, 3);
-  SWITCH_KEY(C, 2, 3);
-  SWITCH_KEY(D, 3, 3);
-  SWITCH_KEY(E, 4, 3);
-  SWITCH_KEY(F, 5, 3);
-  SWITCH_KEY(G, 6, 3);
-  SWITCH_KEY(H, 7, 3);
-  SWITCH_KEY(I, 8, 3);
-  SWITCH_KEY(J, 9, 3);
-  SWITCH_KEY(K, 10, 3);
-  SWITCH_KEY(L, 11, 3);
-  SWITCH_KEY(M, 12, 3);
-  SWITCH_KEY(N, 13, 3);
-  SWITCH_KEY(O, 14, 3);
-  SWITCH_KEY(P, 15, 3);
-  SWITCH_KEY(Q, 16, 3);
-  SWITCH_KEY(R, 17, 3);
-#elif defined(PCBTARANIS) || defined(PCBHORUS)
-  SWITCH_KEY(A, 0, 3);
-  SWITCH_KEY(B, 1, 3);
-  SWITCH_KEY(C, 2, 3);
-  SWITCH_KEY(D, 3, 3);
-  SWITCH_KEY(E, 4, 3);
-  SWITCH_KEY(F, 5, 2);
-  SWITCH_KEY(G, 6, 3);
-  SWITCH_KEY(H, 7, 2);
-#else
   SWITCH_KEY(1, 0, 2);
   SWITCH_KEY(2, 1, 2);
   SWITCH_KEY(3, 2, 2);
@@ -350,7 +286,6 @@ void Open9xSim::updateKeysAndSwitches(bool start)
   SWITCH_KEY(5, 4, 2);
   SWITCH_KEY(6, 5, 2);
   SWITCH_KEY(7, 6, 2);
-#endif
 }
 
 long Open9xSim::onTimeout(FXObject*, FXSelector, void*)
@@ -378,40 +313,6 @@ long Open9xSim::onTimeout(FXObject*, FXSelector, void*)
     }
 #endif
 
-#if defined(PCBX9E)
-    SWITCH_KEY(A, 0, 3);
-    SWITCH_KEY(B, 1, 3);
-    SWITCH_KEY(C, 2, 3);
-    SWITCH_KEY(D, 3, 3);
-    SWITCH_KEY(E, 4, 3);
-    SWITCH_KEY(F, 5, 2);
-    SWITCH_KEY(G, 6, 3);
-    SWITCH_KEY(H, 7, 2);
-    SWITCH_KEY(I, 8, 3);
-    SWITCH_KEY(J, 9, 3);
-    SWITCH_KEY(K, 10, 3);
-    SWITCH_KEY(L, 11, 3);
-    SWITCH_KEY(M, 12, 3);
-    SWITCH_KEY(N, 13, 3);
-    SWITCH_KEY(O, 14, 3);
-    SWITCH_KEY(P, 15, 3);
-    SWITCH_KEY(Q, 16, 3);
-    SWITCH_KEY(R, 17, 3);
-#elif defined(PCBTARANIS) || defined(PCBHORUS)
-    SWITCH_KEY(A, 0, 3);
-    SWITCH_KEY(B, 1, 3);
-    SWITCH_KEY(C, 2, 3);
-    SWITCH_KEY(D, 3, 3);
-#if defined(PCBX7)
-    SWITCH_KEY(F, 4, 2);
-    SWITCH_KEY(H, 5, 2);
-#else
-    SWITCH_KEY(E, 4, 3);
-    SWITCH_KEY(F, 5, 2);
-    SWITCH_KEY(G, 6, 3);
-    SWITCH_KEY(H, 7, 2);
-#endif
-#else
     SWITCH_KEY(1, 0, 2);
     SWITCH_KEY(2, 1, 2);
     SWITCH_KEY(3, 2, 2);
@@ -419,7 +320,6 @@ long Open9xSim::onTimeout(FXObject*, FXSelector, void*)
     SWITCH_KEY(5, 4, 2);
     SWITCH_KEY(6, 5, 2);
     SWITCH_KEY(7, 6, 2);
-#endif
   }
 
   per10ms();
@@ -461,21 +361,7 @@ void Open9xSim::refreshDisplay()
 #endif
     for (int x=0; x<LCD_W; x++) {
       for (int y=0; y<LCD_H; y++) {
-#if defined(PCBHORUS)
-    	display_t z = simuLcdBuf[y * LCD_W + x];
-    	if (1) {
-          if (z == 0) {
-            setPixel(x, y, FXRGB(0,0,0));
-          }
-          else if (z == 0xFFFF) {
-            setPixel(x, y, FXRGB(255,255,255));
-          }
-          else {
-            FXColor color = FXRGB(255*((z&0xF800)>>11)/0x1f, 255*((z&0x07E0)>>5)/0x3F, 255*(z&0x001F)/0x01F);
-            setPixel(x, y, color);
-          }
-    	}
-#elif LCD_W >= 212
+#if LCD_W >= 212
         display_t * p = &simuLcdBuf[y / 2 * LCD_W + x];
         uint8_t z = (y & 1) ? (*p >> 4) : (*p & 0x0F);
         if (z) {

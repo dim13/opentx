@@ -156,12 +156,6 @@ void PxxPulses<PxxTransport>::addExtraFlags(uint8_t port)
   // Ext. flag (holds antenna selection on Horus internal module, 0x00 otherwise)
   uint8_t extra_flags = 0;
 
-#if defined(PCBHORUS) || defined(PCBXLITE)
-  if (port == INTERNAL_MODULE) {
-    extra_flags |= (g_model.moduleData[port].pxx.external_antenna << 0);
-  }
-#endif
-
   extra_flags |= (g_model.moduleData[port].pxx.receiver_telem_off << 1);
   extra_flags |= (g_model.moduleData[port].pxx.receiver_channel_9_16 << 2);
   if (isModuleR9M(port)) {

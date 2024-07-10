@@ -287,27 +287,10 @@ void getSwitchAudioFile(char * filename, swsrc_t index)
 {
   char * str = getModelAudioPath(filename);
 
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-  if (index <= SWSRC_LAST_SWITCH) {
-    div_t swinfo = switchInfo(index);
-    *str++ = 'S';
-    *str++ = 'A' + swinfo.quot;
-    const char * positions[] = { "-up", "-mid", "-down" };
-    strcpy(str, positions[swinfo.rem]);
-  }
-  else {
-    div_t swinfo = div(int(index - SWSRC_FIRST_MULTIPOS_SWITCH), XPOTS_MULTIPOS_COUNT);
-    *str++ = 'S';
-    *str++ = '1' + swinfo.quot;
-    *str++ = '1' + swinfo.rem;
-    *str = '\0';
-  }
-#else
   int len = STR_VSWITCHES[0];
   strncpy(str, &STR_VSWITCHES[1+(len*index)], len);
   str += len;
   *str = '\0';
-#endif
   strcat(str, SOUNDS_EXT);
 }
 
@@ -315,21 +298,9 @@ void getLogicalSwitchAudioFile(char * filename, int index, unsigned int event)
 {
   char * str = getModelAudioPath(filename);
 
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-  *str++ = 'L';
-  if (index >= 9) {
-    div_t qr = div(index+1, 10);
-    *str++ = '0' + qr.quot;
-    *str++ = '0' + qr.rem;
-  }
-  else {
-    *str++ = '1' + index;
-  }
-#else
   int len = STR_VSWITCHES[0];
   strncpy(str, &STR_VSWITCHES[1+len*(index+SWSRC_FIRST_LOGICAL_SWITCH)], len);
   str += len;
-#endif
 
   strcpy(str, suffixes[event]);
   strcat(str, SOUNDS_EXT);
@@ -1091,20 +1062,7 @@ void audioEvent(unsigned int index)
       case AU_STICK4_MIDDLE:
       case AU_POT1_MIDDLE:
       case AU_POT2_MIDDLE:
-#if defined(PCBX9E)
       case AU_POT3_MIDDLE:
-      case AU_POT4_MIDDLE:
-#endif
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-      case AU_SLIDER1_MIDDLE:
-      case AU_SLIDER2_MIDDLE:
-#if defined(PCBX9E)
-      case AU_SLIDER3_MIDDLE:
-      case AU_SLIDER4_MIDDLE:
-#endif
-#else
-      case AU_POT3_MIDDLE:
-#endif
         audioQueue.playTone(BEEP_DEFAULT_FREQ + 1500, 80, 20, PLAY_NOW);
         break;
       case AU_MIX_WARNING_1:

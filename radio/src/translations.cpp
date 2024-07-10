@@ -515,9 +515,7 @@ const char STR_SCRIPT_KILLED[]  = TR_SCRIPT_KILLED;
 const char STR_SCRIPT_ERROR[]  = TR_SCRIPT_ERROR;
 const char STR_PLAY_FILE[]  = TR_PLAY_FILE;
 const char STR_ASSIGN_BITMAP[]  = TR_ASSIGN_BITMAP;
-#if defined(PCBHORUS)
 const char STR_ASSIGN_SPLASH[]  = TR_ASSIGN_SPLASH;
-#endif
 const char STR_EXECUTE_FILE[]  = TR_EXECUTE_FILE;
 const char STR_DELETE_FILE[]  = TR_DELETE_FILE;
 const char STR_COPY_FILE[]  = TR_COPY_FILE;

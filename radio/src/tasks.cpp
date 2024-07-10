@@ -217,14 +217,6 @@ TASK_FUNCTION(menusTask) {
 #endif
   }
 
-#if defined(PCBX9E)
-  toplcdOff();
-#endif
-
-#if defined(PCBHORUS)
-  ledOff();
-#endif
-
 #if !defined(PCBI6X) // no software controlled power on i6X
   drawSleepBitmap();
   opentxClose();

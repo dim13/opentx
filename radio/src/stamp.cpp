@@ -26,11 +26,7 @@
 
 #define EEPROM_STR DEFNUMSTR(EEPROM_VER);
 
-#if defined(PCBHORUS)
-#define TAB "\037\075"
-#else
 #define TAB "\037\033"
-#endif
 
 #if defined(FRSKY_RELEASE)
 #define DISPLAY_VERSION "-frsky"

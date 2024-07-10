@@ -51,21 +51,10 @@ inline bool isModuleMultimoduleDSM2(uint8_t)
 }
 #endif
 
-#if defined(PCBHORUS) || defined(PCBTARANIS)
 inline bool isModuleXJT(uint8_t idx)
 {
-  return g_model.moduleData[idx].type == MODULE_TYPE_XJT;
-}
-#else
-inline bool isModuleXJT(uint8_t idx)
-{
-  #if defined(PCBI6X)
   return false;
-  #else
-  return idx == EXTERNAL_MODULE && g_model.moduleData[EXTERNAL_MODULE].type == MODULE_TYPE_XJT;
-  #endif
 }
-#endif
 
 #if defined(CROSSFIRE)
 inline bool isModuleCrossfire(uint8_t idx)
