@@ -174,23 +174,7 @@ void inavRun(event_t event);
 bool displayTelemetryScreen()
 {
 #if defined(TELEMETRY_FRSKY)
-#if defined(LUA)
-  if (TELEMETRY_SCREEN_TYPE(s_frsky_view) == TELEMETRY_SCREEN_TYPE_SCRIPT) {
-    uint8_t state = isTelemetryScriptAvailable(s_frsky_view);
-    switch (state) {
-      case SCRIPT_OK:
-        return true;  // contents will be drawed by Lua Task
-      case SCRIPT_NOFILE:
-        return false;  // requested lua telemetry screen not available
-      case SCRIPT_SYNTAX_ERROR:
-      case SCRIPT_PANIC:
-      case SCRIPT_KILLED:
-        luaError(lsScripts, state, false);
-        return true;
-    }
-    return false;
-  }
-#elif defined(PCBI6X_INAV)
+#if defined(PCBI6X_INAV)
   if (TELEMETRY_SCREEN_TYPE(s_frsky_view) == TELEMETRY_SCREEN_TYPE_SCRIPT) {
     inavRun(0xff);
     return true;
@@ -230,9 +214,6 @@ void menuViewTelemetryFrsky(event_t event)
 
   switch (event) {
     case EVT_KEY_FIRST(KEY_EXIT):
-#if defined(LUA)
-    case EVT_KEY_LONG(KEY_EXIT):
-#endif
       killEvents(event);
       chainMenu(menuMainView);
       break;

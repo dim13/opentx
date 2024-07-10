@@ -247,11 +247,6 @@ inline void telemetryOutputSetTrigger(uint8_t byte)
   outputTelemetryBufferTrigger = byte;
 }
 
-#if defined(LUA)
-#define LUA_TELEMETRY_INPUT_FIFO_SIZE  256
-extern Fifo<uint8_t, LUA_TELEMETRY_INPUT_FIFO_SIZE> * luaInputTelemetryFifo;
-#endif
-
 #if defined(STM32)
     #define IS_TELEMETRY_INTERNAL_MODULE() (true)
 #else

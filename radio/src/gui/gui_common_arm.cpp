@@ -129,16 +129,6 @@ bool isSourceAvailable(int source) {
     return isInputAvailable(source - MIXSRC_FIRST_INPUT);
   }
 
-#if defined(LUA_MODEL_SCRIPTS)
-  if (source >= MIXSRC_FIRST_LUA && source <= MIXSRC_LAST_LUA) {
-    div_t qr = div(source - MIXSRC_FIRST_LUA, MAX_SCRIPT_OUTPUTS);
-    return (qr.rem < scriptInputsOutputs[qr.quot].outputsCount);
-  }
-#elif defined(LUA_INPUTS)
-  if (source >= MIXSRC_FIRST_LUA && source <= MIXSRC_LAST_LUA)
-    return false;
-#endif
-
   if (source >= MIXSRC_FIRST_POT && source <= MIXSRC_LAST_POT) {
     return IS_POT_SLIDER_AVAILABLE(POT1 + source - MIXSRC_FIRST_POT);
   }
@@ -378,9 +368,7 @@ bool isAssignableFunctionAvailable(int function) {
     case FUNC_RANGECHECK:
     case FUNC_BIND:
 #endif
-#if !defined(LUA)
     case FUNC_PLAY_SCRIPT:
-#endif
     case FUNC_RESERVE5:
       return false;
 

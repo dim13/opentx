@@ -131,9 +131,6 @@ enum UartModes {
 #if defined(SBUS)
   UART_MODE_SBUS_TRAINER,
 #endif
-#if defined(LUA)
-  UART_MODE_LUA,
-#endif
   UART_MODE_COUNT,
   UART_MODE_MAX = UART_MODE_COUNT-1
 };

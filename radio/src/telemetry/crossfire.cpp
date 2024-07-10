@@ -235,18 +235,9 @@ void processCrossfireTelemetryFrame() {
       }
       break;
     default:
-#if defined(LUA)
-      if (luaInputTelemetryFifo && luaInputTelemetryFifo->hasSpace(telemetryRxBufferCount - 2)) {
-        for (uint8_t i = 1; i < telemetryRxBufferCount - 1; i++) {
-          // destination address and CRC are skipped
-          luaInputTelemetryFifo->push(telemetryRxBuffer[i]);
-        }
-      }
-#else
       // <Device address 0><Frame length 1><Type 2><Payload 3><CRC>
       // destination address and CRC are skipped
       runCrossfireTelemetryCallback(telemetryRxBuffer[2], telemetryRxBuffer + 2, telemetryRxBuffer[1] - 1);
-#endif
       break;
   }
 }
@@ -351,7 +342,6 @@ void crossfireSetDefault(int index, uint8_t id, uint8_t subId) {
   storageDirty(EE_MODEL);
 }
 
-#if !defined(LUA)
 /**
  * Skip luaInputTelemetryFifo and luaCrossfireTelemetryPop() to save RAM and provide synchronous API instead
  */
@@ -383,4 +373,3 @@ bool crossfireTelemetryPush(uint8_t command, uint8_t *data, uint8_t length) {
     return false;
   }
 }
-#endif

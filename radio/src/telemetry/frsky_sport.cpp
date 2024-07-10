@@ -242,18 +242,6 @@ void sportProcessTelemetryPacket(const uint8_t * packet)
           sportProcessTelemetryPacket(id, 1, instance, (data >> 16) / 10);
         }
         else if (id >= DIY_STREAM_FIRST_ID && id <= DIY_STREAM_LAST_ID) {
-#if defined(LUA)
-          if (luaInputTelemetryFifo && luaInputTelemetryFifo->hasSpace(sizeof(SportTelemetryPacket))) {
-            SportTelemetryPacket luaPacket;
-            luaPacket.physicalId = physicalId;
-            luaPacket.primId = primId;
-            luaPacket.dataId = id;
-            luaPacket.value = data;
-            for (uint8_t i=0; i<sizeof(SportTelemetryPacket); i++) {
-              luaInputTelemetryFifo->push(luaPacket.raw[i]);
-            }
-          }
-#endif
         }
         else {
           sportProcessTelemetryPacket(id, 0, instance, data);
@@ -261,20 +249,6 @@ void sportProcessTelemetryPacket(const uint8_t * packet)
       }
     }
   }
-#if defined(LUA)
-  else if (primId == 0x32) {
-    if (luaInputTelemetryFifo && luaInputTelemetryFifo->hasSpace(sizeof(SportTelemetryPacket))) {
-      SportTelemetryPacket luaPacket;
-      luaPacket.physicalId = physicalId;
-      luaPacket.primId = primId;
-      luaPacket.dataId = id;
-      luaPacket.value = data;
-      for (uint8_t i=0; i<sizeof(SportTelemetryPacket); i++) {
-        luaInputTelemetryFifo->push(luaPacket.raw[i]);
-      }
-    }
-  }
-#endif
 }
 
 void frskySportSetDefault(int index, uint16_t id, uint8_t subId, uint8_t instance)

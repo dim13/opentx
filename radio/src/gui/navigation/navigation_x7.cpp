@@ -43,10 +43,6 @@ void onSourceLongEnterPress(const char * result)
 {
   if (result == STR_MENU_INPUTS)
     checkIncDecSelection = getFirstAvailable(MIXSRC_FIRST_INPUT, MIXSRC_LAST_INPUT, isInputAvailable)+1;
-#if defined(LUA_MODEL_SCRIPTS)
-  else if (result == STR_MENU_LUA)
-    checkIncDecSelection = getFirstAvailable(MIXSRC_FIRST_LUA, MIXSRC_LAST_LUA, isSourceAvailable);
-#endif
   else if (result == STR_MENU_STICKS)
     checkIncDecSelection = MIXSRC_FIRST_STICK;
   else if (result == STR_MENU_POTS)
@@ -163,13 +159,6 @@ int checkIncDec(event_t event, int val, int i_min, int i_max, unsigned int i_fla
           POPUP_MENU_ADD_ITEM(STR_MENU_INPUTS);
         }
       }
-#if defined(LUA_MODEL_SCRIPTS)
-      if (i_min <= MIXSRC_FIRST_LUA && i_max >= MIXSRC_FIRST_LUA) {
-        if (getFirstAvailable(MIXSRC_FIRST_LUA, MIXSRC_LAST_LUA, isSourceAvailable) != MIXSRC_NONE) {
-          POPUP_MENU_ADD_ITEM(STR_MENU_LUA);
-        }
-      }
-#endif
       if (i_min <= MIXSRC_FIRST_STICK && i_max >= MIXSRC_FIRST_STICK)      POPUP_MENU_ADD_ITEM(STR_MENU_STICKS);
       if (i_min <= MIXSRC_FIRST_POT && i_max >= MIXSRC_FIRST_POT)          POPUP_MENU_ADD_ITEM(STR_MENU_POTS);
       if (i_min <= MIXSRC_MAX && i_max >= MIXSRC_MAX)                      POPUP_MENU_ADD_ITEM(STR_MENU_MAX);

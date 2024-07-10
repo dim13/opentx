@@ -673,23 +673,6 @@ void drawSource(coord_t x, coord_t y, uint32_t idx, LcdFlags att)
     else
       lcdDrawNumber(x+8, y, idx, att|LEADING0|LEFT, 2);
   }
-#if defined(LUA_INPUTS)
-  else if (idx <= MIXSRC_LAST_LUA) {
-    div_t qr = div(idx-MIXSRC_FIRST_LUA, MAX_SCRIPT_OUTPUTS);
-#if defined(LUA_MODEL_SCRIPTS)
-    if (qr.quot < MAX_SCRIPTS && qr.rem < scriptInputsOutputs[qr.quot].outputsCount) {
-      lcdDrawChar(x+2, y+1, '1'+qr.quot, TINSIZE);
-      lcdDrawFilledRect(x, y, 7, 7, 0);
-      lcdDrawSizedText(x+8, y, scriptInputsOutputs[qr.quot].outputs[qr.rem].name, att & STREXPANDED ? 9 : 4, att);
-    }
-    else
-#endif
-    {
-      drawStringWithIndex(x, y, "LUA", qr.quot+1, att);
-      lcdDrawChar(lcdLastRightPos, y, 'a'+qr.rem, att);
-    }
-  }
-#endif
   else if (idx <= MIXSRC_LAST_POT) {
     idx = idx - MIXSRC_Rud;
     if (ZEXIST(g_eeGeneral.anaNames[idx])) {

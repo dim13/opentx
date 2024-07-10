@@ -66,21 +66,8 @@ uint8_t auxSerialTracesEnabled();
 #define TRACE_WARNING_WP(...) debugPrintf(__VA_ARGS__)
 #define TRACE_ERROR(...)      debugPrintf("-E- " __VA_ARGS__)
 
-#if defined(TRACE_LUA_INTERNALS_ENABLED)
-  #define TRACE_LUA_INTERNALS(f_, ...)     debugPrintf(("[LUA INT] " f_ "\r\n"), ##__VA_ARGS__)
-
-  #define TRACE_LUA_INTERNALS_WITH_LINEINFO(L, f_, ...)   do { \
-                                                            lua_Debug ar; \
-                                                            if (lua_getstack(L, 1, &ar)) {  \
-                                                              lua_getinfo(L, ">Sl", &ar); \
-                                                              debugPrintf("%s:%d: ", ar.short_src, ar.currentline); \
-                                                            } \
-                                                            debugPrintf(("[LUA INT] " f_ "\r\n"), ##__VA_ARGS__); \
-                                                          } while(0)
-#else
   #define TRACE_LUA_INTERNALS(...)
   #define TRACE_LUA_INTERNALS_WITH_LINEINFO(L, f_, ...)
-#endif
 
 #if defined(DEBUG) && !defined(SIMU)
 #define TIME_MEASURE_START(id) uint16_t t0 ## id = getTmr2MHz()

@@ -46,11 +46,7 @@
   #define CASE_STM32(x)
 #endif
 
-#if defined(LUA)
-  #define CASE_LUA(x) x,
-#else
   #define CASE_LUA(x)
-#endif
 
 #if defined(RTCLOCK)
   #define CASE_RTCLOCK(x) x,
@@ -649,12 +645,6 @@ inline void getMixSrcRange(const int source, int16_t & valMin, int16_t & valMax,
     valMax = g_model.extendedTrims ? TRIM_EXTENDED_MAX : TRIM_MAX;
     valMin = -valMax;
   }
-#if defined(LUA_INPUTS)
-  else if (source >= MIXSRC_FIRST_LUA && source <= MIXSRC_LAST_LUA) {
-    valMax = 30000;
-    valMin = -valMax;
-  }
-#endif
   else if (source < MIXSRC_FIRST_CH) {
     valMax = 100;
     valMin = -valMax;

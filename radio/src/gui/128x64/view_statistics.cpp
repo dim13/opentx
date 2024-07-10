@@ -182,13 +182,6 @@ void menuStatisticsDebug(event_t event)
   lcdDrawTextAlignedLeft(MENU_DEBUG_Y_FREE_RAM, "Free Mem");
   lcdDrawNumber(MENU_DEBUG_COL1_OFS, MENU_DEBUG_Y_FREE_RAM, availableMemory(), LEFT);
   lcdDrawText(lcdLastRightPos, MENU_DEBUG_Y_FREE_RAM, "b");
-#if defined(LUA)
-  lcdDrawTextAlignedLeft(MENU_DEBUG_Y_LUA, "Lua scripts");
-  lcdDrawText(MENU_DEBUG_COL1_OFS, MENU_DEBUG_Y_LUA+1, "[D]", SMLSIZE);
-  lcdDrawNumber(lcdLastRightPos, MENU_DEBUG_Y_LUA, 10*maxLuaDuration, LEFT);
-  lcdDrawText(lcdLastRightPos+2, MENU_DEBUG_Y_LUA+1, "[I]", SMLSIZE);
-  lcdDrawNumber(lcdLastRightPos, MENU_DEBUG_Y_LUA, 10*maxLuaInterval, LEFT);
-#endif // LUA
 #endif // PCBTARANIS
 
   lcdDrawTextAlignedLeft(MENU_DEBUG_Y_MIXMAX, STR_TMIXMAXMS);

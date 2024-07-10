@@ -116,9 +116,6 @@ enum MenuModelIndexes {
   MENU_MODEL_CURVES,
   MENU_MODEL_LOGICAL_SWITCHES,
   MENU_MODEL_SPECIAL_FUNCTIONS,
-#if defined(LUA_MODEL_SCRIPTS)
-  MENU_MODEL_CUSTOM_SCRIPTS,
-#endif
   CASE_FRSKY(MENU_MODEL_TELEMETRY_FRSKY)
   MENU_MODEL_DISPLAY,
   MENU_MODEL_PAGES_COUNT
@@ -155,9 +152,6 @@ static const MenuHandlerFunc menuTabModel[]  = {
   menuModelCurvesAll,
   menuModelLogicalSwitches,
   menuModelSpecialFunctions,
-#if defined(LUA_MODEL_SCRIPTS)
-  menuModelCustomScripts,
-#endif
   CASE_FRSKY(menuModelTelemetryFrsky)
   menuModelDisplay,
 };

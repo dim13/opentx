@@ -434,11 +434,6 @@ int cliMemoryInfo(const char ** argv)
   serialPrint("\tused  %d bytes", (int)(heap - (unsigned char *)&_end));
   serialPrint("\tfree  %d bytes", (int)((unsigned char *)&_heap_end - heap));
 
-#if defined(LUA)
-  serialPrint("\nLua:");
-  uint32_t s = luaGetMemUsed(lsScripts);
-  serialPrint("\tScripts %u", s);
-#endif
   return 0;
 }
 

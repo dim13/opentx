@@ -127,12 +127,6 @@ void onSdManagerMenu(const char * result)
     getSelectionFullPath(lfn);
     pushMenuTextView(lfn);
   }
-#if defined(LUA)
-  else if (result == STR_EXECUTE_FILE) {
-    getSelectionFullPath(lfn);
-    luaExec(lfn);
-  }
-#endif
 }
 
 void menuRadioSdManager(event_t _event)
@@ -213,11 +207,6 @@ void menuRadioSdManager(event_t _event)
           else if (!strcasecmp(ext, TEXT_EXT)) {
             POPUP_MENU_ADD_ITEM(STR_VIEW_TEXT);
           }
-#if defined(LUA)
-          else if (isExtensionMatching(ext, SCRIPTS_EXT)) {
-            POPUP_MENU_ADD_ITEM(STR_EXECUTE_FILE);
-          }
-#endif
         }
         if (!READ_ONLY()) {
           if (IS_FILE(line))

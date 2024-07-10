@@ -1428,9 +1428,6 @@ void opentxClose(uint8_t shutdown) {
 #if defined(TELEMETRY_FRSKY)
     // TODO needed? telemetryEnd();
 #endif
-#if defined(LUA)
-    luaClose(&lsScripts);
-#endif
 #if defined(HAPTIC)
     hapticOff();
 #endif

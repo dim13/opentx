@@ -214,12 +214,6 @@ extern "C" void AUX_SERIAL_USART_IRQHandler(void)
     uint8_t data = AUX_SERIAL_USART->DR;
 #endif // STM32F0
     UNUSED(data);
-    if (!(status & USART_FLAG_ERRORS)) {
-#if defined(LUA) & !defined(CLI)
-      if (luaRxFifo && auxSerialMode == UART_MODE_LUA)
-        luaRxFifo->push(data);
-#endif
-    }
 #if defined(STM32F0)
     status = AUX_SERIAL_USART->ISR;
 #else

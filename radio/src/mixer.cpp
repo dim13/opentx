@@ -292,26 +292,10 @@ getvalue_t getValue(mixsrc_t i)
   else if (i <= MIXSRC_LAST_INPUT) {
     return anas[i-MIXSRC_FIRST_INPUT];
   }
-#if defined(LUA_INPUTS)
-  else if (i < MIXSRC_LAST_LUA) {
-#if defined(LUA_MODEL_SCRIPTS)
-    div_t qr = div(i-MIXSRC_FIRST_LUA, MAX_SCRIPT_OUTPUTS);
-    return scriptInputsOutputs[qr.quot].outputs[qr.rem].value;
-#else
-    return 0;
-#endif
-  }
-#endif
 
-#if defined(LUA_INPUTS)
-  else if (i <= MIXSRC_LAST_POT+NUM_MOUSE_ANALOGS) {
-    return calibratedAnalogs[i-MIXSRC_Rud];
-  }
-#else
   else if (i>=MIXSRC_FIRST_STICK && i<=MIXSRC_LAST_POT+NUM_MOUSE_ANALOGS) {
     return calibratedAnalogs[i-MIXSRC_Rud];
   }
-#endif
 
 #if defined(PCBGRUVIN9X) || defined(PCBMEGA2560) || defined(ROTARY_ENCODERS)
   else if (i <= MIXSRC_LAST_ROTARY_ENCODER) {
@@ -645,16 +629,6 @@ void evalFlightModeMixes(uint8_t mode, uint8_t tick10ms)
       if (mixEnabled && md->srcRaw >= MIXSRC_FIRST_TRAINER && md->srcRaw <= MIXSRC_LAST_TRAINER && !IS_TRAINER_INPUT_VALID()) {
         MIXER_LINE_DISABLE();
       }
-
-#if defined(LUA_MODEL_SCRIPTS)
-      // disable mixer if Lua script is used as source and script was killed
-      if (mixEnabled && md->srcRaw >= MIXSRC_FIRST_LUA && md->srcRaw <= MIXSRC_LAST_LUA) {
-        div_t qr = div(md->srcRaw-MIXSRC_FIRST_LUA, MAX_SCRIPT_OUTPUTS);
-        if (scriptInternalData[qr.quot].state != SCRIPT_OK) {
-          MIXER_LINE_DISABLE();
-        }
-      }
-#endif
 
       //========== VALUE ===============
       getvalue_t v = 0;

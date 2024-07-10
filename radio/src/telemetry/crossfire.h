@@ -125,8 +125,6 @@ const uint8_t CROSSFIRE_PERIODS[] = {
 
 #define CROSSFIRE_TELEM_MIRROR_BAUDRATE   115200
 
-#if !defined(LUA)
 bool crossfireTelemetryPush(uint8_t command, uint8_t *data, uint8_t length);
-#endif
 
 #endif // _CROSSFIRE_H_

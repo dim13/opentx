@@ -307,20 +307,6 @@ char * getSourceString(char * dest, mixsrc_t idx)
       strAppendUnsigned(dest, idx+1, 2);
     }
   }
-#if defined(LUA_INPUTS)
-  else if (idx <= MIXSRC_LAST_LUA) {
-#if defined(LUA_MODEL_SCRIPTS)
-    div_t qr = div(idx-MIXSRC_FIRST_LUA, MAX_SCRIPT_OUTPUTS);
-    if (qr.quot < MAX_SCRIPTS && qr.rem < scriptInputsOutputs[qr.quot].outputsCount) {
-      *dest++ = '\322';
-      // *dest++ = '1'+qr.quot;
-      strcpy(dest, scriptInputsOutputs[qr.quot].outputs[qr.rem].name);
-    }
-#else
-    strcpy(dest, "N/A");
-#endif
-  }
-#endif
   else if (idx <= MIXSRC_LAST_POT) {
     idx -= MIXSRC_Rud;
     if (ZEXIST(g_eeGeneral.anaNames[idx])) {

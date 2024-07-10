@@ -177,9 +177,6 @@ void periodicTick_1s()
 void periodicTick_10s()
 {
   checkBatteryAlarms();
-#if defined(LUA)
-  checkLuaMemoryUsage();
-#endif
 }
 
 void periodicTick()
