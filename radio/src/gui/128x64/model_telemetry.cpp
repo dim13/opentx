@@ -77,11 +77,7 @@ enum MenuModelTelemetryFrskyItems {
 
 #if defined(TELEMETRY_FRSKY)
   #define TELEM_COL1                   INDENT_WIDTH
-  #if defined(TRANSLATIONS_CZ)
-    #define TELEM_COL2                 (9*FW)
-  #else
-    #define TELEM_COL2                 (8*FW)
-  #endif
+  #define TELEM_COL2                   (8*FW)
   #define TELEM_BARS_COLMIN            (56-3*FW)
   #define TELEM_BARS_COLMAX            (14*FW-3)
   #define TELEM_SCRTYPE_COL            TELEM_COL2

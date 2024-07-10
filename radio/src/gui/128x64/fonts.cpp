@@ -22,25 +22,6 @@
 
 const unsigned char font_5x7[]  = {
 #include "font_05x07.lbm"
-#if defined(TRANSLATIONS_DE)
-#include "font_de_05x07.lbm"
-#elif defined(TRANSLATIONS_CZ)
-#include "font_cz_05x07.lbm"
-#elif defined(TRANSLATIONS_ES)
-#include "font_es_05x07.lbm"
-#elif defined(TRANSLATIONS_FI)
-#include "font_fi_05x07.lbm"
-#elif defined(TRANSLATIONS_FR)
-#include "font_fr_05x07.lbm"
-#elif defined(TRANSLATIONS_IT)
-#include "font_it_05x07.lbm"
-#elif defined(TRANSLATIONS_PL)
-#include "font_pl_05x07.lbm"
-#elif defined(TRANSLATIONS_PT)
-#include "font_pt_05x07.lbm"
-#elif defined(TRANSLATIONS_SE)
-#include "font_se_05x07.lbm"
-#endif
 };
 
 #if defined(BOLD_SPECIFIC_FONT)
@@ -52,25 +33,6 @@ const unsigned char font_5x7_B[]  = {
 #if !defined(BOOT)
 const unsigned char font_10x14[]  = {
 #include "font_10x14_compressed.lbm"
-  #if defined(TRANSLATIONS_DE)
-  #include "font_de_10x14.lbm"
-  #elif defined(TRANSLATIONS_CZ)
-  #include "font_cz_10x14.lbm"
-  #elif defined(TRANSLATIONS_ES)
-  #include "font_es_10x14.lbm"
-  #elif defined(TRANSLATIONS_FI)
-  #include "font_fi_10x14.lbm"
-  #elif defined(TRANSLATIONS_FR)
-  #include "font_fr_10x14.lbm"
-  #elif defined(TRANSLATIONS_IT)
-  #include "font_it_10x14.lbm"
-  #elif defined(TRANSLATIONS_PL)
-  #include "font_pl_10x14.lbm"
-  #elif defined(TRANSLATIONS_PT)
-  #include "font_pt_10x14.lbm"
-  #elif defined(TRANSLATIONS_SE)
-  #include "font_se_10x14.lbm"
-  #endif
 };
 #endif
 
@@ -80,48 +42,10 @@ const unsigned char font_3x5[]  = {
 };
 const unsigned char font_4x6[]  = {
 #include "font_04x06.lbm"
-#if defined(TRANSLATIONS_DE)
-#include "font_de_04x06.lbm"
-#elif defined(TRANSLATIONS_CZ)
-#include "font_cz_04x06.lbm"
-#elif defined(TRANSLATIONS_ES)
-#include "font_es_04x06.lbm"
-#elif defined(TRANSLATIONS_FI)
-#include "font_fi_04x06.lbm"
-#elif defined(TRANSLATIONS_FR)
-#include "font_fr_04x06.lbm"
-#elif defined(TRANSLATIONS_IT)
-#include "font_it_04x06.lbm"
-#elif defined(TRANSLATIONS_PL)
-#include "font_pl_04x06.lbm"
-#elif defined(TRANSLATIONS_PT)
-#include "font_pt_04x06.lbm"
-#elif defined(TRANSLATIONS_SE)
-#include "font_se_04x06.lbm"
-#endif
 };
 
 const unsigned char font_8x10[]  = {
 #include "font_08x10.lbm"
-#if defined(TRANSLATIONS_DE)
-#include "font_de_08x10.lbm"
-#elif defined(TRANSLATIONS_CZ)
-#include "font_cz_08x10.lbm"
-#elif defined(TRANSLATIONS_ES)
-#include "font_es_08x10.lbm"
-#elif defined(TRANSLATIONS_FI)
-#include "font_fi_08x10.lbm"
-#elif defined(TRANSLATIONS_FR)
-#include "font_fr_08x10.lbm"
-#elif defined(TRANSLATIONS_IT)
-#include "font_it_08x10.lbm"
-#elif defined(TRANSLATIONS_PL)
-#include "font_pl_08x10.lbm"
-#elif defined(TRANSLATIONS_PT)
-#include "font_pt_08x10.lbm"
-#elif defined(TRANSLATIONS_SE)
-#include "font_se_08x10.lbm"
-#endif
 };
 
 // only lua uses those

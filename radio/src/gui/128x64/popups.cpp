@@ -52,22 +52,12 @@ void drawAlertBox(const char * title, const char * text, const char * action)
 {
   lcdClear();
 
-#if defined(PCBI6X_ELRS) && defined(TRANSLATIONS_PT) // saves ~140B
-  lcdDrawRect(2, 2, 32 - 4, 32 - 4);
-  lcdDrawText(11, 6, "x", DBLSIZE);
-#else
   lcdDraw1bitBitmap(2, 0, ASTERISK_BITMAP, 0, 0);
-#endif
 
 #define MESSAGE_LCD_OFFSET   6*FW
 
-#if defined(TRANSLATIONS_FR) || defined(TRANSLATIONS_IT) || defined(TRANSLATIONS_CZ)
-  lcdDrawText(MESSAGE_LCD_OFFSET, 0, STR_WARNING, DBLSIZE);
-  lcdDrawText(MESSAGE_LCD_OFFSET, 2*FH, title, DBLSIZE);
-#else
   lcdDrawText(MESSAGE_LCD_OFFSET, 0, title, DBLSIZE);
   lcdDrawText(MESSAGE_LCD_OFFSET, 2*FH, STR_WARNING, DBLSIZE);
-#endif
   
   lcdDrawSolidFilledRect(0, 0, LCD_W, 32);
   if (text) {

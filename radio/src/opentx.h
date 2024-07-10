@@ -347,11 +347,7 @@ extern InactivityData inactivity;
 
 #define LEN_STD_CHARS 40
 
-#if defined(TRANSLATIONS_CZ)
-#define ZCHAR_MAX (LEN_STD_CHARS)
-#else
 #define ZCHAR_MAX (LEN_STD_CHARS + LEN_SPECIAL_CHARS)
-#endif
 
 char hex2zchar(uint8_t hex);
 char zchar2char(int8_t idx);

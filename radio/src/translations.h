@@ -21,40 +21,8 @@
 #ifndef _TRANSLATIONS_H_
 #define _TRANSLATIONS_H_
 
-#if defined(TRANSLATIONS_FR)
-  #include "translations/fr.h"
-  #define LEN_SPECIAL_CHARS 3
-#elif defined(TRANSLATIONS_IT)
-  #include "translations/it.h"
-  #define LEN_SPECIAL_CHARS 1
-#elif defined(TRANSLATIONS_SE)
-  #include "translations/se.h"
-  #define LEN_SPECIAL_CHARS 6
-#elif defined(TRANSLATIONS_FI)
-  #include "translations/fi.h"
-  #define LEN_SPECIAL_CHARS 6
-#elif defined(TRANSLATIONS_DE)
-  #include "translations/de.h"
-  #define LEN_SPECIAL_CHARS 6
-#elif defined(TRANSLATIONS_CZ)
-  #include "translations/cz.h"
-  #define LEN_SPECIAL_CHARS 17
-#elif defined(TRANSLATIONS_ES)
-  #include "translations/es.h"
-  #define LEN_SPECIAL_CHARS 0
-#elif defined(TRANSLATIONS_PL)
-  #include "translations/pl.h"
-  #define LEN_SPECIAL_CHARS 0
-#elif defined(TRANSLATIONS_PT)
-  #include "translations/pt.h"
-  #define LEN_SPECIAL_CHARS 0
-#elif defined(TRANSLATIONS_NL)
-  #include "translations/nl.h"
-  #define LEN_SPECIAL_CHARS 0
-#else
-  #include "translations/en.h"
-  #define LEN_SPECIAL_CHARS 0
-#endif
+#include "translations/en.h"
+#define LEN_SPECIAL_CHARS 0
 
 #define PSIZE(x) ( sizeof(x) - 1 )
 #define EOFS(x)  ( OFS_##x + sizeof(TR_##x) )
@@ -148,12 +116,7 @@ extern const char STR_OPEN9X[];
 #endif
 #define OFS_VSWITCHES           (OFS_VKEYS + sizeof(TR_VKEYS))
 #define OFS_VSRCRAW             (OFS_VSWITCHES + sizeof(TR_VSWITCHES))
-#if defined(TRANSLATIONS_CZ)
-  #define OFS_INPUTNAMES          (OFS_VSRCRAW + sizeof(TR_VSRCRAW))
-  #define OFS_VTMRMODES           (OFS_INPUTNAMES + sizeof(TR_INPUTNAMES))
-#else
-  #define OFS_VTMRMODES           (OFS_VSRCRAW + sizeof(TR_VSRCRAW))
-#endif
+#define OFS_VTMRMODES           (OFS_VSRCRAW + sizeof(TR_VSRCRAW))
 #define OFS_DATETIME            (OFS_VTMRMODES + sizeof(TR_VTMRMODES))
 #define OFS_VPERSISTENT         (OFS_DATETIME + sizeof(TR_DATETIME))
 #if !defined(PCBI6X)
@@ -253,9 +216,6 @@ extern const char STR_OPEN9X[];
 #define STR_VKEYS               (STR_OPEN9X + OFS_VKEYS)
 #define STR_VSWITCHES           (STR_OPEN9X + OFS_VSWITCHES)
 #define STR_VSRCRAW             (STR_OPEN9X + OFS_VSRCRAW)
-#if defined(TRANSLATIONS_CZ)
-#define STR_INPUTNAMES          (STR_OPEN9X + OFS_INPUTNAMES)
-#endif
 #define STR_VTMRMODES           (STR_OPEN9X + OFS_VTMRMODES)
 
 #if defined(ROTARY_ENCODERS)
