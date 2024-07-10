@@ -154,41 +154,6 @@ void onExposMenu(const char * result)
   }
 }
 
-#if LCD_W >= 212
-#define EXPO_LINE_WEIGHT_POS           8*FW+8
-#define EXPO_LINE_SRC_POS              9*FW+3
-#define EXPO_LINE_CURVE_POS            12*FW+11
-#define EXPO_LINE_TRIM_POS             19*FW-2
-#define EXPO_LINE_SWITCH_POS           20*FW
-#define EXPO_LINE_SIDE_POS             25*FW
-#define EXPO_LINE_FM_POS               12*FW+11
-#define EXPO_LINE_SELECT_POS           5*FW+2
-#define EXPO_LINE_NAME_POS             LCD_W-LEN_EXPOMIX_NAME*FW-MENUS_SCROLLBAR_WIDTH
-
-void displayExpoInfos(coord_t y, ExpoData * ed)
-{
-  drawCurveRef(EXPO_LINE_CURVE_POS, y, ed->curve, 0);
-  drawSwitch(EXPO_LINE_SWITCH_POS, y, ed->swtch, 0);
-}
-
-void displayExpoLine(coord_t y, ExpoData * ed)
-{
-  drawSource(EXPO_LINE_SRC_POS, y, ed->srcRaw, 0);
-
-  if (ed->carryTrim != TRIM_ON) {
-    lcdDrawChar(EXPO_LINE_TRIM_POS, y, ed->carryTrim > 0 ? '-' : STR_RETA123[-ed->carryTrim]);
-  }
-
-  if (!ed->flightModes || ((ed->curve.value || ed->swtch) && ((get_tmr10ms() / 200) & 1)))
-    displayExpoInfos(y, ed);
-  else
-    displayFlightModes(EXPO_LINE_FM_POS, y, ed->flightModes);
-
-  if (ed->name[0]) {
-    lcdDrawSizedText(EXPO_LINE_NAME_POS, y, ed->name, sizeof(ed->name), ZCHAR);
-  }
-}
-#else
 #define EXPO_LINE_WEIGHT_POS           7*FW+8
 #define EXPO_LINE_SRC_POS              8*FW+3
 #define EXPO_LINE_INFOS_POS            11*FW+11
@@ -217,7 +182,6 @@ void displayExpoLine(coord_t y, ExpoData * ed)
   else
     displayFlightModes(EXPO_LINE_INFOS_POS+9*FWNUM, y, ed->flightModes);
 }
-#endif
 
 void menuModelExposAll(event_t event)
 {

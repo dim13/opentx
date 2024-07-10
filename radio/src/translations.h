@@ -61,16 +61,8 @@
 
   #define HINT(s) s
 
-#if LCD_W >= 480
-  #define TR3(x, y, z) z
-  #define TR2(x, y) y
-#elif LCD_W >= 212
-  #define TR3(x, y, z) y
-  #define TR2(x, y) y
-#else
   #define TR3(x, y, z) x
   #define TR2(x, y) x
-#endif
 
 #define TR(x, y) TR2(x, y) // for compatibility
 
@@ -551,9 +543,7 @@ extern const char STR_PROTOCOL_INVALID[];
 extern const char STR_MODULE_STATUS[];
 extern const char STR_MODULE_SYNC[];
 extern const char STR_MULTI_SERVOFREQ[];
-#if LCD_W < 212
 extern const char STR_SUBTYPE[];
-#endif
 #endif
 extern const char STR_RECEIVER_NUM[];
 extern const char STR_RECEIVER[];
@@ -802,14 +792,6 @@ extern const char STR_BLCOLOR[];
 #define TR_LIMITS_HEADERS { HINT(TR_LIMITS_HEADERS_NAME), HINT(TR_LIMITS_HEADERS_SUBTRIM), HINT(TR_LIMITS_HEADERS_MIN), HINT(TR_LIMITS_HEADERS_MAX), HINT(TR_LIMITS_HEADERS_DIRECTION), HINT(TR_LIMITS_HEADERS_CURVE), HINT(TR_LIMITS_HEADERS_PPMCENTER), HINT(TR_LIMITS_HEADERS_SUBTRIMMODE) }
 #define TR_LSW_HEADERS    { HINT(TR_LSW_HEADERS_FUNCTION), HINT(TR_LSW_HEADERS_V1), HINT(TR_LSW_HEADERS_V2), HINT(TR_LSW_HEADERS_V2), HINT(TR_LSW_HEADERS_ANDSW), HINT(TR_LSW_HEADERS_DURATION), HINT(TR_LSW_HEADERS_DELAY) }
 #define TR_GVAR_HEADERS   { HINT(TR_GVAR_HEADERS_FM0), HINT(TR_GVAR_HEADERS_FM1), HINT(TR_GVAR_HEADERS_FM2), HINT(TR_GVAR_HEADERS_FM3), HINT(TR_GVAR_HEADERS_FM4), HINT(TR_GVAR_HEADERS_FM5), HINT(TR_GVAR_HEADERS_FM6), HINT(TR_GVAR_HEADERS_FM7), HINT(TR_GVAR_HEADERS_FM8) }
-
-#if LCD_W >= 212
-  extern const char * const STR_PHASES_HEADERS[];
-  extern const char * const STR_LIMITS_HEADERS[];
-  extern const char * const STR_LSW_HEADERS[];
-  extern const char * const STR_LSW_DESCRIPTIONS[];
-  extern const char * const STR_GVAR_HEADERS[];
-#endif
 
   extern const char STR_TRAINER[];
   extern const char STR_MODULE_BIND[];

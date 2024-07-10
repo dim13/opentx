@@ -442,9 +442,7 @@ const char STR_PROTOCOL_INVALID[]  = TR_PROTOCOL_INVALID;
 const char STR_MODULE_STATUS[]  = TR_MODULE_STATUS;
 const char STR_MODULE_SYNC[]  = TR_MODULE_SYNC;
 const char STR_MULTI_SERVOFREQ[]  = TR_MULTI_SERVOFREQ;
-#if LCD_W < 212
 const char STR_SUBTYPE[]  = TR_SUBTYPE;
-#endif
 #endif
 
 const char STR_RESET_BTN[]  = TR_RESET_BTN;
@@ -560,14 +558,6 @@ const char STR_BLCOLOR[]   = TR_BLCOLOR;
   const char STR_MIXNAME[]  = TR_MIXNAME;
   const char STR_INPUTNAME[]  = TR_INPUTNAME;
   const char STR_EXPONAME[]  = TR_EXPONAME;
-
-#if LCD_W >= 212
-  const char * const STR_PHASES_HEADERS[] = TR_PHASES_HEADERS;
-  const char * const STR_LIMITS_HEADERS[] = TR_LIMITS_HEADERS;
-  const char * const STR_LSW_HEADERS[] = TR_LSW_HEADERS;
-  const char * const STR_LSW_DESCRIPTIONS[] = TR_LSW_DESCRIPTIONS;
-  const char * const STR_GVAR_HEADERS[] = TR_GVAR_HEADERS;
-#endif
 
   const char STR_TRAINER[]  = TR_TRAINER;
   const char STR_MODULE_BIND[]   = TR_MODULE_BIND;

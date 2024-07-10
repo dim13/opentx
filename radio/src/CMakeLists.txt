@@ -405,11 +405,6 @@ else()
   endif(WARNINGS_AS_ERRORS)
 endif()
 
-add_subdirectory(targets/simu)
-if(NOT MSVC)
-  add_subdirectory(tests)
-endif()
-
 set(SRC ${SRC} ${FIRMWARE_SRC})
 
 

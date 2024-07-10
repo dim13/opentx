@@ -31,19 +31,10 @@
 #define BOOTLOADER_TITLE               " Bootloader - " VERSION
 #define DISPLAY_CHAR_WIDTH             (LCD_COLS+4)
 
-#if LCD_W >= 480
-  #define STR_INVALID_FIRMWARE         "Not a valid firmware file"
-#elif LCD_W >= 212
-  #define STR_OR_PLUGIN_USB_CABLE      "Or plug in a USB cable for mass storage"
-  #define STR_HOLD_ENTER_TO_START      "\012Hold [ENT] to start writing"
-  #define STR_INVALID_FIRMWARE         "\011Not a valid firmware file!        "
-  #define STR_INVALID_EEPROM           "\011Not a valid EEPROM file!          "
-#else
   #define STR_OR_PLUGIN_USB_CABLE      "Or plug in a USB cable"
   #define STR_HOLD_ENTER_TO_START      "\006Hold [ENT] to start"
   #define STR_INVALID_FIRMWARE         "\004Not a valid firmware!        "
   #define STR_INVALID_EEPROM           "\004Not a valid EEPROM!          "
-#endif
 
 #define STR_USB_CONNECTED              "\011USB Connected"
 

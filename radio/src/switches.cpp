@@ -22,13 +22,8 @@
 
 #define CS_LAST_VALUE_INIT -32768
 
-#if LCD_W >= 212
-  #define SWITCH_WARNING_LIST_X        60
-  #define SWITCH_WARNING_LIST_Y        4*FH+3
-#else
   #define SWITCH_WARNING_LIST_X        4
   #define SWITCH_WARNING_LIST_Y        4*FH+4
-#endif
 
 
 enum LogicalSwitchContextState {

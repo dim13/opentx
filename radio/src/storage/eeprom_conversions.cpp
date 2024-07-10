@@ -981,19 +981,11 @@ bool eeConvert()
   storageDirty(EE_GENERAL);
   storageCheck(true);
 
-#if LCD_W >= 212
-  lcdDrawRect(60, 6*FH+4, 132, 3);
-#else
   lcdDrawRect(10, 6*FH+4, 102, 3);
-#endif
 
   // Models conversion
   for (uint8_t id=0; id<MAX_MODELS; id++) {
-#if LCD_W >= 212
-    lcdDrawSolidHorizontalLine(61, 6*FH+5, 10+id*2, FORCE);
-#else
     lcdDrawSolidHorizontalLine(11, 6*FH+5, 10+(id*3)/2, FORCE);
-#endif
     lcdRefresh();
     if (eeModelExists(id)) {
       ConvertModel(id, conversionVersionStart);

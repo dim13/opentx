@@ -60,11 +60,9 @@ void bootloaderDrawScreen(BootloaderState st, int opt, const char* str) {
         bootloaderDrawMsg(0, STR_INVALID_EEPROM, 2, false);
     } else if (opt == FC_OK) {
       const char* vers = getOtherVersion((char*)Block_buffer);
-#if LCD_W < 212
       // Remove opentx- from string
       if (strstr(vers, "opentx-"))
         vers = vers + 7;
-#endif
       bootloaderDrawMsg(INDENT_WIDTH, vers, 0, false);
     }
     bootloaderDrawMsg(0, STR_HOLD_ENTER_TO_START, 2, false);

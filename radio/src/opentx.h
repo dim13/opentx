@@ -644,11 +644,7 @@ extern const char vers_stamp[];
 const char* getOtherVersion(const char* buffer = nullptr);
 
 extern uint8_t g_vbat100mV;
-#if LCD_W > 128
-  #define GET_TXBATT_BARS() (limit<int8_t>(0, div_and_round(10 * (g_vbat100mV - g_eeGeneral.vBatMin - 90), 30 + g_eeGeneral.vBatMax - g_eeGeneral.vBatMin), 10))
-#else
   #define GET_TXBATT_BARS() (limit<int8_t>(2, 20 * (g_vbat100mV - g_eeGeneral.vBatMin - 90) / (30 + g_eeGeneral.vBatMax - g_eeGeneral.vBatMin), 20))
-#endif
 #define IS_TXBATT_WARNING() (g_vbat100mV <= g_eeGeneral.vBatWarn)
 
 
@@ -992,11 +988,7 @@ constexpr uint8_t OPENTX_START_NO_CHECKS = 0x04;
 #endif
 
 // Re-useable byte array to save having multiple buffers
-#if LCD_W <= 212
 constexpr uint8_t SD_SCREEN_FILE_LENGTH = 32;
-#else
-constexpr uint8_t SD_SCREEN_FILE_LENGTH = 64;
-#endif
 
 constexpr uint8_t TEXT_FILENAME_MAXLEN = 40;
 

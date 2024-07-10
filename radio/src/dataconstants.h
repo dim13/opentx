@@ -60,19 +60,6 @@ enum CurveType {
 
 #define MAX_POINTS_PER_CURVE           17
 
-#if LCD_W == 212
-  #define LEN_MODEL_NAME               12
-  #define LEN_TIMER_NAME               8
-  #define LEN_FLIGHT_MODE_NAME         10
-  #define LEN_BITMAP_NAME              10
-  #define LEN_EXPOMIX_NAME             8   // TODO next EEPROM change: 6 seem enough
-  #define LEN_CHANNEL_NAME             6
-  #define LEN_INPUT_NAME               4
-  #define LEN_CURVE_NAME               3
-  #define LEN_FUNCTION_NAME            8
-  #define MAX_CURVES                   32
-  #define MAX_CURVE_POINTS             512
-#else
   #define LEN_MODEL_NAME               10
   #define LEN_TIMER_NAME               3
   #define LEN_FLIGHT_MODE_NAME         6
@@ -83,7 +70,6 @@ enum CurveType {
   #define LEN_FUNCTION_NAME            6
   #define MAX_CURVES                   16   // TODO next EEPROM check if can be changed to 32 to have all ARM the same
   #define MAX_CURVE_POINTS             512
-#endif
 
   #define NUM_MODULES                  2
 
@@ -92,14 +78,6 @@ enum CurveType {
   #define MAX_ROTARY_ENCODERS          0
   #define NUM_ROTARY_ENCODERS          0
 
-#if LCD_W >= 212
-enum MainViews {
-  VIEW_TIMERS,
-  VIEW_INPUTS,
-  VIEW_SWITCHES,
-  VIEW_COUNT
-};
-#else
 enum MainViews {
   VIEW_OUTPUTS_VALUES,
   VIEW_OUTPUTS_BARS,
@@ -108,7 +86,6 @@ enum MainViews {
   VIEW_CHAN_MONITOR,
   VIEW_COUNT
 };
-#endif
 
 enum BeeperMode {
   e_mode_quiet = -2,
@@ -226,11 +203,7 @@ enum TelemetryUnit {
 #define UNIT_TEMPERATURE UNIT_CELSIUS
 #define UNIT_SPEED UNIT_KMH
 
-#if LCD_W >= 212
-  #define NUM_LINE_ITEMS 3
-#else
   #define NUM_LINE_ITEMS 2
-#endif
 
 enum TelemetryScreenType {
   TELEMETRY_SCREEN_TYPE_NONE,

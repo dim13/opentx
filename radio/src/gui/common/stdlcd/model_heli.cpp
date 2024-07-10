@@ -32,11 +32,7 @@ enum MenuModelHeliItems {
   ITEM_HELI_MAX
 };
 
-#if LCD_W >= 212
-#define MODEL_HELI_2ND_COLUMN          (LCD_W-17*FW-MENUS_SCROLLBAR_WIDTH)
-#else
 #define MODEL_HELI_2ND_COLUMN          (14*FW)
-#endif
 
 void menuModelHeli(event_t event)
 {

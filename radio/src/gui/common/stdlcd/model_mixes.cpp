@@ -153,49 +153,6 @@ void onMixesMenu(const char * result)
   }
 }
 
-#if LCD_W >= 212
-#define MIX_LINE_WEIGHT_POS            2*FW+34
-#define MIX_LINE_SRC_POS               7*FW+5
-#define MIX_LINE_CURVE_POS             13*FW+3
-#define MIX_LINE_SWITCH_POS            19*FW+1
-#define MIX_LINE_FM_POS                13*FW+3
-#define MIX_LINE_DELAY_POS             24*FW+3
-#define MIX_LINE_NAME_POS              LCD_W-LEN_EXPOMIX_NAME*FW-MENUS_SCROLLBAR_WIDTH
-#define MIX_HDR_GAUGE_POS_X            127
-
-void displayHeaderChannelName(uint8_t ch)
-{
-  if (g_model.limitData[ch].name[0] != '\0') {
-    lcdDrawSizedText(MIX_HDR_GAUGE_POS_X - FWNUM * 5 - 1, 1, g_model.limitData[ch].name, ZLEN(g_model.limitData[ch].name), ZCHAR|SMLSIZE|RIGHT);
-  }
-}
-
-void displayMixInfos(coord_t y, MixData * md)
-{
-  drawCurveRef(MIX_LINE_CURVE_POS, y, md->curve, 0);
-
-  if (md->swtch) {
-    drawSwitch(MIX_LINE_SWITCH_POS, y, md->swtch);
-  }
-}
-
-void displayMixLine(coord_t y, MixData * md)
-{
-  if (md->name[0])
-    lcdDrawSizedText(MIX_LINE_NAME_POS, y, md->name, sizeof(md->name), ZCHAR);
-  if (!md->flightModes || ((md->curve.value || md->swtch) && ((get_tmr10ms() / 200) & 1)))
-    displayMixInfos(y, md);
-  else
-    displayFlightModes(MIX_LINE_FM_POS, y, md->flightModes);
-
-  char cs = ' ';
-  if (md->speedDown || md->speedUp)
-    cs = 'S';
-  if (md->delayUp || md->delayDown)
-    cs = (cs == 'S' ? '*' : 'D');
-  lcdDrawChar(MIX_LINE_DELAY_POS, y, cs);
-}
-#else // LCD_W >= 212
 #define MIX_LINE_WEIGHT_POS            6*FW+8
 #define MIX_LINE_SRC_POS               7*FW+3
 #define MIX_LINE_CURVE_POS             12*FW+3
@@ -246,7 +203,6 @@ void displayMixLine(coord_t y, MixData * md, bool active)
       displayFlightModes(MIX_LINE_FM_POS, y, md->flightModes);
   }
 }
-#endif // LCD_W >= 212
 
 void menuModelMixAll(event_t event)
 {
@@ -392,19 +348,9 @@ void menuModelMixAll(event_t event)
   uint8_t index = mixAddress(s_currIdx)->destCh;
   if (!s_currCh) {
     displayHeaderChannelName(index);
-#if LCD_W >= 212
-    lcdDrawNumber(MIX_HDR_GAUGE_POS_X, 2, calcRESXto1000(ex_chans[index]), PREC1|TINSIZE|RIGHT);
-#endif
   }
 
   SIMPLE_MENU(STR_MIXER, menuTabModel, MENU_MODEL_MIXES, HEADER_LINE + s_maxLines);
-
-#if LCD_W >= 212
-  // Gauge
-  if (!s_currCh) {
-    drawGauge(MIX_HDR_GAUGE_POS_X, 1, 58, 6, ex_chans[index], 2048);
-  }
-#endif
 
   sub = menuVerticalPosition - HEADER_LINE;
   s_currCh = 0;
@@ -448,11 +394,7 @@ void menuModelMixAll(event_t event)
             gvarWeightItem(MIX_LINE_WEIGHT_POS, y, md, RIGHT | attr | (isMixActive(i) ? BOLD : 0), 0);
           }
 
-#if LCD_W >= 212
-          displayMixLine(y, md);
-#else
           displayMixLine(y, md, (sub == cur));
-#endif
 
           if (s_copyMode) {
             if ((s_copyMode==COPY_MODE || s_copyTgtOfs == 0) && s_copySrcCh == ch && i == (s_copySrcIdx + (s_copyTgtOfs<0))) {
@@ -480,12 +422,6 @@ void menuModelMixAll(event_t event)
         if (!s_copyMode) {
           attr = INVERS;
           displayHeaderChannelName(ch - 1);
-#if LCD_W >= 212
-          if (g_model.limitData[ch - 1].name[0] != '\0') {
-            coord_t xPos = MIX_HDR_GAUGE_POS_X - FWNUM * 5 - 50;
-            lcdDrawFilledRect(lcdNextPos, 0, lcdNextPos - xPos, MENU_HEADER_HEIGHT, SOLID, FILL_WHITE | GREY_DEFAULT);
-          }
-#endif
         }
       }
       if (cur-menuVerticalOffset >= 0 && cur-menuVerticalOffset < NUM_BODY_LINES) {

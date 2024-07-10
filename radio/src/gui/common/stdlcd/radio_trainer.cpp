@@ -20,11 +20,7 @@
 
 #include "opentx.h"
 
-#if LCD_W >= 212
-  #define TRAINER_CALIB_COLUMN_WIDTH 12
-#else
   #define TRAINER_CALIB_COLUMN_WIDTH 8
-#endif
 
 void menuRadioTrainer(event_t event)
 {

@@ -38,40 +38,17 @@ void doPaint(QPainter & p)
   p.eraseRect(0, 0, LCD_W, LCD_H);
 
   if (1) {
-#if LCD_W < 212
     rgb = qRgb(0, 0, 0);
     p.setPen(rgb);
     p.setBrush(QBrush(rgb));
-#endif
-
-#if LCD_W >= 212
-    unsigned int previousDepth = 0xFF;
-#endif
 
     for (int y=0; y<LCD_H; y++) {
-#if LCD_W >= 212
-      unsigned int idx = (y/2) * LCD_W;
-#else
       unsigned int idx = (y/8) * LCD_W;
       unsigned int mask = (1 << (y%8));
-#endif
       for (int x=0; x<LCD_W; x++, idx++) {
-#if LCD_W < 212
         if (simuLcdBuf[idx] & mask) {
           p.drawPoint(x, y);
         }
-#else
-        unsigned int z = (y & 1) ? (simuLcdBuf[idx] >> 4) : (simuLcdBuf[idx] & 0x0F);
-        if (z) {
-          if (z != previousDepth) {
-            previousDepth = z;
-            rgb = qRgb(161-(z*161)/15, 161-(z*161)/15, 161-(z*161)/15);
-            p.setPen(rgb);
-            p.setBrush(QBrush(rgb));
-          }
-          p.drawPoint(x, y);
-        }
-#endif
       }
     }
   }
