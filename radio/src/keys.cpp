@@ -167,10 +167,6 @@ void killEvents(event_t event) {
 }
 
 bool clearKeyEvents() {
-#if defined(PCBSKY9X)
-  RTOS_WAIT_MS(200);  // 200ms
-#endif
-
   // loop until all keys are up
 #if !defined(BOOT)
   tmr10ms_t start = get_tmr10ms();

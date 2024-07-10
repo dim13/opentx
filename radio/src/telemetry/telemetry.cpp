@@ -33,11 +33,6 @@ uint8_t telemetryProtocol = 255;
 
 volatile bool pendingTelemetryPollFrame = false;
 
-#if defined(PCBSKY9X) && defined(REVX)
-uint8_t serialInversion = 0;
-#endif
-
-
 void processTelemetryData(uint8_t data)
 {
 #if defined(CROSSFIRE)
@@ -135,16 +130,6 @@ void telemetryWakeup()
     if (sensor_lost && TELEMETRY_STREAMING() &&  !g_model.rssiAlarms.disabled) {
       audioEvent(AU_SENSOR_LOST);
     }
-
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-    if ((isModulePXX(INTERNAL_MODULE) || isModulePXX(EXTERNAL_MODULE)) && FRSKY_BAD_ANTENNA()) {
-      AUDIO_RAS_RED();
-      POPUP_WARNING(STR_WARNING);
-      const char * w = STR_ANTENNAPROBLEM;
-      SET_WARNING_INFO(w, strlen(w), 0);
-      SCHEDULE_NEXT_ALARMS_CHECK(10/*seconds*/);
-    }
-#endif
 
     if (!g_model.rssiAlarms.disabled) {
       if (TELEMETRY_STREAMING()) {

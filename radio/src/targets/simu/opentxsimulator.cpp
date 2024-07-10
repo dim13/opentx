@@ -577,13 +577,7 @@ const char * OpenTxSimulator::getError()
 const int OpenTxSimulator::voltageToAdc(const int volts)
 {
   int ret = 0;
-#if defined(PCBHORUS) || defined(PCBX7)
-  ret = (float)volts * 16.2f;
-#elif defined(PCBTARANIS) || defined(PCBSKY9X)
-  ret = (float)volts * 13.3f;
-#else
   ret = (float)volts * 14.15f;
-#endif
   return ret;
 }
 

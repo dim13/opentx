@@ -134,25 +134,6 @@ void onSdManagerMenu(const char * result)
     getSelectionFullPath(lfn);
     pushMenuTextView(lfn);
   }
-#if defined(PCBTARANIS)
-  else if (result == STR_FLASH_BOOTLOADER) {
-    getSelectionFullPath(lfn);
-    bootloaderFlash(lfn);
-  }
-  else if (result == STR_FLASH_INTERNAL_MODULE) {
-    getSelectionFullPath(lfn);
-    sportFlashDevice(INTERNAL_MODULE, lfn);
-  }
-  else if (result == STR_FLASH_EXTERNAL_MODULE) {
-    // needed on X-Lite (as the R9M needs 2S while the external device flashing port only provides 5V)
-    getSelectionFullPath(lfn);
-    sportFlashDevice(EXTERNAL_MODULE, lfn);
-  }
-  else if (result == STR_FLASH_EXTERNAL_DEVICE) {
-    getSelectionFullPath(lfn);
-    sportFlashDevice(FLASHING_MODULE, lfn);
-  }
-#endif
 #if defined(LUA)
   else if (result == STR_EXECUTE_FILE) {
     getSelectionFullPath(lfn);
@@ -168,9 +149,6 @@ void menuRadioSdManager(event_t _event)
     showMessageBox(STR_FORMATTING);
 #if defined(SDCARD)
     logsClose();
-#endif
-#if defined(PCBSKY9X)
-    Card_state = SD_ST_DATA;
 #endif
     audioQueue.stopSD();
     if(sdCardFormat()) {
@@ -198,17 +176,6 @@ void menuRadioSdManager(event_t _event)
     case EVT_ENTRY_UP:
       menuVerticalOffset = reusableBuffer.sdmanager.offset;
       break;
-
-#if defined(PCBX9) || defined(PCBX7) // TODO NO_MENU_KEY
-    case EVT_KEY_LONG(KEY_MENU):
-      if (!READ_ONLY() && s_editMode == 0) {
-        killEvents(_event);
-        POPUP_MENU_ADD_ITEM(STR_SD_INFO);
-        POPUP_MENU_ADD_ITEM(STR_SD_FORMAT);
-        POPUP_MENU_START(onSdManagerMenu);
-      }
-      break;
-#endif
 
     case EVT_KEY_BREAK(KEY_EXIT):
       REFRESH_FILES();
@@ -270,21 +237,6 @@ void menuRadioSdManager(event_t _event)
 #if defined(LUA)
           else if (isExtensionMatching(ext, SCRIPTS_EXT)) {
             POPUP_MENU_ADD_ITEM(STR_EXECUTE_FILE);
-          }
-#endif
-#if defined(PCBTARANIS)
-          else if (!READ_ONLY() && !strcasecmp(ext, FIRMWARE_EXT)) {
-            TCHAR lfn[_MAX_LFN + 1];
-            getSelectionFullPath(lfn);
-            if (isBootloader(lfn)) {
-              POPUP_MENU_ADD_ITEM(STR_FLASH_BOOTLOADER);
-            }
-          }
-          else if (!READ_ONLY() && !strcasecmp(ext, SPORT_FIRMWARE_EXT)) {
-            if (HAS_SPORT_UPDATE_CONNECTOR())
-              POPUP_MENU_ADD_ITEM(STR_FLASH_EXTERNAL_DEVICE);
-            POPUP_MENU_ADD_ITEM(STR_FLASH_INTERNAL_MODULE);
-            POPUP_MENU_ADD_ITEM(STR_FLASH_EXTERNAL_MODULE);
           }
 #endif
         }

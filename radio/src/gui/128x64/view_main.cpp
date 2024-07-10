@@ -193,42 +193,8 @@ void displayBattVoltage()
 #endif
 }
 
-#if defined(PCBSKY9X)
-void displayVoltageOrAlarm()
-{
-  if (g_eeGeneral.temperatureWarn && getTemperature() >= g_eeGeneral.temperatureWarn) {
-    drawValueWithUnit(6*FW-1, 2*FH, getTemperature(), UNIT_TEMPERATURE, BLINK|INVERS|DBLSIZE|RIGHT);
-  }
-  else if (g_eeGeneral.mAhWarn && (g_eeGeneral.mAhUsed + Current_used * (488 + g_eeGeneral.txCurrentCalibration)/8192/36) / 500 >= g_eeGeneral.mAhWarn) {
-    drawValueWithUnit(7*FW-1, 2*FH, (g_eeGeneral.mAhUsed + Current_used*(488 + g_eeGeneral.txCurrentCalibration)/8192/36)/10, UNIT_MAH, BLINK|INVERS|DBLSIZE|RIGHT);
-  }
-  else {
-    displayBattVoltage();
-  }
-}
-#else
-  #define displayVoltageOrAlarm() displayBattVoltage()
-#endif
+#define displayVoltageOrAlarm() displayBattVoltage()
 
-#if defined(PCBX7)
-  #define EVT_KEY_CONTEXT_MENU           EVT_KEY_LONG(KEY_ENTER)
-  #define EVT_KEY_NEXT_VIEW              EVT_KEY_BREAK(KEY_PAGE)
-  #define EVT_KEY_NEXT_PAGE              EVT_ROTARY_RIGHT
-  #define EVT_KEY_PREVIOUS_PAGE          EVT_ROTARY_LEFT
-  #define EVT_KEY_MODEL_MENU             EVT_KEY_BREAK(KEY_MENU)
-  #define EVT_KEY_GENERAL_MENU           EVT_KEY_LONG(KEY_MENU)
-  #define EVT_KEY_TELEMETRY              EVT_KEY_LONG(KEY_PAGE)
-#elif defined(PCBXLITE)
-  #define EVT_KEY_CONTEXT_MENU           EVT_KEY_LONG(KEY_ENTER)
-  #define EVT_KEY_PREVIOUS_VIEW          EVT_KEY_BREAK(KEY_UP)
-  #define EVT_KEY_NEXT_VIEW              EVT_KEY_BREAK(KEY_DOWN)
-  #define EVT_KEY_NEXT_PAGE              EVT_KEY_BREAK(KEY_RIGHT)
-  #define EVT_KEY_PREVIOUS_PAGE          EVT_KEY_BREAK(KEY_LEFT)
-  #define EVT_KEY_MODEL_MENU             EVT_KEY_LONG(KEY_RIGHT)
-  #define EVT_KEY_GENERAL_MENU           EVT_KEY_LONG(KEY_LEFT)
-  #define EVT_KEY_TELEMETRY              EVT_KEY_LONG(KEY_DOWN)
-  #define EVT_KEY_STATISTICS             EVT_KEY_LONG(KEY_UP)
-#else
   #define EVT_KEY_CONTEXT_MENU           EVT_KEY_BREAK(KEY_MENU)
   #define EVT_KEY_PREVIOUS_VIEW          EVT_KEY_BREAK(KEY_UP)
   #define EVT_KEY_NEXT_VIEW              EVT_KEY_BREAK(KEY_DOWN)
@@ -238,7 +204,6 @@ void displayVoltageOrAlarm()
   #define EVT_KEY_MODEL_MENU             EVT_KEY_LONG(KEY_MENU)
   #define EVT_KEY_TELEMETRY              EVT_KEY_LONG(KEY_DOWN)
   #define EVT_KEY_STATISTICS             EVT_KEY_LONG(KEY_UP)
-#endif
 
 void onMainViewMenu(const char *result)
 {

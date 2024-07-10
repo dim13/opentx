@@ -143,17 +143,6 @@ bool isSourceAvailable(int source) {
     return IS_POT_SLIDER_AVAILABLE(POT1 + source - MIXSRC_FIRST_POT);
   }
 
-#if defined(PCBSKY9X) && defined(REVX)
-  if (source == MIXSRC_REa) {
-    return false;
-  }
-#endif
-
-#if defined(PCBX10)
-  if ((source >= MIXSRC_S3 && source <= MIXSRC_S4) || (source >= MIXSRC_MOUSE1 && source <= MIXSRC_MOUSE2))
-    return false;
-#endif
-
   if (source >= MIXSRC_FIRST_SWITCH && source <= MIXSRC_LAST_SWITCH) {
     return SWITCH_EXISTS(source - MIXSRC_FIRST_SWITCH);
   }
@@ -282,12 +271,6 @@ bool isSwitchAvailable(int swtch, SwitchContext context) {
     } else {
       return false;
     }
-  }
-#endif
-
-#if defined(PCBSKY9X) && defined(REVX)
-  if (swtch == SWSRC_REa) {
-    return false;
   }
 #endif
 
@@ -485,12 +468,6 @@ bool isRfProtocolAvailable(int protocol) {
 }
 
 bool isTelemetryProtocolAvailable(int protocol) {
-#if defined(PCBTARANIS)
-  if (protocol == PROTOCOL_FRSKY_D_SECONDARY && g_eeGeneral.auxSerialMode != UART_MODE_TELEMETRY) {
-    return false;
-  }
-#endif
-
   if (protocol == PROTOCOL_PULSES_CROSSFIRE) {
     return false;
   }
@@ -499,12 +476,6 @@ bool isTelemetryProtocolAvailable(int protocol) {
   }
 #if !defined(MULTIMODULE)
   if (protocol == PROTOCOL_SPEKTRUM || protocol == PROTOCOL_FLYSKY_IBUS || protocol == PROTOCOL_MULTIMODULE) {
-    return false;
-  }
-#endif
-
-#if defined(PCBHORUS)
-  if (protocol == PROTOCOL_FRSKY_D_SECONDARY) {
     return false;
   }
 #endif

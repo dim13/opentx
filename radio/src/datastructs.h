@@ -27,27 +27,13 @@
 #include "dataconstants.h"
 #include "definitions.h"
 
-#if defined(PCBTARANIS)
-#define N_TARANIS_FIELD(x)
-#define TARANIS_FIELD(x) x;
-#else
 #define N_TARANIS_FIELD(x) x;
 #define TARANIS_FIELD(x)
-#endif
 
-#if defined(PCBX9E)
-#define TARANIS_PCBX9E_FIELD(x) x;
-#else
 #define TARANIS_PCBX9E_FIELD(x)
-#endif
 
-#if defined(PCBHORUS)
-#define N_HORUS_FIELD(x)
-#define HORUS_FIELD(x) x;
-#else
 #define N_HORUS_FIELD(x) x;
 #define HORUS_FIELD(x)
-#endif
 
 #if defined(BACKUP)
 #define NOBACKUP(...)
@@ -55,11 +41,7 @@
 #define NOBACKUP(...) __VA_ARGS__
 #endif
 
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-typedef uint16_t source_t;
-#else
 typedef uint8_t source_t;
-#endif
 
 /*
  * Mixer structure
@@ -144,11 +126,7 @@ PACK(struct LogicalSwitchData {
  * SpecialFunction structure
  */
 
-#if defined(PCBTARANIS)
-#define CFN_SPARE_TYPE int32_t
-#else
 #define CFN_SPARE_TYPE int16_t
-#endif
 
 PACK(struct CustomFunctionData {
   int16_t swtch : 9;
@@ -476,58 +454,9 @@ typedef uint8_t swarnenable_t;
   NOBACKUP(FrSkyTelemetryData frsky); \
   NOBACKUP(RssiAlarmData rssiAlarms);
 
-#if defined(PCBHORUS)
-#include "gui/480x272/layout.h"
-#include "gui/480x272/topbar.h"
-#define LAYOUT_NAME_LEN 10
-PACK(struct CustomScreenData {
-  char layoutName[LAYOUT_NAME_LEN];
-  Layout::PersistentData layoutData;
-});
-#define CUSTOM_SCREENS_DATA                                  \
-  NOBACKUP(CustomScreenData screenData[MAX_CUSTOM_SCREENS]); \
-  NOBACKUP(Topbar::PersistentData topbarData);               \
-  NOBACKUP(uint8_t view);
-#elif defined(PCBTARANIS)
-#define CUSTOM_SCREENS_DATA \
-  NOBACKUP(uint8_t view);
-#else
 #define CUSTOM_SCREENS_DATA
 // TODO other boards could have their custom screens here as well
-#endif
 
-#if defined(PCBX12S)
-#define MODELDATA_EXTRA                                  \
-  NOBACKUP(uint8_t spare : 3);                           \
-  NOBACKUP(uint8_t trainerMode : 3);                     \
-  NOBACKUP(uint8_t potsWarnMode : 2);                    \
-  ModuleData moduleData[NUM_MODULES + 1];                \
-  NOBACKUP(ScriptData scriptsData[MAX_SCRIPTS]);         \
-  NOBACKUP(char inputNames[MAX_INPUTS][LEN_INPUT_NAME]); \
-  NOBACKUP(uint8_t potsWarnEnabled);                     \
-  NOBACKUP(int8_t potsWarnPosition[NUM_POTS + NUM_SLIDERS]);
-#elif defined(PCBX10)
-#define MODELDATA_EXTRA                                      \
-  NOBACKUP(uint8_t spare : 3);                               \
-  NOBACKUP(uint8_t trainerMode : 3);                         \
-  NOBACKUP(uint8_t potsWarnMode : 2);                        \
-  ModuleData moduleData[NUM_MODULES + 1];                    \
-  NOBACKUP(ScriptData scriptsData[MAX_SCRIPTS]);             \
-  NOBACKUP(char inputNames[MAX_INPUTS][LEN_INPUT_NAME]);     \
-  NOBACKUP(uint8_t potsWarnEnabled);                         \
-  NOBACKUP(int8_t potsWarnPosition[NUM_POTS + NUM_SLIDERS]); \
-  NOBACKUP(uint8_t potsWarnSpares[NUM_DUMMY_ANAS]);
-#elif defined(PCBTARANIS)
-#define MODELDATA_EXTRA                        \
-  uint8_t spare : 3;                           \
-  uint8_t trainerMode : 3;                     \
-  uint8_t potsWarnMode : 2;                    \
-  ModuleData moduleData[NUM_MODULES + 1];      \
-  ScriptData scriptsData[MAX_SCRIPTS];         \
-  char inputNames[MAX_INPUTS][LEN_INPUT_NAME]; \
-  uint8_t potsWarnEnabled;                     \
-  int8_t potsWarnPosition[NUM_POTS + NUM_SLIDERS];
-#elif defined(PCBI6X)
 #define MODELDATA_EXTRA                            \
   NOBACKUP(uint8_t spare : 3);                     \
   NOBACKUP(uint8_t trainerMode : 3);               \
@@ -537,18 +466,6 @@ PACK(struct CustomScreenData {
   uint8_t potsWarnEnabled;                         \
   int8_t potsWarnPosition[NUM_POTS + NUM_SLIDERS]; \
   uint8_t rxBattAlarms[2];
-#elif defined(PCBSKY9X)
-#define MODELDATA_EXTRA                            \
-  uint8_t spare : 6;                               \
-  uint8_t potsWarnMode : 2;                        \
-  ModuleData moduleData[NUM_MODULES + 1];          \
-  char inputNames[MAX_INPUTS][LEN_INPUT_NAME];     \
-  uint8_t potsWarnEnabled;                         \
-  int8_t potsWarnPosition[NUM_POTS + NUM_SLIDERS]; \
-  uint8_t rxBattAlarms[2];
-#else
-#define MODELDATA_EXTRA
-#endif
 
 PACK(struct ModelData {
   ModelHeader header;
@@ -622,11 +539,7 @@ PACK(struct TrainerData {
   NOBACKUP(TrainerMix mix[4]);
 });
 
-#if defined(PCBHORUS)
-#define SPLASH_MODE uint8_t splashSpares : 3
-#else
 #define SPLASH_MODE int8_t splashMode : 3
-#endif
 
 #define EXTRA_GENERAL_FIELDS_ARM                       \
   NOBACKUP(uint8_t backlightBright);                   \
@@ -649,20 +562,6 @@ PACK(struct TrainerData {
   NOBACKUP(int8_t varioRepeat);                        \
   CustomFunctionData customFn[MAX_SPECIAL_FUNCTIONS];
 
-#if defined(PCBHORUS)
-#define EXTRA_GENERAL_FIELDS                                                                   \
-  EXTRA_GENERAL_FIELDS_ARM                                                                     \
-  NOBACKUP(uint8_t auxSerialMode : 4);                                                           \
-  uint8_t slidersConfig : 4;                                                                   \
-  uint32_t switchConfig;                                                                       \
-  uint8_t potsConfig; /* two bits per pot */                                                   \
-  NOBACKUP(char switchNames[NUM_SWITCHES][LEN_SWITCH_NAME]);                                   \
-  NOBACKUP(char anaNames[NUM_STICKS + NUM_POTS + NUM_SLIDERS + NUM_DUMMY_ANAS][LEN_ANA_NAME]); \
-  NOBACKUP(char currModelFilename[LEN_MODEL_FILENAME + 1]);                                    \
-  NOBACKUP(uint8_t spare : 1);                                                                 \
-  NOBACKUP(uint8_t blOffBright : 7);                                                           \
-  NOBACKUP(char bluetoothName[LEN_BLUETOOTH_NAME]);
-#elif defined(PCBTARANIS) || defined(PCBI6X)
 #if defined(BLUETOOTH)
 #define BLUETOOTH_FIELDS \
   uint8_t spare;         \
@@ -681,32 +580,8 @@ PACK(struct TrainerData {
   char anaNames[NUM_STICKS + NUM_POTS + NUM_SLIDERS][LEN_ANA_NAME]; \
   uint8_t receiverId[16][4]; /* AFHDS2A RxNum */                    \
   BLUETOOTH_FIELDS
-#elif defined(PCBSKY9X)
-#define EXTRA_GENERAL_FIELDS                                        \
-  EXTRA_GENERAL_FIELDS_ARM                                          \
-  int8_t txCurrentCalibration;                                      \
-  int8_t temperatureWarn;                                           \
-  uint8_t mAhWarn;                                                  \
-  uint16_t mAhUsed;                                                 \
-  int8_t temperatureCalib;                                          \
-  uint8_t optrexDisplay;                                            \
-  uint8_t sticksGain;                                               \
-  uint8_t rotarySteps;                                              \
-  char switchNames[NUM_SWITCHES][LEN_SWITCH_NAME];                  \
-  char anaNames[NUM_STICKS + NUM_POTS + NUM_SLIDERS][LEN_ANA_NAME]; \
-                                                                    \
-#define EXTRA_GENERAL_FIELDS EXTRA_GENERAL_FIELDS_ARM
-#endif
 
-#if defined(PCBHORUS)
-#include "gui/480x272/theme.h"
-#define THEME_NAME_LEN 8
-#define THEME_DATA                          \
-  NOBACKUP(char themeName[THEME_NAME_LEN]); \
-  NOBACKUP(Theme::PersistentData themeData);
-#else
 #define THEME_DATA
-#endif
 
 #if defined(BUZZER)
 #define BUZZER_FIELD NOBACKUP(int8_t buzzerMode : 2);  // -2=quiet, -1=only alarms, 0=no keys, 1=all (only used on AVR radios without audio hardware)
@@ -792,63 +667,6 @@ static inline void check_struct() {
   /* Difference between Taranis/Horus is LEN_EXPOMIX_NAME */
   /* LEN_FUNCTION_NAME is the difference in CustomFunctionData */
 
-#if defined(PCBX7) || defined(PCBXLITE)
-  CHKSIZE(MixData, 20);
-  CHKSIZE(ExpoData, 17);
-  CHKSIZE(LimitData, 11);
-  CHKSIZE(LogicalSwitchData, 9);
-  CHKSIZE(CustomFunctionData, 11);
-  CHKSIZE(FlightModeData, 28 + 2 * NUM_TRIMS);
-  CHKSIZE(TimerData, 11);
-  CHKSIZE(SwashRingData, 8);
-  CHKSIZE(FrSkyBarData, 6);
-  CHKSIZE(FrSkyLineData, 4);
-  CHKTYPE(union FrSkyScreenData, 24);
-  CHKSIZE(FrSkyTelemetryData, 104);
-  CHKSIZE(ModelHeader, 12);
-  CHKSIZE(CurveData, 4);
-#elif defined(PCBTARANIS)
-  CHKSIZE(MixData, 22);
-  CHKSIZE(ExpoData, 19);
-  CHKSIZE(LimitData, 13);
-  CHKSIZE(LogicalSwitchData, 9);
-  CHKSIZE(CustomFunctionData, 11);
-  CHKSIZE(FlightModeData, 40);
-  CHKSIZE(TimerData, 16);
-  CHKSIZE(SwashRingData, 8);
-  CHKSIZE(FrSkyBarData, 6);
-  CHKSIZE(FrSkyLineData, 6);
-  CHKTYPE(union FrSkyScreenData, 24);
-  CHKSIZE(FrSkyTelemetryData, 104);
-  CHKSIZE(ModelHeader, 24);
-  CHKSIZE(CurveData, 4);
-#elif defined(PCBHORUS)
-  CHKSIZE(MixData, 20);
-  CHKSIZE(ExpoData, 17);
-  CHKSIZE(LimitData, 13);
-  CHKSIZE(CustomFunctionData, 9);
-  CHKSIZE(FlightModeData, 44);
-  CHKSIZE(TimerData, 16);
-  CHKSIZE(SwashRingData, 8);
-  CHKSIZE(FrSkyTelemetryData, 5);
-  CHKSIZE(ModelHeader, 27);
-  CHKSIZE(CurveData, 4);
-  CHKSIZE(CustomScreenData, 610);
-  CHKSIZE(Topbar::PersistentData, 216);
-#elif defined(PCBSKY9X)
-  CHKSIZE(MixData, 20);
-  CHKSIZE(ExpoData, 17);
-  CHKSIZE(LimitData, 11);
-  CHKSIZE(CustomFunctionData, 9);
-  CHKSIZE(FlightModeData, 38);
-  CHKSIZE(TimerData, 11);
-  CHKSIZE(SwashRingData, 8);
-  CHKSIZE(FrSkyBarData, 5);
-  CHKSIZE(FrSkyLineData, 2);
-  CHKSIZE(FrSkyTelemetryData, 88);
-  CHKSIZE(ModelHeader, 12);
-  CHKTYPE(CurveData, 4);
-#elif defined(PCBI6X)
   CHKSIZE(LimitData, 11);
   CHKSIZE(MixData, 20);
   CHKSIZE(ExpoData, 17);
@@ -861,26 +679,6 @@ static inline void check_struct() {
   CHKSIZE(FrSkyTelemetryData, 88);
   CHKSIZE(ModelHeader, 12);
   CHKTYPE(CurveData, 4);
-#else
-  // Common for all variants
-  CHKSIZE(LimitData, 5);
-  CHKSIZE(SwashRingData, 3);
-  CHKSIZE(FrSkyBarData, 3);
-  CHKSIZE(FrSkyLineData, 2);
-  CHKSIZE(FrSkyTelemetryData, 43);
-  CHKSIZE(ModelHeader, 11);
-  CHKTYPE(CurveData, 1);
-
-  CHKSIZE(MixData, 9);
-  CHKSIZE(ExpoData, 4);
-
-  CHKSIZE(CustomFunctionData, 3);
-  CHKSIZE(TimerData, 3);
-
-  CHKSIZE(FlightModeData, 30);
-  CHKSIZE(RadioData, 85);
-
-#endif /* board specific ifdefs*/
 
   CHKSIZE(LogicalSwitchData, 9);
   CHKSIZE(TelemetrySensor, 14);
@@ -892,28 +690,8 @@ static inline void check_struct() {
   CHKSIZE(RssiAlarmData, 2);
   CHKSIZE(TrainerData, 16);
 
-#if defined(PCBI6X)
   CHKSIZE(RadioData, 318);
   CHKSIZE(ModelData, 2848);
-#elif defined(PCBXLITE)
-  CHKSIZE(RadioData, 844);
-  CHKSIZE(ModelData, 6025);
-#elif defined(PCBX7)
-  CHKSIZE(RadioData, 850);
-  CHKSIZE(ModelData, 6025);
-#elif defined(PCBX9E)
-  CHKSIZE(RadioData, 952);
-  CHKSIZE(ModelData, 6520);
-#elif defined(PCBX9D)
-  CHKSIZE(RadioData, 872);
-  CHKSIZE(ModelData, 6507);
-#elif defined(PCBSKY9X)
-  CHKSIZE(RadioData, 727);
-  CHKSIZE(ModelData, 5188);
-#elif defined(PCBHORUS)
-  CHKSIZE(RadioData, 847);
-  CHKSIZE(ModelData, 9380);
-#endif
 
 #undef CHKSIZE
 #undef CHKSIZEUNION

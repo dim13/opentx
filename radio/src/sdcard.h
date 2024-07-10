@@ -114,30 +114,6 @@ inline const char * SDCARD_ERROR(FRESULT result)
 // NOTE: 'size' must = 0 or be a valid character position within 'filename' array -- it is NOT validated
 const char * getFileExtension(const char * filename, uint8_t size=0, uint8_t extMaxLen=0, uint8_t *fnlen=NULL, uint8_t *extlen=NULL);
 
-// TODO REMOVE THE O9X FOURCC in 2.3
-#if defined(PCBX12S)
-  #define OTX_FOURCC 0x3478746F // otx for X12S
-  #define O9X_FOURCC 0x3178396F // we forgot it in 2.2 RC ..
-#elif defined(PCBX10)
-  #define OTX_FOURCC 0x3778746F // otx for X10
-  #define O9X_FOURCC 0x3478746F // match X12S, we forgot OTX_FOURCC before 2.2.1 RC2
-#elif defined(PCBX9E)
-  #define OTX_FOURCC 0x3578746F // otx for Taranis X9E
-  #define O9X_FOURCC 0x3378396F // o9x for Taranis X9E
-#elif defined(PCBXLITE)
-  #define OTX_FOURCC 0x3978746F // otx for Taranis X-Lite
-  #define O9X_FOURCC 0x3978396F // o9x for Taranis X-Lite
-#elif defined(PCBX7)
-  #define OTX_FOURCC 0x3678746F // otx for Taranis X7
-  #define O9X_FOURCC 0x3378396F // o9x for Taranis X7
-#elif defined(PCBX9D) || defined(PCBX9DP)
-  #define OTX_FOURCC 0x3378746F // otx for Taranis X9D
-  #define O9X_FOURCC 0x3378396F // o9x for Taranis X9D
-#elif defined(PCBSKY9X)
-  #define OTX_FOURCC 0x3278746F // otx for sky9x
-  #define O9X_FOURCC 0x3278396F // o9x for sky9x
-#endif
-
 bool isFileAvailable(const char * filename, bool exclDir = false);
 int findNextFileIndex(char * filename, uint8_t size, const char * directory);
 bool isExtensionMatching(const char * extension, const char * pattern, char * match = NULL);

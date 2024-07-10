@@ -31,28 +31,14 @@ void menuStatisticsView(event_t event)
 
   switch (event) {
     case EVT_KEY_FIRST(KEY_UP):
-#if defined(PCBX7)
-    case EVT_KEY_BREAK(KEY_PAGE):
-#endif
       chainMenu(menuStatisticsDebug);
       break;
 
     case EVT_KEY_FIRST(KEY_DOWN):
-#if defined(PCBX7)
-    case EVT_KEY_LONG(KEY_PAGE):
-      killEvents(event);
-      chainMenu(menuStatisticsDebug2);
-#else
       chainMenu(menuStatisticsDebug);
-#endif
       break;
 
-#if !defined(PCBTARANIS)
     case EVT_KEY_LONG(KEY_MENU): // historical
-#endif
-#if !defined(PCBSKY9X) && !defined(PCBI6X)
-    case EVT_KEY_LONG(KEY_ENTER):
-#endif
       g_eeGeneral.globalTimer = 0;
       storageDirty(EE_GENERAL);
       sessionTimer = 0;
@@ -120,10 +106,6 @@ void menuStatisticsDebug(event_t event)
 
   switch (event) {
     case EVT_KEY_LONG(KEY_ENTER):
-#if defined(PCBSKY9X)
-      g_eeGeneral.mAhUsed = 0;
-      Current_used = 0;
-#endif
       g_eeGeneral.globalTimer = 0;
       sessionTimer = 0;
       storageDirty(EE_GENERAL);
@@ -137,18 +119,12 @@ void menuStatisticsDebug(event_t event)
 
 
     case EVT_KEY_FIRST(KEY_UP):
-#if defined(PCBX7)
-    case EVT_KEY_BREAK(KEY_PAGE):
-#endif
 #if !defined(PCBI6X) // single debug screen
       chainMenu(menuStatisticsDebug2);
       return;
 #endif
 
     case EVT_KEY_FIRST(KEY_DOWN):
-#if defined(PCBX7)
-    case EVT_KEY_LONG(KEY_PAGE):
-#endif
       killEvents(event);
       chainMenu(menuStatisticsView);
       break;
@@ -158,19 +134,9 @@ void menuStatisticsDebug(event_t event)
       break;
   }
 
-#if defined(PCBI6X) // single debug screen
+// single debug screen
 //   lcdDrawTextAlignedLeft(MENU_DEBUG_ROW1, "Tlm RX Err");
 //   lcdDrawNumber(MENU_DEBUG_COL1_OFS + FW, MENU_DEBUG_ROW1, telemetryErrors, RIGHT);
-#endif
-
-#if defined(PCBSKY9X)
-  if ((ResetReason&RSTC_SR_RSTTYP) == (2<<8)) {
-    lcdDrawText(LCD_W-8*FW, 0*FH, "WATCHDOG");
-  }
-  else if (globalData.unexpectedShutdown) {
-    lcdDrawText(LCD_W-13*FW, 0*FH, "UNEXP.SHTDOWN");
-  }
-#endif
 
 #if defined(TX_CAPACITY_MEASUREMENT)
   // current
@@ -182,13 +148,6 @@ void menuStatisticsDebug(event_t event)
   // consumption
   lcdDrawTextAlignedLeft(MENU_DEBUG_Y_MAH, STR_CPU_MAH);
   drawValueWithUnit(MENU_DEBUG_COL1_OFS, MENU_DEBUG_Y_MAH, g_eeGeneral.mAhUsed + Current_used*current_scale/8192/36, UNIT_MAH, LEFT|PREC1);
-#endif
-
-#if defined(PCBSKY9X)
-  lcdDrawTextAlignedLeft(MENU_DEBUG_Y_CPU_TEMP, STR_CPU_TEMP);
-  drawValueWithUnit(MENU_DEBUG_COL1_OFS, MENU_DEBUG_Y_CPU_TEMP, getTemperature(), UNIT_TEMPERATURE, LEFT);
-  lcdDrawChar(MENU_DEBUG_COL2_OFS, MENU_DEBUG_Y_CPU_TEMP, '>');
-  drawValueWithUnit(MENU_DEBUG_COL2_OFS+FW+1, MENU_DEBUG_Y_CPU_TEMP, maxTemperature+g_eeGeneral.temperatureCalib, UNIT_TEMPERATURE, LEFT);
 #endif
 
 #if defined(COPROCESSOR)
@@ -260,16 +219,10 @@ void menuStatisticsDebug2(event_t event)
       break;
 
     case EVT_KEY_FIRST(KEY_UP):
-#if defined(PCBX7)
-    case EVT_KEY_BREAK(KEY_PAGE):
-#endif
       chainMenu(menuStatisticsView);
       return;
 
     case EVT_KEY_FIRST(KEY_DOWN):
-#if defined(PCBX7)
-    case EVT_KEY_LONG(KEY_PAGE):
-#endif
       killEvents(event);
       chainMenu(menuStatisticsDebug);
       break;
@@ -281,12 +234,6 @@ void menuStatisticsDebug2(event_t event)
 
 //   lcdDrawTextAlignedLeft(MENU_DEBUG_ROW1, "Tlm RX Err");
 //   lcdDrawNumber(MENU_DEBUG_COL1_OFS + FW, MENU_DEBUG_ROW1, telemetryErrors, RIGHT);
-#if defined(BLUETOOTH)
-#if defined(PCBX7)
-  lcdDrawTextAlignedLeft(MENU_DEBUG_ROW2, "BT status");
-  lcdDrawNumber(MENU_DEBUG_COL1_OFS, MENU_DEBUG_ROW2, IS_BLUETOOTH_CHIP_PRESENT(), RIGHT);
-#endif
-#endif
   lcdDrawText(4*FW, 7*FH+1, STR_MENUTORESET);
   lcdInvertLastLine();
 }

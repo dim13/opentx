@@ -181,10 +181,6 @@ const char * const audioFilenames[] = {
   "servoko",
   "rxko",
   "modelpwr",
-#if defined(PCBSKY9X)
-  "highmah",
-  "hightemp",
-#endif
   "error",
   "warning1",
   "warning2",
@@ -196,24 +192,9 @@ const char * const audioFilenames[] = {
   "midstck2",
   "midstck3",
   "midstck4",
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-  "midpot1",
-  "midpot2",
-#if defined(PCBX9E)
-  "midpot3",
-  "midpot4",
-#endif
-  "midslid1",
-  "midslid2",
-#if defined(PCBX9E)
-  "midslid3",
-  "midslid4",
-#endif
-#else
   "midpot1",
   "midpot2",
   "midpot3",
-#endif
   "mixwarn1",
   "mixwarn2",
   "mixwarn3",
@@ -1077,10 +1058,6 @@ void audioEvent(unsigned int index)
         audioQueue.playTone(2250, 80, 20, PLAY_REPEAT(2));
         break;
       case AU_TX_BATTERY_LOW:
-#if defined(PCBSKY9X)
-      case AU_TX_MAH_HIGH:
-      case AU_TX_TEMP_HIGH:
-#endif
         audioQueue.playTone(1950, 160, 20, PLAY_REPEAT(2), 1);
         audioQueue.playTone(2550, 160, 20, PLAY_REPEAT(2), -1);
         break;

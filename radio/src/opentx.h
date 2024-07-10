@@ -37,13 +37,8 @@
   #define SWITCH_SIMU(a, b)  (b)
 #endif
 
-#if defined(PCBSKY9X)
-  #define IS_PCBSKY9X        true
-  #define CASE_PCBSKY9X(x)   x,
-#else
   #define IS_PCBSKY9X        false
   #define CASE_PCBSKY9X(x)
-#endif
 
 #if defined(STM32)
   #define CASE_STM32(x)     x,
@@ -153,24 +148,11 @@
   #define CASE_GVARS(x)
 #endif
 
-#if defined(PCBX9DP) || defined(PCBX9E)
-  #define CASE_PCBX9E_PCBX9DP(x) x,
-#else
   #define CASE_PCBX9E_PCBX9DP(x)
-#endif
 
-#if defined(PCBX9E)
-  #define CASE_PCBX9E(x) x,
-#else
   #define CASE_PCBX9E(x)
-#endif
 
-#if defined(PCBSKY9X) && !defined(AR9X) && !defined(REVA)
-  #define TX_CAPACITY_MEASUREMENT
-  #define CASE_CAPACITY(x) x,
-#else
   #define CASE_CAPACITY(x)
-#endif
 
 #if ROTARY_ENCODERS > 0
   #define ROTARY_ENCODER_NAVIGATION
@@ -229,16 +211,7 @@
 
 #include "debug.h"
 
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-  #define SWSRC_THR                    SWSRC_SB2
-  #define SWSRC_GEA                    SWSRC_SG2
-  #define SWSRC_ID0                    SWSRC_SA0
-  #define SWSRC_ID1                    SWSRC_SA1
-  #define SWSRC_ID2                    SWSRC_SA2
-  #define IS_MOMENTARY(sw)             false // TODO
-#else
   #define SW_DSM2_BIND     SW_TRN
-#endif
 
 #define NUM_PSWITCH                    (SWSRC_LAST_SWITCH-SWSRC_FIRST_SWITCH+1)
 
@@ -248,27 +221,10 @@
 
 void memswap(void * a, void * b, uint8_t size);
 
-#if defined(PCBX9D) || defined(PCBX9DP) || defined(PCBX9E) || defined(PCBHORUS)
-  #define POT_CONFIG(x)                ((g_eeGeneral.potsConfig >> (2*((x)-POT1)))&0x03)
-  #define IS_POT_MULTIPOS(x)           (IS_POT(x) && POT_CONFIG(x)==POT_MULTIPOS_SWITCH)
-  #define IS_POT_WITHOUT_DETENT(x)     (IS_POT(x) && POT_CONFIG(x)==POT_WITHOUT_DETENT)
-  #define IS_SLIDER_AVAILABLE(x)       ((x) == SLIDER1 || (x) == SLIDER2 || (IS_SLIDER(x) && (g_eeGeneral.slidersConfig & (0x01 << ((x)-SLIDER1)))))
-  #define IS_POT_AVAILABLE(x)          (IS_POT(x) && POT_CONFIG(x)!=POT_NONE)
-  #define IS_POT_SLIDER_AVAILABLE(x)   (IS_POT_AVAILABLE(x) || IS_SLIDER_AVAILABLE(x))
-  #define IS_MULTIPOS_CALIBRATED(cal)  (cal->count>0 && cal->count<XPOTS_MULTIPOS_COUNT)
-#elif defined(PCBX7) || defined(PCBXLITE)
-  #define POT_CONFIG(x)                ((g_eeGeneral.potsConfig >> (2*((x)-POT1)))&0x03)
-  #define IS_POT_MULTIPOS(x)           (IS_POT(x) && POT_CONFIG(x)==POT_MULTIPOS_SWITCH)
-  #define IS_POT_WITHOUT_DETENT(x)     (IS_POT(x) && POT_CONFIG(x)==POT_WITHOUT_DETENT)
-  #define IS_POT_AVAILABLE(x)          (IS_POT(x) && POT_CONFIG(x)!=POT_NONE)
-  #define IS_POT_SLIDER_AVAILABLE(x)   (IS_POT_AVAILABLE(x))
-  #define IS_MULTIPOS_CALIBRATED(cal)  (cal->count>0 && cal->count<XPOTS_MULTIPOS_COUNT)
-#else
   #define IS_POT_MULTIPOS(x)           (false)
   #define IS_POT_WITHOUT_DETENT(x)     (true)
   #define IS_POT_SLIDER_AVAILABLE(x)   (true)
   #define IS_MULTIPOS_CALIBRATED(cal)  (false)
-#endif
 
 #if defined(PWR_BUTTON_PRESS)
   #define pwrOffPressed()              pwrPressed()
@@ -353,11 +309,7 @@ extern const uint8_t modn12x3[];
 #define AIL_STICK 3
 #define CONVERT_MODE(x)          (((x)<=AIL_STICK) ? *(modn12x3 + 4*g_eeGeneral.stickMode + (x)) : (x) )
 
-#if defined(PCBXLITE)
-  #define CONVERT_MODE_TRIMS(x)  (((x) == RUD_STICK) ? AIL_STICK : ((x) == AIL_STICK) ? RUD_STICK : (x))
-#else
   #define CONVERT_MODE_TRIMS(x)  CONVERT_MODE(x)
-#endif
 
 extern uint8_t channelOrder(uint8_t x);
 
@@ -427,11 +379,7 @@ int zchar2str(char *dest, const char *src, int size);
 div_t switchInfo(int switchPosition);
 extern uint8_t potsPos[NUM_XPOTS];
 
-#if defined(PCBHORUS)
-  uint16_t trimDown(uint16_t idx); // TODO why?
-#else
   uint8_t trimDown(uint8_t idx);
-#endif
 void readKeysAndTrims();
 
 uint16_t evalChkSum();
@@ -525,13 +473,7 @@ bool setTrimValue(uint8_t phase, uint8_t idx, int trim);
   void incRotaryEncoder(uint8_t idx, int8_t inc);
 #endif
 
-#if   defined(PCBSKY9X)
-  #define ROTARY_ENCODER_GRANULARITY (2 << g_eeGeneral.rotarySteps)
-#elif defined(PCBHORUS)
-  #define ROTARY_ENCODER_GRANULARITY (1)
-#else
   #define ROTARY_ENCODER_GRANULARITY (2)
-#endif
 
 #include "gvars.h"
 
@@ -579,8 +521,6 @@ extern uint16_t maxMixerDuration;
   uint16_t getTmr16KHz();
 #elif defined(STM32)
   static inline uint16_t getTmr2MHz() { return TIMER_2MHz_TIMER->CNT; }
-#elif defined(PCBSKY9X)
-  static inline uint16_t getTmr2MHz() { return TC1->TC_CHANNEL[0].TC_CV; }
 #else
   uint16_t getTmr16KHz();
 #endif
@@ -953,10 +893,6 @@ enum AUDIO_SOUNDS {
   AU_SERVO_KO,
   AU_RX_OVERLOAD,
   AU_MODEL_STILL_POWERED,
-#if defined(PCBSKY9X)
-  AU_TX_MAH_HIGH,
-  AU_TX_TEMP_HIGH,
-#endif
   AU_ERROR,
   AU_WARNING1,
   AU_WARNING2,
@@ -1093,14 +1029,6 @@ union ReusableBuffer
     int16_t loVals[NUM_STICKS+NUM_POTS+NUM_SLIDERS+NUM_MOUSE_ANALOGS];
     int16_t hiVals[NUM_STICKS+NUM_POTS+NUM_SLIDERS+NUM_MOUSE_ANALOGS];
     uint8_t state;
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-    struct {
-      uint8_t stepsCount;
-      int16_t steps[XPOTS_MULTIPOS_COUNT];
-      uint8_t lastCount;
-      int16_t lastPosition;
-    } xpotsCalib[NUM_XPOTS];
-#endif
   } calib;
 
 #if defined(SDCARD)
@@ -1227,10 +1155,6 @@ void varioWakeup();
 
 #define IS_IMPERIAL_ENABLE() (g_eeGeneral.imperial)
 
-#if defined(PCBTARANIS)
-  extern const unsigned char logo_taranis[];
-#endif
-
 #if defined(STM32)
 void usbPluggedIn();
 #endif
@@ -1273,11 +1197,7 @@ extern uint16_t s_anaFilt[NUM_ANALOGS];
 #if defined(JITTER_MEASURE)
 extern JitterMeter<uint16_t> rawJitter[NUM_ANALOGS];
 extern JitterMeter<uint16_t> avgJitter[NUM_ANALOGS];
-#if defined(PCBHORUS)
-  #define JITTER_MEASURE_ACTIVE()   (menuHandlers[menuLevel] == menuStatsAnalogs)
-#elif defined(PCBTARANIS)
-  #define JITTER_MEASURE_ACTIVE()   (menuHandlers[menuLevel] == menuRadioDiagAnalogs)
-#elif defined(CLI)
+#if defined(CLI)
   #define JITTER_MEASURE_ACTIVE()   (1)
 #else
   #define JITTER_MEASURE_ACTIVE()   (0)

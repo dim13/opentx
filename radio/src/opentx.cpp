@@ -266,18 +266,8 @@ void generalDefault() {
     g_eeGeneral.trainer.mix[i].studWeight = 100;
   }
 
-#if defined(PCBX9E)
-  const int8_t defaultName[] = {20, -1, -18, -1, -14, -9, -19};
-  memcpy(g_eeGeneral.bluetoothName, defaultName, sizeof(defaultName));
-#endif
-
 #if !defined(EEPROM)
   strcpy(g_eeGeneral.currModelFilename, DEFAULT_MODEL_FILENAME);
-#endif
-
-#if defined(PCBHORUS)
-  strcpy(g_eeGeneral.themeName, theme->getName());
-  theme->init();
 #endif
 
   g_eeGeneral.chkSum = 0xFFFF;
@@ -420,22 +410,11 @@ void modelDefault(uint8_t id) {
 
   applyDefaultTemplate();
 
-#if defined(LUA) && defined(PCBTARANIS)  //Horus uses menuModelWizard() for wizard
-  if (isFileAvailable(WIZARD_PATH "/" WIZARD_NAME)) {
-    f_chdir(WIZARD_PATH);
-    luaExec(WIZARD_NAME);
-  }
-#endif
-
   g_model.moduleData[INTERNAL_MODULE].type = MODULE_TYPE_AFHDS2A_SPI;
   g_model.moduleData[INTERNAL_MODULE].channelsStart = 0;
   g_model.moduleData[INTERNAL_MODULE].channelsCount = MAX_OUTPUT_CHANNELS;
   g_model.moduleData[INTERNAL_MODULE].subType = AFHDS2A_SUBTYPE_PWM_IBUS;
   g_model.moduleData[INTERNAL_MODULE].afhds2a.servoFreq = 50;
-
-#if defined(PCBXLITE)
-  g_model.trainerMode = TRAINER_MODE_MASTER_BLUETOOTH;
-#endif
 
 #if defined(EEPROM)
   for (int i = 0; i < NUM_MODULES; i++) {
@@ -464,19 +443,6 @@ void modelDefault(uint8_t id) {
   strcpy(g_model.header.name, "\015\361\374\373\364");
   g_model.header.name[5] = '\033' + id / 10;
   g_model.header.name[6] = '\033' + id % 10;
-#endif
-
-#if defined(PCBHORUS)
-  extern const LayoutFactory *defaultLayout;
-  delete customScreens[0];
-  customScreens[0] = defaultLayout->create(&g_model.screenData[0].layoutData);
-  strcpy(g_model.screenData[0].layoutName, "Layout2P1");
-  extern const WidgetFactory *defaultWidget;
-  customScreens[0]->createWidget(0, defaultWidget);
-  // enable switch warnings
-  for (int i = 0; i < NUM_SWITCHES; i++) {
-    g_model.switchWarningState |= (1 << (3 * i));
-  }
 #endif
 }
 
@@ -716,12 +682,6 @@ void doSplash() {
     resetBacklightTimeout();
     drawSplash();
 
-#if defined(PCBSKY9X)
-    tmr10ms_t curTime = get_tmr10ms() + 10;
-    uint8_t contrast = 10;
-    lcdSetRefVolt(contrast);
-#endif
-
     getADC();  // init ADC array
 
     inputsMoved();
@@ -757,16 +717,6 @@ void doSplash() {
       if (!secondSplash && get_tmr10ms() >= tgtime - 200) {
         secondSplash = true;
         drawSecondSplash();
-      }
-#endif
-
-#if defined(PCBSKY9X)
-      if (curTime < get_tmr10ms()) {
-        curTime += 10;
-        if (contrast < g_eeGeneral.contrast) {
-          contrast += 1;
-          lcdSetRefVolt(contrast);
-        }
       }
 #endif
 
@@ -1303,12 +1253,6 @@ void doMixerCalculations() {
   getSwitchesPosition(!s_mixer_first_run_done);
   DEBUG_TIMER_STOP(debugTimerGetSwitches);
 
-#if defined(PCBSKY9X) && !defined(REVA) && !defined(SIMU)
-  Current_analogue = (Current_analogue * 31 + s_anaFilt[8]) >> 5;
-  if (Current_analogue > Current_max)
-    Current_max = Current_analogue;
-#endif
-
   DEBUG_TIMER_START(debugTimerEvalMixes);
   evalMixes(tick10ms);
   DEBUG_TIMER_STOP(debugTimerEvalMixes);
@@ -1464,12 +1408,6 @@ void opentxStart(const uint8_t startOptions = OPENTX_START_DEFAULT_ARGS) {
   trace_event(trace_start, 0x12345678);
 #endif
 
-#if defined(PCBSKY9X) && defined(SDCARD) && !defined(SIMU)
-  for (int i = 0; i < 500 && !Card_initialized; i++) {
-    RTOS_WAIT_MS(2);  // 2ms
-  }
-#endif
-
 #if defined(NIGHTLY_BUILD_WARNING)
   ALERT(STR_NIGHTLY_WARNING, TR_NIGHTLY_NOTSAFE, AU_ERROR);
 #endif
@@ -1498,9 +1436,6 @@ void opentxClose(uint8_t shutdown) {
 #endif
 #if defined(LUA)
     luaClose(&lsScripts);
-#if defined(PCBHORUS)
-    luaClose(&lsWidgets);
-#endif
 #endif
 #if defined(HAPTIC)
     hapticOff();
@@ -1535,13 +1470,6 @@ void saveAllData() {
     sessionTimer = 0;
   }
 
-#if defined(PCBSKY9X)
-  uint32_t mAhUsed = g_eeGeneral.mAhUsed + Current_used * (488 + g_eeGeneral.txCurrentCalibration) / 8192 / 36;
-  if (g_eeGeneral.mAhUsed != mAhUsed) {
-    g_eeGeneral.mAhUsed = mAhUsed;
-  }
-#endif
-
   g_eeGeneral.unexpectedShutdown = 0;
   storageDirty(EE_GENERAL);
   storageCheck(true);
@@ -1555,10 +1483,6 @@ void opentxResume() {
 
   sdMount();
   storageReadAll();
-#if defined(PCBHORUS)
-  loadTheme();
-  loadFontCache();
-#endif
 
   // removed to avoid the double warnings (throttle, switch, etc.)
   // opentxStart(OPENTX_START_NO_SPLASH | OPENTX_START_NO_CALIBRATION | OPENTX_START_NO_CHECKS);
@@ -1725,38 +1649,8 @@ void opentxInit()
     globalData.unexpectedShutdown = 1;
   }
 
-#if defined(SDCARD) && !defined(PCBMEGA2560)
-  // SDCARD related stuff, only done if not unexpectedShutdown
-  if (!globalData.unexpectedShutdown) {
-    sdInit();
-    logsInit();
-  }
-#endif
-
 #if defined(EEPROM)
   storageReadCurrentModel();
-#endif
-
-#if defined(PCBHORUS)
-  if (!globalData.unexpectedShutdown) {
-    // g_model.topbarData is still zero here (because it was not yet read from SDCARD),
-    // but we only remember the pointer to in in constructor.
-    // The storageReadAll() needs topbar object, so it must be created here
-#if __clang__
-// clang does not like this at all, turn into a warning so that -Werror does not stop here
-// taking address of packed member 'topbarData' of class or structure 'ModelData' may result in an unaligned pointer value [-Werror,-Waddress-of-packed-member]
-#pragma clang diagnostic push
-#pragma clang diagnostic warning "-Waddress-of-packed-member"
-#endif
-    topbar = new Topbar(&g_model.topbarData);
-#if __clang__
-// Restore warnings
-#pragma clang diagnostic pop
-#endif
-
-    // lua widget state must also be prepared before the call to storageReadAll()
-    LUA_INIT_THEMES_AND_WIDGETS();
-  }
 #endif
 
   // handling of storage for radios that have no EEPROM
@@ -1801,20 +1695,6 @@ void opentxInit()
 
   BACKLIGHT_ENABLE();
 
-#if defined(PCBSKY9X)
-  // Set ADC gains here
-  setSticksGain(g_eeGeneral.sticksGain);
-#endif
-
-#if defined(PCBSKY9X) && defined(BLUETOOTH)
-  btInit();
-#endif
-
-#if defined(PCBHORUS)
-  loadTheme();
-  loadFontCache();
-#endif
-
   if (g_eeGeneral.backlightMode != e_backlight_mode_off) {
     // on Tx start turn the light on
     resetBacklightTimeout();
@@ -1850,20 +1730,9 @@ int main()
   // important to disable it before commencing with system initialisation (or
   // we could put a bunch more wdt_reset()s in. But I don't like that approach
   // during boot up.)
-#if defined(PCBTARANIS)
-  g_eeGeneral.contrast = LCD_CONTRAST_DEFAULT;
-#endif
   wdt_disable();
 
   boardInit();
-
-#if defined(PCBX7)
-  bluetoothInit(BLUETOOTH_DEFAULT_BAUDRATE);  //BT is turn on for a brief period to differentiate X7 and X7S
-#endif
-
-#if defined(PCBHORUS)
-  loadFonts();
-#endif
 
 #if defined(GUI) && !defined(PCBTARANIS) && !defined(PCBHORUS) && !defined(PCBI6X)
   // TODO remove this
@@ -1878,22 +1747,12 @@ int main()
   // lcdSetRefVolt(25);
 #endif
 
-#if defined(SPLASH) && (defined(PCBTARANIS) || defined(PCBHORUS))
-  drawSplash();
-#endif
-
 #if defined(DSM2_SERIAL) && !defined(TELEMETRY_FRSKY)
   DSM2_Init();
 #endif
 
 #if defined(MENU_ROTARY_SW)
   init_rotary_sw();
-#endif
-
-#if defined(PCBHORUS)
-  if (!IS_FIRMWARE_COMPATIBLE_WITH_BOARD()) {
-    runFatalErrorScreen(STR_WRONG_PCBREV);
-  }
 #endif
 
 #if !defined(EEPROM)
@@ -1952,28 +1811,8 @@ uint32_t pwrCheck() {
 #else
         while ((TELEMETRY_STREAMING() && !g_eeGeneral.disableRssiPoweroffAlarm)) {
 #endif
-#if defined(PCBI6X)
           pwr_check_state = PWR_CHECK_OFF;
           return e_power_off;
-#else
-          lcdRefreshWait();
-          lcdClear();
-
-          POPUP_CONFIRMATION(STR_MODEL_SHUTDOWN);
-          SET_WARNING_INFO(STR_MODEL_STILL_POWERED, sizeof(TR_MODEL_STILL_POWERED), 0);
-          event_t evt = getEvent(false);
-          DISPLAY_WARNING(evt);
-          lcdRefresh();
-
-          if (warningResult) {
-            pwr_check_state = PWR_CHECK_OFF;
-            return e_power_off;
-          } else if (!warningText) {
-            // shutdown has been cancelled
-            pwr_check_state = PWR_CHECK_PAUSED;
-            return e_power_on;
-          }
-#endif
         }
 #if defined(HAPTIC)
         haptic.play(15, 3, PLAY_NOW);

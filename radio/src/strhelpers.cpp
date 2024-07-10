@@ -241,13 +241,6 @@ char * getSwitchPositionName(char * dest, swsrc_t idx)
     idx = -idx;
   }
 
-#if defined(PCBSKY9X)
-  #define IDX_TRIMS_IN_STR_VSWITCHES   (1+SWSRC_LAST_SWITCH)
-  #define IDX_ON_IN_STR_VSWITCHES      (IDX_TRIMS_IN_STR_VSWITCHES+SWSRC_LAST_TRIM-SWSRC_FIRST_TRIM+2)
-  if (idx <= SWSRC_LAST_SWITCH) {
-    getStringAtIndex(s, STR_VSWITCHES, idx);
-  }
-#else
   #define IDX_TRIMS_IN_STR_VSWITCHES   (1)
   #define IDX_ON_IN_STR_VSWITCHES      (IDX_TRIMS_IN_STR_VSWITCHES+SWSRC_LAST_TRIM-SWSRC_FIRST_TRIM+1)
   if (idx <= SWSRC_LAST_SWITCH) {
@@ -258,21 +251,11 @@ char * getSwitchPositionName(char * dest, swsrc_t idx)
     }
     else {
       *s++ = 'S';
-#if defined(PCBX7)
-      if (swinfo.quot == 5)
-        *s++ = 'H';
-      else if (swinfo.quot == 4)
-        *s++ = 'F';
-      else
-        *s++ = 'A'+swinfo.quot;
-#else
       *s++ = 'A'+swinfo.quot;
-#endif
     }
     *s++ = "\300-\301"[swinfo.rem];
     *s = '\0';
   }
-#endif // PCBSKY9X
 
 #if NUM_XPOTS > 0
   else if (idx <= SWSRC_LAST_MULTIPOS_SWITCH) {

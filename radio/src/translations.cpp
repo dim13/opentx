@@ -48,9 +48,6 @@ const char STR_OPEN9X[]  =
     ISTR(RETA123)
     ISTR(VPROTOS)
     ISTR(POSNEG)
-#if defined(PCBSKY9X) && defined(REVX)
-    ISTR(VOUTPUT_TYPE)
-#endif
     ISTR(VBLMODE)
     ISTR(VCURVEFUNC)
     ISTR(VMLTPX)
@@ -147,9 +144,6 @@ const char STR_TTRACE[]  = TR_TTRACE;
 const char STR_TTRIM[]  = TR_TTRIM;
 const char STR_BEEPCTR[]  = TR_BEEPCTR;
 const char STR_USE_GLOBAL_FUNCS[]  = TR_USE_GLOBAL_FUNCS;
-#if defined(PCBSKY9X) && defined(REVX)
-  const char STR_OUTPUT_TYPE[]  = TR_OUTPUT_TYPE;
-#endif
 const char STR_PROTO[]  = TR_PROTO;
 const char STR_PPMFRAME[]  = TR_PPMFRAME;
 const char STR_REFRESHRATE[]  = TR_REFRESHRATE;
