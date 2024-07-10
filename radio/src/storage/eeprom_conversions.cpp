@@ -486,38 +486,13 @@ PACK(typedef struct {
   uint8_t ppmPulsePol;
 }) ModuleData_v216;
 
-#if defined(PCBTARANIS)
-#define MODELDATA_EXTRA_216 \
-  uint8_t externalModule; \
-  uint8_t trainerMode; \
-  ModuleData_v216 moduleData[NUM_MODULES+1]; \
-  char curveNames[MAX_CURVES][6]; \
-  ScriptData_v216 scriptsData[MAX_SCRIPTS]; \
-  char inputNames[MAX_INPUTS][LEN_INPUT_NAME]; \
-  uint8_t nPotsToWarn; \
-  int8_t potPosition[NUM_POTS+NUM_SLIDERS]; \
-  uint8_t spare[2];
-#elif defined(PCBSKY9X) || defined(PCBI6X)
 #define MODELDATA_EXTRA_216 \
   uint8_t externalModule; \
   ModuleData_v216 moduleData[NUM_MODULES+1]; \
   uint8_t nPotsToWarn; \
   int8_t potPosition[NUM_POTS+NUM_SLIDERS]; \
   uint8_t rxBattAlarms[2];
-#endif
 
-#if defined(PCBTARANIS)
-#define MODELDATA_EXTRA_217 \
-  uint8_t spare:3; \
-  uint8_t trainerMode:3; \
-  uint8_t potsWarnMode:2; \
-  ModuleData moduleData[NUM_MODULES+1]; \
-  char curveNames[MAX_CURVES][6]; \
-  ScriptData scriptsData[MAX_SCRIPTS]; \
-  char inputNames[MAX_INPUTS][LEN_INPUT_NAME]; \
-  uint8_t potsWarnEnabled; \
-  int8_t potsWarnPosition[NUM_POTS+NUM_SLIDERS];
-#else
 #define MODELDATA_EXTRA_217 \
   uint8_t spare:6; \
   uint8_t potsWarnMode:2; \
@@ -525,7 +500,6 @@ PACK(typedef struct {
   uint8_t potsWarnEnabled; \
   int8_t potsWarnPosition[NUM_POTS+NUM_SLIDERS]; \
   uint8_t rxBattAlarms[2];
-#endif
 
 #if defined(PCBTARANIS) && LCD_W >= 212
 PACK(typedef struct {

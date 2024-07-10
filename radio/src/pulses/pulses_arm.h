@@ -153,12 +153,8 @@ inline void startPulses() {
 //  TRACE_NOCRLF("sP");
   s_pulses_paused = false;
 
-#if defined(PCBTARANIS) || defined(PCBHORUS) || defined(PCBI6X)
   setupPulses(INTERNAL_MODULE);
   setupPulses(EXTERNAL_MODULE);
-#else
-  setupPulses(EXTERNAL_MODULE);
-#endif
 
 #if defined(HUBSAN)
   Hubsan_Init();

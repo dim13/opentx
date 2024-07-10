@@ -27,11 +27,7 @@
 
 #define USBD_CFG_MAX_NUM           1
 #define USBD_ITF_MAX_NUM           1
-#if defined(PCBI6X)
 #define USB_MAX_STR_DESC_SIZ       (21 * 2) + 2 // max usb desc * 2 + 2
-#else
-#define USB_MAX_STR_DESC_SIZ       64
-#endif
 
 #define USBD_SELF_POWERED
 
@@ -57,15 +53,7 @@
 #define HID_IN_EP                    0x81
 #define HID_OUT_EP                   0x01
 
-#if defined(PCBI6X)
-#if defined(ADC_JOYSTICK)
 #define HID_IN_PACKET                8
-#else
-#define HID_IN_PACKET                18
-#endif
-#else
-#define HID_IN_PACKET                19
-#endif
 #define HID_OUT_PACKET               9
 
 #define CDC_IN_EP                    0x81  /* EP1 for data IN */

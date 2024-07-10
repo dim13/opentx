@@ -89,17 +89,12 @@
 #define CFN_PLAY_REPEAT_NOSTART 0xFF
 #define CFN_GVAR_MODE(p) ((p)->all.mode)
 #define CFN_PARAM(p) ((p)->all.val)
-#if defined(PCBI6X)
 #define CFN_RESET(p) ((p)->active = 0, (p)->clear.val1 = 0)
-#else
-#define CFN_RESET(p) ((p)->active = 0, (p)->clear.val1 = 0, (p)->clear.val2 = 0)
-#endif
 #define CFN_GVAR_CST_MIN -GVAR_MAX
 #define CFN_GVAR_CST_MAX GVAR_MAX
 #define MODEL_GVAR_MIN(idx) (CFN_GVAR_CST_MIN + g_model.gvars[idx].min)
 #define MODEL_GVAR_MAX(idx) (CFN_GVAR_CST_MAX - g_model.gvars[idx].max)
 
-#if defined(PCBTARANIS) || defined(PCBHORUS) || defined(PCBI6X)
 enum SwitchConfig {
   SWITCH_NONE,
   SWITCH_TOGGLE,
@@ -121,12 +116,6 @@ enum SliderConfig {
 #define IS_CONFIG_3POS(x) (SWITCH_CONFIG(x) == SWITCH_3POS)
 #define IS_CONFIG_TOGGLE(x) (SWITCH_CONFIG(x) == SWITCH_TOGGLE)
 #define SWITCH_WARNING_ALLOWED(x) (SWITCH_EXISTS(x) && !IS_CONFIG_TOGGLE(x))
-#else
-#define IS_CONFIG_3POS(x) IS_3POS(x)
-#define IS_CONFIG_TOGGLE(x) IS_TOGGLE(x)
-#define switchInfo(x) ((x) >= 3 ? (x)-2 : 0)
-#define SWITCH_EXISTS(x) true
-#endif
 
 #define ALTERNATE_VIEW 0x10
 
@@ -339,9 +328,7 @@ enum ChannelsProtocols {
 #if defined(PXX2)
   PROTO_PXX2,
 #endif
-#if defined(PCBI6X)
   PROTOCOL_CHANNELS_AFHDS2A_SPI
-#endif
 };
 
 #if defined(PXX2)
@@ -442,13 +429,8 @@ enum MMRFrskySubtypes {
   MM_RF_FRSKY_SUBTYPE_D16_LBT_8CH
 };
 
-#if defined(PCBI6X)
 #define HAS_RF_PROTOCOL_FAILSAFE(rf) ((rf) == RF_I6X_PROTO_AFHDS2A)
 #define HAS_RF_PROTOCOL_MODELINDEX(rf) (1)
-#else
-#define HAS_RF_PROTOCOL_FAILSAFE(rf) ((rf) == RF_PROTO_X16)
-#define HAS_RF_PROTOCOL_MODELINDEX(rf) (((rf) == RF_PROTO_X16) || ((rf) == RF_PROTO_LR12))
-#endif
 
 enum DSM2Protocols {
   DSM2_PROTO_LP45,
@@ -473,7 +455,6 @@ enum ModuleTypes {
   MODULE_TYPE_COUNT
 };
 
-#if defined(PCBI6X)
 enum AFHDS2A_Subtype {
   AFHDS2A_SUBTYPE_FIRST,
   AFHDS2A_SUBTYPE_PWM_IBUS = AFHDS2A_SUBTYPE_FIRST,
@@ -496,7 +477,6 @@ const char STR_SUBTYPE_AFHDS2A[] =
     "PPM,IB16"
     "PWM,SB16"
     "PPM,SB16";
-#endif
 
 enum AntennaTypes {
   XJT_INTERNAL_ANTENNA,

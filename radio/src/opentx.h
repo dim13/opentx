@@ -202,9 +202,7 @@
   #define IS_SLAVE_TRAINER()           (g_model.trainerMode == TRAINER_MODE_SLAVE)
 #endif
 
-#if defined(LUA) || defined(PXX2) || defined(MULTIMODULE) || defined(PCBI6X)
   #define RADIO_TOOLS
-#endif
 
 #if defined(PCBI6X_ELRS)
 #define CTOOL_DATA_SIZE (468 + 176 + 140 + 4) // 788
@@ -365,21 +363,8 @@ extern uint8_t channelOrder(uint8_t x);
 
 #define THRCHK_DEADBAND                16
 
-#if defined(COLORLCD)
-  #define SPLASH_NEEDED()              (false)
-#elif defined(PCBTARANIS) || defined(PCBI6X)
-  #define SPLASH_NEEDED()              (g_eeGeneral.splashMode != 3)
-#else
-  #define SPLASH_NEEDED()              (g_model.moduleData[EXTERNAL_MODULE].type != MODULE_TYPE_DSM2 && !g_eeGeneral.splashMode)
-#endif
-
-#if defined(PCBHORUS)
-  #define SPLASH_TIMEOUT               0 /* we use the splash duration to load stuff from the SD */
-#elif defined(PCBTARANIS) || defined(PCBI6X)
-  #define SPLASH_TIMEOUT               (g_eeGeneral.splashMode==-4 ? 1500 : (g_eeGeneral.splashMode<=0 ? (400-g_eeGeneral.splashMode*200) : (400-g_eeGeneral.splashMode*100)))
-#else
-  #define SPLASH_TIMEOUT               (4*100)  // 4 seconds
-#endif
+#define SPLASH_NEEDED()              (g_eeGeneral.splashMode != 3)
+#define SPLASH_TIMEOUT               (g_eeGeneral.splashMode==-4 ? 1500 : (g_eeGeneral.splashMode<=0 ? (400-g_eeGeneral.splashMode*200) : (400-g_eeGeneral.splashMode*100)))
 
 #if defined(ROTARY_ENCODERS)
   #define IS_ROTARY_ENCODER_NAVIGATION_ENABLE()  g_eeGeneral.reNavigation
@@ -402,11 +387,7 @@ extern uint8_t channelOrder(uint8_t x);
 
 #define HEART_TIMER_10MS               1
 #define HEART_TIMER_PULSES             2 // when multiple modules this is the first one
-#if defined(PCBTARANIS) || defined(PCBHORUS) || defined(PCBI6X)
 #define HEART_WDT_CHECK                (HEART_TIMER_10MS + (HEART_TIMER_PULSES << 0) + (HEART_TIMER_PULSES << 1))
-#else
-#define HEART_WDT_CHECK                (HEART_TIMER_10MS + HEART_TIMER_PULSES)
-#endif
 extern uint8_t heartbeat;
 
 #if !defined(BOOT)
@@ -443,10 +424,8 @@ int zchar2str(char *dest, const char *src, int size);
 #include "keys.h"
 #include "pwr.h"
 
-#if defined(PCBTARANIS) || defined(PCBHORUS) || defined(PCBI6X)
 div_t switchInfo(int switchPosition);
 extern uint8_t potsPos[NUM_XPOTS];
-#endif
 
 #if defined(PCBHORUS)
   uint16_t trimDown(uint16_t idx); // TODO why?
@@ -512,11 +491,7 @@ void evalLogicalSwitches(bool isCurrentFlightmode=true);
 void logicalSwitchesCopyState(uint8_t src, uint8_t dst);
 #define LS_RECURSIVE_EVALUATION_RESET()
 
-#if defined(PCBTARANIS) || defined(PCBHORUS) || defined(PCBI6X)
-  void getSwitchesPosition(bool startup);
-#else
-  #define getSwitchesPosition(...)
-#endif
+void getSwitchesPosition(bool startup);
 
 extern swarnstate_t switches_states;
 swsrc_t getMovedSwitch();
@@ -576,14 +551,9 @@ extern uint8_t trimsDisplayMask;
 void flightReset(uint8_t check=true);
 
 PACK(struct GlobalData {
-#if defined(PCBI6X)
   uint8_t unexpectedShutdown;
   uint8_t usbConnect;
   uint8_t cToolRunning;
-#else
-  uint8_t unexpectedShutdown:1;
-  uint8_t spare:7;
-#endif
 });
 
 extern GlobalData globalData;
@@ -970,11 +940,7 @@ inline void customFunctionsReset()
 }
 
 #include "telemetry/telemetry.h"
-#if defined(PCBI6X)
 #include "crc_driver.h"
-#else
-#include "crc.h"
-#endif
 
 #define PLAY_REPEAT(x)            (x)                 /* Range 0 to 15 */
 #define PLAY_NOW                  0x10
@@ -1014,27 +980,8 @@ enum AUDIO_SOUNDS {
   AU_STICK2_MIDDLE,
   AU_STICK3_MIDDLE,
   AU_STICK4_MIDDLE,
-#if defined(PCBTARANIS) || defined(PCBHORUS)
   AU_POT1_MIDDLE,
   AU_POT2_MIDDLE,
-#if defined(PCBX9E)
-  AU_POT3_MIDDLE,
-  AU_POT4_MIDDLE,
-#endif
-  AU_SLIDER1_MIDDLE,
-  AU_SLIDER2_MIDDLE,
-#if defined(PCBX9E)
-  AU_SLIDER3_MIDDLE,
-  AU_SLIDER4_MIDDLE,
-#endif
-#elif defined(PCBI6X)
-  AU_POT1_MIDDLE,
-  AU_POT2_MIDDLE,
-#else
-  AU_POT1_MIDDLE,
-  AU_POT2_MIDDLE,
-  AU_POT3_MIDDLE,
-#endif
   AU_MIX_WARNING_1,
   AU_MIX_WARNING_2,
   AU_MIX_WARNING_3,

@@ -39,12 +39,10 @@ const char STR_OPEN9X[]  =
 #endif
     ISTR(TRNMODE)
     ISTR(TRNCHN)
-#if defined(PCBTARANIS) || defined(PCBHORUS) || defined(PCBI6X)
     ISTR(AUX_SERIAL_MODES)
     ISTR(SWTYPES)
     ISTR(POTTYPES)
     ISTR(SLIDERTYPES)
-#endif
     ISTR(VTRIMINC)
     ISTR(VDISPLAYTRIMS)
     ISTR(RETA123)
@@ -706,9 +704,7 @@ const char STR_BLCOLOR[]   = TR_BLCOLOR;
   const char STR_MODS_FORBIDDEN[]  = TR_MODS_FORBIDDEN;
 #endif
 
-#if defined(PCBTARANIS) || defined(DSM2) || defined(PCBI6X)
   const char STR_MODULE_RANGE[]  = TR_MODULE_RANGE;
-#endif
 
 #if defined(BLUETOOTH)
   const char STR_BLUETOOTH[]  = TR_BLUETOOTH;

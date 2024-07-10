@@ -39,13 +39,8 @@ uint8_t createCrossfireModelIDFrame(uint8_t* frame) {
   *buf++ = SUBCOMMAND_CRSF;                         /* sub command */
   *buf++ = COMMAND_MODEL_SELECT_ID;                 /* command of set model/receiver id */
   *buf++ = g_model.header.modelId[EXTERNAL_MODULE]; /* model ID */
-#if defined(PCBI6X)
   *buf++ = crc8_BA_hw(frame + 2, 6);
   *buf++ = crc8_hw(frame + 2, 7);
-#else
-  *buf++ = crc8_BA(frame + 2, 6);
-  *buf++ = crc8(frame + 2, 7);
-#endif
   return buf - frame;
 }
 
@@ -68,11 +63,7 @@ uint8_t createCrossfireChannelsFrame(uint8_t* frame, int16_t* pulses) {
       bitsavailable -= 8;
     }
   }
-#if defined(PCBI6X)
   *buf++ = crc8_hw(crc_start, 23);
-#else
-  *buf++ = crc8(crc_start, 23);
-#endif
   return buf - frame;
 }
 

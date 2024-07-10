@@ -242,13 +242,8 @@ void menuModelSelect(event_t event)
     case EVT_ROTARY_LEFT:
     case EVT_ROTARY_RIGHT:
 #endif
-#if defined(PCBI6X)
     case EVT_KEY_BREAK(KEY_RIGHT):
     case EVT_KEY_LONG(KEY_RIGHT):
-#else
-    case EVT_KEY_FIRST(KEY_LEFT):
-    case EVT_KEY_FIRST(KEY_RIGHT):
-#endif
 #if defined(ROTARY_ENCODER_NAVIGATION)
       if ((!IS_ROTARY_RIGHT(event) && !IS_ROTARY_LEFT(event)) || s_editMode < 0) {
 #endif

@@ -25,16 +25,10 @@
 
 #define CROSSFIRE_CHANNELS_COUNT        16
 
-#if defined(PCBI6X)
 inline bool isModuleA7105(uint8_t idx){
   return idx == INTERNAL_MODULE;
 }
-#else
-inline bool isModuleA7105(uint8_t idx){
-  return false;
-}
 
-#endif
 #if defined(MULTIMODULE)
 inline bool isModuleMultimodule(uint8_t idx)
 {

@@ -67,8 +67,8 @@ void drawVerticalScrollbar(coord_t x, coord_t y, coord_t h, uint16_t offset, uin
 
 void drawGauge(coord_t x, coord_t y, coord_t w, coord_t h, int32_t val, int32_t max)
 {
-#if defined(PCBX7) || defined(PCBX9LITES) || defined(PCBI6X) // X7 LCD doesn't like too many horizontal lines
-  h++;
+#if defined(PCBX7) || defined(PCBX9LITES) || defined(PCBI6X)
+  h++; // LCD doesn't like too many horizontal lines
 #else
   lcdDrawRect(x, y, w+1, h);
 #endif

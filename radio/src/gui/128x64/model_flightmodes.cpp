@@ -244,32 +244,17 @@ void menuModelFlightModesAll(event_t event)
     att = (i==sub ? INVERS : 0);
     FlightModeData * p = flightModeAddress(i);
     drawFlightMode(0, y, i+1, att|(getFlightMode()==i ? BOLD : 0));
-#if defined(PCBTARANIS) || defined(PCBI6X)
     lcdDrawSizedText(NAME_POS, y, p->name, sizeof(p->name), ZCHAR);
-#else
-    lcdDrawSizedText(4*FW+NAME_OFS, y, p->name, sizeof(p->name), ZCHAR);
-#endif
     if (i == 0) {
       for (uint8_t t=0; t<NUM_STICKS; t++) {
-#if defined(PCBTARANIS) || defined(PCBI6X)
         drawTrimMode(TRIMS_POS+t*FW*2, y, i, t, 0);
-#else
-        drawShortTrimMode((9+LEN_FLIGHT_MODE_NAME+t)*FW+TRIMS_OFS, y, i, t, 0);
-#endif
       }
     }
     else {
-#if defined(PCBTARANIS) || defined(PCBI6X)
       drawSwitch(SWITCH_POS, y, p->swtch, 0);
       for (uint8_t t=0; t<NUM_STICKS; t++) {
         drawTrimMode(TRIMS_POS+t*FW*2, y, i, t, 0);
       }
-#else
-      drawSwitch((4+LEN_FLIGHT_MODE_NAME)*FW+SWITCH_OFS, y, p->swtch, 0);
-      for (uint8_t t=0; t<NUM_STICKS; t++) {
-        drawShortTrimMode((9+LEN_FLIGHT_MODE_NAME+t)*FW+TRIMS_OFS, y, i, t, 0);
-      }
-#endif
     }
 
     if (p->fadeIn || p->fadeOut) {

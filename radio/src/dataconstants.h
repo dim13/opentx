@@ -33,43 +33,6 @@
   #define LUA_EXPORT_EXTRA(...)
 #endif
 
-#if defined(PCBHORUS)
-  #define MAX_MODELS                   60
-  #define MAX_OUTPUT_CHANNELS          32 // number of real output channels CH1-CH32
-  #define MAX_FLIGHT_MODES             9
-  #define MAX_MIXERS                   64
-  #define MAX_EXPOS                    64
-  #define MAX_LOGICAL_SWITCHES         64
-  #define MAX_SPECIAL_FUNCTIONS        64 // number of functions assigned to switches
-  #define MAX_SCRIPTS                  9
-  #define MAX_INPUTS                   32
-  #define MAX_TRAINER_CHANNELS         16
-  #define MAX_TELEMETRY_SENSORS        32
-  #define MAX_CUSTOM_SCREENS           5
-#elif defined(PCBTARANIS)
-  #define MAX_MODELS                   60
-  #define MAX_OUTPUT_CHANNELS          32 // number of real output channels CH1-CH32
-  #define MAX_FLIGHT_MODES             9
-  #define MAX_MIXERS                   64
-  #define MAX_EXPOS                    64
-  #define MAX_LOGICAL_SWITCHES         64
-  #define MAX_SPECIAL_FUNCTIONS        64 // number of functions assigned to switches
-  #define MAX_SCRIPTS                  7
-  #define MAX_INPUTS                   32
-  #define MAX_TRAINER_CHANNELS         16
-  #define MAX_TELEMETRY_SENSORS        32
-#elif defined(PCBSKY9X)
-  #define MAX_MODELS                   60
-  #define MAX_OUTPUT_CHANNELS          32 // number of real output channels CH1-CH32
-  #define MAX_FLIGHT_MODES             9
-  #define MAX_MIXERS                   64
-  #define MAX_EXPOS                    32
-  #define MAX_LOGICAL_SWITCHES         64
-  #define MAX_SPECIAL_FUNCTIONS        64 // number of functions assigned to switches
-  #define MAX_INPUTS                   32
-  #define MAX_TRAINER_CHANNELS         16
-  #define MAX_TELEMETRY_SENSORS        32
-#elif defined(PCBI6X)
   #define MAX_MODELS                   16
   #define MAX_OUTPUT_CHANNELS          16 // number of real output channels CH1-CH16
   #define MAX_FLIGHT_MODES             5
@@ -80,18 +43,7 @@
   #define MAX_TRAINER_CHANNELS         16
   #define MAX_INPUTS                   16
   #define MAX_TELEMETRY_SENSORS        30 // 48B each
-  #define MAX_SCRIPTS				   0
-#else
-  #define MAX_MODELS                   16
-  #define MAX_OUTPUT_CHANNELS          16 // number of real output channels CH1-CH16
-  #define MAX_FLIGHT_MODES             5
-  #define MAX_MIXERS                   32
-  #define MAX_EXPOS                    14
-  #define MAX_LOGICAL_SWITCHES         12
-  #define MAX_SPECIAL_FUNCTIONS        16 // number of functions assigned to switches
-  #define MAX_TRAINER_CHANNELS         8
-  #define MAX_TELEMETRY_SENSORS        0
-#endif
+  #define MAX_SCRIPTS			0
 
 #define MAX_TIMERS                   3
 
@@ -145,11 +97,7 @@ enum CurveType {
   #define MAX_CURVE_POINTS             512
 #endif
 
-#if defined(PCBTARANIS) || defined(PCBSKY9X) || defined(PCBHORUS) || defined(PCBI6X)
   #define NUM_MODULES                  2
-#else
-  #define NUM_MODULES                  1
-#endif
 
 #define XPOTS_MULTIPOS_COUNT           6
 

@@ -268,29 +268,10 @@ bool isSwitchAvailable(int swtch, SwitchContext context) {
     swtch = -swtch;
   }
 
-#if defined(PCBSKY9X) || defined(PCBI6X)
   if (swtch >= SWSRC_FIRST_SWITCH && swtch <= SWSRC_LAST_SWITCH) {
     UNUSED(negative);
     return true;
   }
-#else
-  if (swtch >= SWSRC_FIRST_SWITCH && swtch <= SWSRC_LAST_SWITCH) {
-    div_t swinfo = switchInfo(swtch);
-    if (!SWITCH_EXISTS(swinfo.quot)) {
-      return false;
-    }
-    if (!IS_CONFIG_3POS(swinfo.quot)) {
-      if (negative) {
-        return false;
-      }
-      if (swinfo.rem == 1) {
-        // mid position not available for 2POS switches
-        return false;
-      }
-    }
-    return true;
-  }
-#endif
 
 #if NUM_XPOTS > 0
   if (swtch >= SWSRC_FIRST_MULTIPOS_SWITCH && swtch <= SWSRC_LAST_MULTIPOS_SWITCH) {
@@ -411,9 +392,7 @@ bool isAssignableFunctionAvailable(int function) {
 #else
       return false;
 #endif
-#if defined(PCBI6X) // volume function unsupported
-    case FUNC_VOLUME:
-#endif
+    case FUNC_VOLUME: // volume function unsupported
 #if !defined(HAPTIC)
     case FUNC_HAPTIC:
 #endif
@@ -468,11 +447,9 @@ bool isR9MModeAvailable(int mode) {
 #endif
 }
 
-#if defined(PCBI6X)
 bool isSubtypeAvailable(int i){
   return true;
 }
-#endif
 
 bool isModuleAvailable(int module) {
 #if defined(CROSSFIRE)
@@ -523,11 +500,9 @@ bool isTelemetryProtocolAvailable(int protocol) {
   if (protocol == PROTOCOL_PULSES_CROSSFIRE) {
     return false;
   }
-#if defined(PCBI6X)
   if (protocol == PROTOCOL_FLYSKY_IBUS) {
     return true;
   }
-#endif
 #if !defined(MULTIMODULE)
   if (protocol == PROTOCOL_SPEKTRUM || protocol == PROTOCOL_FLYSKY_IBUS || protocol == PROTOCOL_MULTIMODULE) {
     return false;
@@ -543,51 +518,9 @@ bool isTelemetryProtocolAvailable(int protocol) {
   return true;
 }
 
-#if defined(PCBHORUS) || defined(PCBI6X)
 bool isTrainerModeAvailable(int mode) {
   return true;
 }
-#elif defined(PCBX9E)
-bool isTrainerModeAvailable(int mode) {
-  if (IS_EXTERNAL_MODULE_ENABLED() && (mode == TRAINER_MODE_MASTER_SBUS_EXTERNAL_MODULE || mode == TRAINER_MODE_MASTER_CPPM_EXTERNAL_MODULE))
-    return false;
-#if defined(USEHORUSBT)
-  else if (mode == TRAINER_MODE_MASTER_BATTERY_COMPARTMENT)
-#else
-  else if (mode == TRAINER_MODE_MASTER_BLUETOOTH || mode == TRAINER_MODE_MASTER_BATTERY_COMPARTMENT || mode == TRAINER_MODE_SLAVE_BLUETOOTH)
-#endif
-    return false;
-  else
-    return true;
-}
-#elif defined(PCBX9)
-bool isTrainerModeAvailable(int mode) {
-  if (IS_EXTERNAL_MODULE_ENABLED() && (mode == TRAINER_MODE_MASTER_SBUS_EXTERNAL_MODULE || mode == TRAINER_MODE_MASTER_CPPM_EXTERNAL_MODULE))
-    return false;
-  else
-    return true;
-}
-#elif defined(PCBX7)
-bool isTrainerModeAvailable(int mode) {
-  if (IS_EXTERNAL_MODULE_ENABLED() && (mode == TRAINER_MODE_MASTER_SBUS_EXTERNAL_MODULE || mode == TRAINER_MODE_MASTER_CPPM_EXTERNAL_MODULE))
-    return false;
-  else if (mode == TRAINER_MODE_MASTER_BATTERY_COMPARTMENT)
-    return false;
-#if defined(BLUETOOTH)
-  else if (g_eeGeneral.bluetoothMode != BLUETOOTH_TRAINER && (mode == TRAINER_MODE_MASTER_BLUETOOTH || mode == TRAINER_MODE_SLAVE_BLUETOOTH))
-    return false;
-#endif
-  else
-    return true;
-}
-#elif defined(PCBXLITE)
-bool isTrainerModeAvailable(int mode) {
-  if (g_eeGeneral.bluetoothMode == BLUETOOTH_TRAINER && (mode == TRAINER_MODE_MASTER_BLUETOOTH || mode == TRAINER_MODE_SLAVE_BLUETOOTH))
-    return true;
-  else
-    return false;
-}
-#endif
 
 bool modelHasNotes() {
 #if defined(SDCARD)

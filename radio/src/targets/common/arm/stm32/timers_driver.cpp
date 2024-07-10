@@ -64,9 +64,7 @@ void interrupt5ms()
 
   if (pre_scale == 2) {
     pre_scale = 0;
-#if defined(PCBI6X)
     BUZZER_HEARTBEAT();
-#endif
     DEBUG_TIMER_START(debugTimerPer10ms);
     DEBUG_TIMER_SAMPLE(debugTimerPer10msPeriod);
     per10ms();

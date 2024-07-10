@@ -233,32 +233,8 @@ void generalDefault() {
   g_eeGeneral.contrast = LCD_CONTRAST_DEFAULT;
 #endif
 
-#if defined(PCBHORUS)
-#if PCBREV >= 13
-  g_eeGeneral.potsConfig = 0x1B;  // S1 = pot, 6P = multipos, S2 = pot with detent
-#else
-  g_eeGeneral.potsConfig = 0x19;  // S1 = pot without detent, 6P = multipos, S2 = pot with detent
-#endif
-  g_eeGeneral.slidersConfig = 0x0f;  // 4 sliders
-  g_eeGeneral.blOffBright = 20;
-#elif defined(PCBXLITE) || defined(PCBI6X)
   g_eeGeneral.potsConfig = 0x0F;  // S1 and S2 = pot without detent
-#elif defined(PCBX7)
-  g_eeGeneral.potsConfig = 0x07;          // S1 = pot without detent, S2 = pot with detent
-#elif defined(PCBTARANIS)
-  g_eeGeneral.potsConfig = 0x05;          // S1 and S2 = pots with detent
-  g_eeGeneral.slidersConfig = 0x03;       // LS and RS = sliders with detent
-#endif
-
-#if defined(PCBXLITE)
-  g_eeGeneral.switchConfig = (SWITCH_2POS << 6) + (SWITCH_2POS << 4) + (SWITCH_3POS << 2) + (SWITCH_3POS << 0);  // 2x3POS, 2x2POS
-#elif defined(PCBI6X)
   g_eeGeneral.switchConfig = (SWITCH_2POS << 6) + (SWITCH_3POS << 4) + (SWITCH_2POS << 2) + (SWITCH_2POS << 0);
-#elif defined(PCBX7)
-  g_eeGeneral.switchConfig = 0x000006ff;  // 4x3POS, 1x2POS, 1xTOGGLE
-#elif defined(PCBTARANIS) || defined(PCBHORUS)
-  g_eeGeneral.switchConfig = 0x00007bff;  // 6x3POS, 1x2POS, 1xTOGGLE
-#endif
 
   // vBatWarn is voltage in 100mV, vBatMin is in 100mV but with -9V offset, vBatMax has a -12V offset
   g_eeGeneral.vBatWarn = BATTERY_WARN;
@@ -451,18 +427,11 @@ void modelDefault(uint8_t id) {
   }
 #endif
 
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-  g_model.moduleData[INTERNAL_MODULE].type = MODULE_TYPE_XJT;
-  g_model.moduleData[INTERNAL_MODULE].channelsCount = defaultModuleChannels_M8(INTERNAL_MODULE);
-#elif defined(PCBSKY9X)
-  g_model.moduleData[EXTERNAL_MODULE].type = MODULE_TYPE_PPM;
-#elif defined(PCBI6X)
   g_model.moduleData[INTERNAL_MODULE].type = MODULE_TYPE_AFHDS2A_SPI;
   g_model.moduleData[INTERNAL_MODULE].channelsStart = 0;
   g_model.moduleData[INTERNAL_MODULE].channelsCount = MAX_OUTPUT_CHANNELS;
   g_model.moduleData[INTERNAL_MODULE].subType = AFHDS2A_SUBTYPE_PWM_IBUS;
   g_model.moduleData[INTERNAL_MODULE].afhds2a.servoFreq = 50;
-#endif
 
 #if defined(PCBXLITE)
   g_model.trainerMode = TRAINER_MODE_MASTER_BLUETOOTH;
@@ -835,19 +804,6 @@ void checkSDVersion() {
 }
 #endif
 
-#if defined(PCBTARANIS) || defined(PCBHORUS)
-void checkFailsafe() {
-  for (int i = 0; i < NUM_MODULES; i++) {
-    if (isModulePXX(i)) {
-      ModuleData &moduleData = g_model.moduleData[i];
-      if (HAS_RF_PROTOCOL_FAILSAFE(moduleData.rfProtocol) && moduleData.failsafeMode == FAILSAFE_NOT_SET) {
-        ALERT(STR_FAILSAFEWARN, STR_NO_FAILSAFE, AU_ERROR);
-        break;
-      }
-    }
-  }
-}
-#elif defined(PCBI6X)
 void checkFailsafe() {
   for (int i = 0; i < NUM_MODULES; i++) {
     if (isModuleA7105(i)) {
@@ -859,9 +815,7 @@ void checkFailsafe() {
     }
   }
 }
-#else
-#define checkFailsafe()
-#endif
+
 void checkRSSIAlarmsDisabled() {
   if (g_model.rssiAlarms.disabled) {
     ALERT(STR_RSSIALARM_WARN, STR_NO_RSSIALARM, AU_ERROR);
@@ -2038,9 +1992,9 @@ uint32_t pwrCheck() {
 
   return e_power_on;
 }
-#elif defined(PCBI6X) // no software controlled power on i6X
+#elif defined(PCBI6X)
 uint32_t pwrCheck() {
-  return e_power_on;
+  return e_power_on; // no software controlled power on i6X
 }
 #else
 uint32_t pwrCheck() {

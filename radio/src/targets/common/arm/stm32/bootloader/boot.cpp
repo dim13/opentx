@@ -24,13 +24,7 @@
 #include "bin_files.h"
 #endif
 
-#if defined(PCBXLITE)
-#define BOOTLOADER_KEYS 0x0f
-#elif defined(PCBI6X)
 #define BOOTLOADER_KEYS 0x2100
-#else
-#define BOOTLOADER_KEYS 0x42
-#endif
 #define APP_START_ADDRESS (uint32_t)(FIRMWARE_ADDRESS + BOOTLOADER_SIZE)
 
 #if defined(PCBI6X)
@@ -217,23 +211,9 @@ int main() {
   uint32_t nameCount = 0;
 
   wdt_reset();
-#if defined(PCBI6X)
   RCC_AHBPeriphClockCmd(RCC_AHB1_LIST, ENABLE);
   RCC_APB1PeriphClockCmd(RCC_APB1_LIST, ENABLE);
   RCC_APB2PeriphClockCmd(RCC_APB2_LIST, ENABLE);
-#else
-  RCC_AHB1PeriphClockCmd(PWR_RCC_AHB1Periph | KEYS_RCC_AHB1Periph |
-                             LCD_RCC_AHB1Periph | BACKLIGHT_RCC_AHB1Periph |
-                             AUX_SERIAL_RCC_AHB1Periph | I2C_RCC_AHB1Periph |
-                             SD_RCC_AHB1Periph, ENABLE);
-
-  RCC_APB1PeriphClockCmd(LCD_RCC_APB1Periph | BACKLIGHT_RCC_APB1Periph |
-                             INTERRUPT_xMS_RCC_APB1Periph | I2C_RCC_APB1Periph |
-                             AUX_SERIAL_RCC_APB1Periph |
-                             SD_RCC_APB1Periph, ENABLE);
-
-  RCC_APB2PeriphClockCmd(LCD_RCC_APB2Periph | BACKLIGHT_RCC_APB2Periph, ENABLE);
-#endif
   keysInit();
 
   // wait for inputs to stabilize

@@ -21,13 +21,8 @@
 #include "opentx.h"
 
 #define BIGSIZE       DBLSIZE
-#if defined (PCBTARANIS) || defined(PCBI6X)
-  #define LBOX_CENTERX  (LCD_W/4 + 14)
-  #define RBOX_CENTERX  (3*LCD_W/4 - 13)
-#else
-  #define LBOX_CENTERX  (LCD_W/4 + 10)
-  #define RBOX_CENTERX  (3*LCD_W/4 - 10)
-#endif
+#define LBOX_CENTERX  (LCD_W/4 + 14)
+#define RBOX_CENTERX  (3*LCD_W/4 - 13)
 #define MODELNAME_X   (2*FW-2)
 #define MODELNAME_Y   (0)
 #define PHASE_X       (6*FW-2)
@@ -50,11 +45,7 @@
 #if defined(TELEMETRY_FRSKY)
 #define RSSSI_X       (30)
 #define RSSSI_Y       (31)
-#if defined(PCBI6X)
-  #define RSSI_MAX      100
-#else
-  #define RSSI_MAX      105
-#endif
+#define RSSI_MAX      100
 #endif
 
 #define TRIM_LEN      23
@@ -243,14 +234,8 @@ void displayVoltageOrAlarm()
   #define EVT_KEY_NEXT_VIEW              EVT_KEY_BREAK(KEY_DOWN)
   #define EVT_KEY_NEXT_PAGE              EVT_KEY_BREAK(KEY_RIGHT)
   #define EVT_KEY_PREVIOUS_PAGE          EVT_KEY_BREAK(KEY_LEFT)
-  #if defined(PCBI6X)
-    #define EVT_KEY_GENERAL_MENU           EVT_KEY_LONG(KEY_RIGHT)
-    #define EVT_KEY_MODEL_MENU             EVT_KEY_LONG(KEY_MENU)
-  #else
-    #define EVT_KEY_GENERAL_MENU           EVT_KEY_LONG(KEY_LEFT)
-    #define EVT_KEY_MODEL_MENU             EVT_KEY_LONG(KEY_RIGHT)
-    #define EVT_KEY_LAST_MENU              EVT_KEY_LONG(KEY_MENU)
-  #endif
+  #define EVT_KEY_GENERAL_MENU           EVT_KEY_LONG(KEY_RIGHT)
+  #define EVT_KEY_MODEL_MENU             EVT_KEY_LONG(KEY_MENU)
   #define EVT_KEY_TELEMETRY              EVT_KEY_LONG(KEY_DOWN)
   #define EVT_KEY_STATISTICS             EVT_KEY_LONG(KEY_UP)
 #endif
@@ -343,19 +328,10 @@ void menuMainView(event_t event)
 
     case EVT_KEY_CONTEXT_MENU:
       killEvents(event);
-#if defined(PCBI6X)
       if (view_base == VIEW_CHAN_MONITOR) break;
-#else
-      if (modelHasNotes()) {
-        POPUP_MENU_ADD_ITEM(STR_VIEW_NOTES);
-      }
-#endif
 
-#if defined(PCBI6X)
       POPUP_MENU_ADD_ITEM(STR_SAVEALLDATA);
-#endif
       POPUP_MENU_ADD_ITEM(STR_RESET_SUBMENU);
-
       POPUP_MENU_ADD_ITEM(STR_STATISTICS);
 
 #if defined(PCBI6X) && !defined(PCBI6X_USB_VBUS)
@@ -485,39 +461,6 @@ void menuMainView(event_t event)
         doMainScreenGraphics();
 
         // Switches
-#if defined(PCBX9LITES)
-        static const uint8_t x[NUM_SWITCHES-2] = {2*FW-2, 2*FW-2, 17*FW+1, 2*FW-2, 17*FW+1};
-        static const uint8_t y[NUM_SWITCHES-2] = {4*FH+1, 5*FH+1, 5*FH+1, 6*FH+1, 6*FH+1};
-        for (int i=0; i<NUM_SWITCHES - 2; ++i) {
-          if (SWITCH_EXISTS(i)) {
-            getvalue_t val = getValue(MIXSRC_FIRST_SWITCH + i);
-            getvalue_t sw = ((val < 0) ? 3 * i + 1 : ((val == 0) ? 3 * i + 2 : 3 * i + 3));
-            drawSwitch(x[i], y[i], sw, 0, false);
-          }
-        }
-        drawSmallSwitch(29, 5*FH+1, 4, SW_SF);
-        drawSmallSwitch(16*FW+1, 5*FH+1, 4, SW_SG);
-#elif defined(PCBX9LITE)
-        static const uint8_t x[NUM_SWITCHES] = {2 * FW - 2, 2 * FW - 2, 16 * FW + 1, 2 * FW - 2, 16 * FW + 1};
-        static const uint8_t y[NUM_SWITCHES] = {4 * FH + 1, 5 * FH + 1, 5 * FH + 1, 6 * FH + 1, 6 * FH + 1};
-        for (int i = 0; i < NUM_SWITCHES; ++i) {
-          if (SWITCH_EXISTS(i)) {
-            getvalue_t val = getValue(MIXSRC_FIRST_SWITCH + i);
-            getvalue_t sw = ((val < 0) ? 3 * i + 1 : ((val == 0) ? 3 * i + 2 : 3 * i + 3));
-            drawSwitch(x[i], y[i], sw, 0, false);
-          }
-        }
-#elif defined(PCBXLITES)
-        static const uint8_t x[NUM_SWITCHES] = {2*FW-2, 16*FW+1, 2*FW-2, 16*FW+1, 2*FW-2, 16*FW+1};
-        static const uint8_t y[NUM_SWITCHES] = {4*FH+1, 4*FH+1, 6*FH+1, 6*FH+1, 5*FH+1, 5*FH+1};
-        for (int i=0; i<NUM_SWITCHES; ++i) {
-          if (SWITCH_EXISTS(i)) {
-            getvalue_t val = getValue(MIXSRC_FIRST_SWITCH + i);
-            getvalue_t sw = ((val < 0) ? 3 * i + 1 : ((val == 0) ? 3 * i + 2 : 3 * i + 3));
-            drawSwitch(x[i], y[i], sw, 0, false);
-          }
-        }
-#elif defined(PCBTARANIS) || defined(PCBI6X)
         uint8_t switches = min((int)NUM_SWITCHES, 6);
         for (int i = 0; i < switches; ++i) {
           if (SWITCH_EXISTS(i)) {
@@ -531,18 +474,6 @@ void menuMainView(event_t event)
             drawSwitch(x, y, sw, 0, false);
           }
         }
-#else
-        // The ID0 3-POS switch is merged with the TRN switch
-        for (uint8_t i=SWSRC_THR; i<=SWSRC_TRN; i++) {
-          int8_t sw = (i == SWSRC_TRN ? (switchState(SW_ID0) ? SWSRC_ID0 : (switchState(SW_ID1) ? SWSRC_ID1 : SWSRC_ID2)) : i);
-          uint8_t x = 2*FW-2, y = i*FH+1;
-          if (i >= SWSRC_AIL) {
-            x = 17*FW-1;
-            y -= 3*FH;
-          }
-          drawSwitch(x, y, sw, getSwitch(i) ? INVERS : 0, false);
-        }
-#endif
       }
       else {
         // Logical Switches
@@ -587,12 +518,10 @@ void menuMainView(event_t event)
       lcdDrawChar(REBOOT_X, 0 * FH, '!', INVERS | BLINK);
     }
 
-#if defined(PCBI6X)
     // Add square in case of pending or ongoing eeprom write
     if (storageDirtyMsk || eepromIsWriting()) {
       lcdDrawRect(REBOOT_X + 3, 0 * FH, 4, 4);
     }
-#endif // PCBI6X
   }
 
 #if defined(GVARS)
