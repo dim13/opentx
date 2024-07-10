@@ -47,15 +47,6 @@ struct PpmPulsesData {
   T* ptr;
 };
 
-#if defined(PPM_PIN_SERIAL)
-PACK(struct Dsm2SerialPulsesData {
-  uint8_t pulses[64];
-  uint8_t* ptr;
-  uint8_t serialByte;
-  uint8_t serialBitCount;
-  uint16_t _alignment;
-});
-#else
 #define MAX_PULSES_TRANSITIONS 300
 PACK(struct Dsm2TimerPulsesData {
   pulse_duration_t pulses[MAX_PULSES_TRANSITIONS];
@@ -63,7 +54,6 @@ PACK(struct Dsm2TimerPulsesData {
   uint16_t rest;
   uint8_t index;
 });
-#endif
 
 #define PPM_DEF_PERIOD               225 /* 22.5ms */
 #define PPM_STEP_SIZE                5 /*0.5ms*/
@@ -99,18 +89,12 @@ union ModulePulsesData {
 #if defined(INTMODULE_USART) || defined(EXTMODULE_USART)
   UartPxxPulses pxx_uart;
 #endif
-#if defined(PPM_PIN_SERIAL)
-  SerialPxxPulses pxx;
-#elif !defined(INTMODULE_USART) || !defined(EXTMODULE_USART)
+#if !defined(INTMODULE_USART) || !defined(EXTMODULE_USART)
   PwmPxxPulses pxx;
 #endif
 #endif
 #if defined(DSM2)
-#if defined(PPM_PIN_SERIAL)
-  Dsm2SerialPulsesData dsm2;
-#else
   Dsm2TimerPulsesData dsm2;
-#endif
 #endif
 } __ALIGNED(4);
 

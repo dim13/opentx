@@ -43,10 +43,8 @@ static void sendSetupFrame()
   sendByteSbus(0x80);           // Module Configuration
   sendByteSbus(1);              // 1 byte data
   uint8_t config = 0x01 | 0x02; // inversion + multi_telemetry
-#if !defined(PPM_PIN_SERIAL)
   // TODO why PPM_PIN_SERIAL would change MULTI protocol?
   config |= 0x04;               // input synchronsisation
-#endif
 
   sendByteSbus(config);
 }
@@ -90,13 +88,8 @@ void setupPulsesMultimodule(uint8_t port)
 {
   static int counter = 0;
 
-#if defined(PPM_PIN_SERIAL)
-  modulePulsesData[EXTERNAL_MODULE].dsm2.serialByte = 0 ;
-  modulePulsesData[EXTERNAL_MODULE].dsm2.serialBitCount = 0 ;
-#else
   modulePulsesData[EXTERNAL_MODULE].dsm2.rest = multiSyncStatus.getAdjustedRefreshRate();
   modulePulsesData[EXTERNAL_MODULE].dsm2.index = 0;
-#endif
 
   modulePulsesData[EXTERNAL_MODULE].dsm2.ptr = modulePulsesData[EXTERNAL_MODULE].dsm2.pulses;
 
