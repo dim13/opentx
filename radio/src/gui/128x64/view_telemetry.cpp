@@ -220,16 +220,8 @@ enum NavigationDirection {
 #define decrTelemetryScreen() direction = up
 #define incrTelemetryScreen() direction = down
 
-#if defined(PCBXLITE)
-#define EVT_KEY_PREVIOUS_VIEW          EVT_KEY_LONG(KEY_LEFT)
-#define EVT_KEY_NEXT_VIEW              EVT_KEY_LONG(KEY_RIGHT)
-#elif defined(PCBX7)
-#define EVT_KEY_PREVIOUS_VIEW          EVT_KEY_LONG(KEY_PAGE)
-#define EVT_KEY_NEXT_VIEW              EVT_KEY_BREAK(KEY_PAGE)
-#else
 #define EVT_KEY_PREVIOUS_VIEW          EVT_KEY_FIRST(KEY_UP)
 #define EVT_KEY_NEXT_VIEW              EVT_KEY_FIRST(KEY_DOWN)
-#endif
 
 void menuViewTelemetryFrsky(event_t event)
 {
@@ -246,26 +238,14 @@ void menuViewTelemetryFrsky(event_t event)
       break;
 
     case EVT_KEY_PREVIOUS_VIEW:
-#if defined(PCBXLITE)
-      if (IS_SHIFT_PRESSED()) {
-        decrTelemetryScreen();
-      }
-#else
       if (IS_KEY_LONG(EVT_KEY_PREVIOUS_VIEW)) {
         killEvents(event);
       }
       decrTelemetryScreen();
-#endif
       break;
 
     case EVT_KEY_NEXT_VIEW:
-#if defined(PCBXLITE)
-      if (IS_SHIFT_PRESSED()) {
-        incrTelemetryScreen();
-      }
-#else
       incrTelemetryScreen();
-#endif
       break;
 
     case EVT_KEY_LONG(KEY_ENTER):

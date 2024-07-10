@@ -778,21 +778,6 @@ bool eeLoadGeneral()
     }
   }
 
-#if defined(PCBX7)
-  if (g_eeGeneral.variant == 0) {
-    TRACE("Pre release EEPROM detected, variant %d instead of %d for X7 radio. Loading anyway", g_eeGeneral.variant, EEPROM_VARIANT);
-    g_eeGeneral.variant = EEPROM_VARIANT;
-    storageDirty(EE_GENERAL);
-    return true;
-  }
-#endif
-
-#if defined(PCBTARANIS)
-  if (g_eeGeneral.variant != EEPROM_VARIANT) {
-    TRACE("EEPROM variant %d instead of %d", g_eeGeneral.variant, EEPROM_VARIANT);
-    return false;
-  }
-#endif
 #if defined(EEPROM_CONVERSIONS)
   if (g_eeGeneral.version != EEPROM_VER) {
     TRACE("EEPROM version %d instead of %d", g_eeGeneral.version, EEPROM_VER);

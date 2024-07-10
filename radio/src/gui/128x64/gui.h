@@ -27,13 +27,8 @@
 
 #define MENUS_SCROLLBAR_WIDTH          0
 
-#if defined(PCBX7)
-  #define HEADER_LINE                  0
-  #define HEADER_LINE_COLUMNS
-#else
   #define HEADER_LINE                  1
   #define HEADER_LINE_COLUMNS          0,
-#endif
 
 #define COLUMN_X                       0
 #define drawFieldLabel(x, y, str)      lcdDrawTextAlignedLeft(y, str)
@@ -169,33 +164,14 @@ void title(const char * s);
 
   #define MENU_TAB(...) const uint8_t mstate_tab[] = __VA_ARGS__
 
-#if defined(PCBX7)
-#define MENU_CHECK(tab, menu, lines_count) \
-  check(event, menu, tab, DIM(tab), mstate_tab, DIM(mstate_tab)-1, lines_count)
-#else
 #define MENU_CHECK(tab, menu, lines_count) \
   check(event, menu, tab, DIM(tab), mstate_tab, DIM(mstate_tab)-1, (lines_count)-1)
-#endif
 
 #define MENU(title, tab, menu, lines_count, ...) \
   MENU_TAB(__VA_ARGS__); \
   MENU_CHECK(tab, menu, lines_count); \
   TITLE(title)
 
-#if defined(PCBX7)
-#define SIMPLE_MENU_NOTITLE(tab, menu, lines_count) \
-  check_simple(event, menu, tab, DIM(tab), lines_count);
-#define SUBMENU_NOTITLE(lines_count, ...) { \
-  MENU_TAB(__VA_ARGS__); \
-  check(event, 0, NULL, 0, mstate_tab, DIM(mstate_tab)-1, lines_count); \
-  }
-#define SUBMENU(title, lines_count, ...) \
-  MENU_TAB(__VA_ARGS__); \
-  check(event, 0, NULL, 0, mstate_tab, DIM(mstate_tab)-1, lines_count); \
-  TITLE(title)
-#define SIMPLE_SUBMENU_NOTITLE(lines_count) \
-  check_submenu_simple(event, lines_count);
-#else
 #define SIMPLE_MENU_NOTITLE(tab, menu, lines_count) \
   check_simple(event, menu, tab, DIM(tab), (lines_count)-1);
 #define SUBMENU_NOTITLE(lines_count, ...) { \
@@ -210,10 +186,6 @@ void title(const char * s);
 
 #define SIMPLE_SUBMENU_NOTITLE(lines_count) \
   check_submenu_simple(event, (lines_count)-1);
-
-
-
-#endif
 
 #define SIMPLE_MENU(title, tab, menu, lines_count) \
   SIMPLE_MENU_NOTITLE(tab, menu, lines_count); \
@@ -334,11 +306,7 @@ void menuChannelsViewCommon(event_t event);
 #endif
 
 // TODO enum
-#if defined(PCBX7)
-#define EDIT_MODE_INIT                 0
-#else
 #define EDIT_MODE_INIT                 -1
-#endif
 
 extern uint8_t editNameCursorPos;
 

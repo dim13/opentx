@@ -25,25 +25,7 @@
 #include "lua_api.h"
 #include "telemetry/frsky.h"
 
-#if defined(PCBX12S)
-  #include "lua/lua_exports_x12s.inc"   // this line must be after lua headers
-#elif defined(PCBX10)
-  #include "lua/lua_exports_x10.inc"
-#elif defined(PCBX9E)
-  #include "lua/lua_exports_x9e.inc"
-#elif defined(PCBX7)
-  #include "lua/lua_exports_x7.inc"
-#elif defined(PCBXLITE)
-  #include "lua/lua_exports_xlite.inc"
-#elif defined(PCBTARANIS)
-  #include "lua/lua_exports_x9d.inc"
-#endif
-
-#if defined(SIMU)
-  #define RADIO_VERSION FLAVOUR "-simu"
-#else
   #define RADIO_VERSION FLAVOUR
-#endif
 
 #define FIND_FIELD_DESC  0x01
 

@@ -212,10 +212,6 @@ enum FrSkyDataState {
 
 #if defined(NO_RAS)
   #define IS_RAS_VALUE_VALID()            (false)
-#elif defined(PCBX10)
-  #define IS_RAS_VALUE_VALID()            (false)
-#elif defined(PCBX9DP) || defined(PCBX9E)
-  #define IS_RAS_VALUE_VALID()            (telemetryData.xjtVersion != 0 && telemetryData.xjtVersion != 0xff)
 #else
   #define IS_RAS_VALUE_VALID()            (true)
 #endif

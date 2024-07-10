@@ -127,10 +127,6 @@
 // PWR and LED driver
 #define PWR_RCC_AHB1Periph              (RCC_AHBPeriph_GPIOA | RCC_AHBPeriph_GPIOE | RCC_AHBPeriph_GPIOB | RCC_AHBPeriph_GPIOC | RCC_AHBPeriph_GPIOD | RCC_AHBPeriph_GPIOE)
 /*
-#if defined(PCBX9E) || defined(PCBX7) || defined(PCBXLITE)
-#define PWR_PRESS_BUTTON
-#endif
-
   #define PWR_SWITCH_GPIO               GPIOD
   #define PWR_SWITCH_GPIO_PIN           GPIO_Pin_1  // PD.01
   #define PWR_ON_GPIO                   GPIOD

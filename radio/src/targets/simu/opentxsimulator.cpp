@@ -272,17 +272,10 @@ void OpenTxSimulator::rotaryEncoderEvent(int steps)
 #else
   // TODO : this should probably be handled in the GUI
   int key;
-#if defined(PCBXLITE)
-  if (steps > 0)
-    key = KEY_DOWN;
-  else if (steps < 0)
-    key = KEY_UP;
-#else
   if (steps > 0)
     key = KEY_MINUS;
   else if (steps < 0)
     key = KEY_PLUS;
-#endif
   else
     // Should not happen but Clang complains that key is unset otherwise
     return;
@@ -605,17 +598,7 @@ class OpenTxSimulatorFactory: public SimulatorFactory
 
     virtual Board::Type type()
     {
-#if defined(PCBX12S)
-      return Board::BOARD_X12S;
-#elif defined(PCBX10)
-      return Board::BOARD_X10;
-#elif defined(PCBX7)
-      return Board::BOARD_TARANIS_X7;
-#elif defined(PCBTARANIS)
-      return Board::BOARD_TARANIS_X9D;
-#else
       return Board::BOARD_STOCK;
-#endif
     }
 };
 

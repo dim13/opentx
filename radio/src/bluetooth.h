@@ -19,11 +19,6 @@
  */
 
 enum BluetoothStates {
-#if defined(PCBX9E) && !defined(USEHORUSBT)
-    BLUETOOTH_INIT,
-    BLUETOOTH_WAIT_TTM,
-    BLUETOOTH_WAIT_BAUDRATE_CHANGE,
-#endif
     BLUETOOTH_STATE_OFF,
     BLUETOOTH_STATE_FACTORY_BAUDRATE_INIT,
     BLUETOOTH_STATE_BAUDRATE_SENT,
@@ -44,12 +39,7 @@ enum BluetoothStates {
 
 #define LEN_BLUETOOTH_ADDR              16
 
-#if (defined(PCBX7) || defined(PCBXLITE)) && !defined(SIMU)
-extern uint8_t btChipPresent;
-#define IS_BLUETOOTH_CHIP_PRESENT()     (btChipPresent)
-#else
 #define IS_BLUETOOTH_CHIP_PRESENT()     (true)
-#endif
 
 extern volatile uint8_t bluetoothState;
 extern char bluetoothLocalAddr[LEN_BLUETOOTH_ADDR+1];

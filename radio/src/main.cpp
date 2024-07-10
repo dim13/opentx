@@ -375,23 +375,6 @@ void perMain()
   DEBUG_TIMER_STOP(debugTimerGuiMain);
 #endif
 
-#if defined(PCBTARANIS)
-  if (mainRequestFlags & (1 << REQUEST_SCREENSHOT)) {
-    writeScreenshot();
-    mainRequestFlags &= ~(1 << REQUEST_SCREENSHOT);
-  }
-#endif
-
-#if defined(PCBX9E) && !defined(SIMU)
-  toplcdRefreshStart();
-  setTopFirstTimer(getValue(MIXSRC_FIRST_TIMER+g_model.toplcdTimer));
-  setTopSecondTimer(g_eeGeneral.globalTimer + sessionTimer);
-  setTopRssi(TELEMETRY_RSSI());
-  setTopBatteryValue(g_vbat100mV);
-  setTopBatteryState(GET_TXBATT_BARS(), IS_TXBATT_WARNING());
-  toplcdRefreshEnd();
-#endif
-
 #if defined(INTERNAL_GPS)
   gpsWakeup();
 #endif

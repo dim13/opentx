@@ -101,32 +101,10 @@ void editName(coord_t x, coord_t y, char * name, uint8_t size, event_t event, ui
             s_editMode = 0;
           break;
 
-#if defined(PCBXLITE) || !defined(PCBTARANIS)
-        case EVT_KEY_BREAK(KEY_LEFT):
-          if (cur>0) cur--;
-          break;
-          
-        case EVT_KEY_BREAK(KEY_RIGHT):
-          if (cur<size-1) cur++;
-          break;
-#endif
-
-#if defined(PCBXLITE)
-        case EVT_KEY_BREAK(KEY_SHIFT):
-#elif defined(PCBTARANIS)
-        case EVT_KEY_LONG(KEY_ENTER):
-#else
         case EVT_KEY_LONG(KEY_LEFT):
         case EVT_KEY_LONG(KEY_RIGHT):
-#endif
           
           if (attr & ZCHAR) {
-#if defined(PCBTARANIS) && !defined(PCBXLITE)
-            if (v == 0) {
-              s_editMode = 0;
-              killEvents(event);
-            }
-#endif
             if (v >= -26 && v <= 26) {
               v = -v; // toggle case
             }

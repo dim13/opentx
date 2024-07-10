@@ -379,10 +379,6 @@ const char STR_LONGITUDE[]  = TR_LONGITUDE;
 const char STR_SHUTDOWN[]  = TR_SHUTDOWN;
 const char STR_SAVEMODEL[]  = TR_SAVEMODEL;
 
-#if defined(PCBX9E)
-const char STR_POWEROFF[]  = TR_POWEROFF;
-#endif
-
 const char STR_BATT_CALIB[]  = TR_BATT_CALIB;
 
 const char STR_VOLTAGE[]  = TR_VOLTAGE;
