@@ -184,18 +184,7 @@ TASK_FUNCTION(mixerTask) {
 TASK_FUNCTION(menusTask) {
   opentxInit();
 
-#if defined(PWR_BUTTON_PRESS)
-  for (;;) {
-    uint32_t pwr_check = pwrCheck();
-    if (pwr_check == e_power_off) {
-      break;
-    } else if (pwr_check == e_power_press) {
-      RTOS_WAIT_TICKS(MENU_TASK_PERIOD_TICKS);
-      continue;
-    }
-#else
   while (pwrCheck() != e_power_off) {
-#endif
     uint32_t start = (uint32_t)RTOS_GET_TIME();
     DEBUG_TIMER_START(debugTimerPerMain);
     perMain();

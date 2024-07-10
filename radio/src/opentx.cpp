@@ -668,9 +668,6 @@ bool readonlyUnlocked() {
 
 #if defined(SPLASH)
 void doSplash() {
-#if defined(PWR_BUTTON_PRESS)
-  bool refresh = false;
-#endif
 
   if (SPLASH_NEEDED()) {
     resetBacklightTimeout();
@@ -690,21 +687,9 @@ void doSplash() {
       if (keyDown() || inputsMoved())
         return;
 
-#if defined(PWR_BUTTON_PRESS)
-      uint32_t pwr_check = pwrCheck();
-      if (pwr_check == e_power_off) {
-        break;
-      } else if (pwr_check == e_power_press) {
-        refresh = true;
-      } else if (pwr_check == e_power_on && refresh) {
-        drawSplash();
-        refresh = false;
-      }
-#else
       if (pwrCheck() == e_power_off) {
         return;
       }
-#endif
 
 #if defined(SPLASH_FRSKY)
       static uint8_t secondSplash = false;
@@ -847,30 +832,14 @@ void checkThrottleStick()
   LED_ERROR_BEGIN();
   RAISE_ALERT(STR_THROTTLEWARN, STR_THROTTLENOTIDLE, STR_PRESSANYKEYTOSKIP, AU_THROTTLE_ALERT);
 
-#if defined(PWR_BUTTON_PRESS)
-  bool refresh = false;
-#endif
-
   while (!getEvent()) {
     if (!isThrottleWarningAlertNeeded()) {
       return;
     }
 
-#if defined(PWR_BUTTON_PRESS)
-    uint32_t power = pwrCheck();
-    if (power == e_power_off) {
-      break;
-    } else if (power == e_power_press) {
-      refresh = true;
-    } else if (power == e_power_on && refresh) {
-      RAISE_ALERT(STR_THROTTLEWARN, STR_THROTTLENOTIDLE, STR_PRESSANYKEYTOSKIP, AU_NONE);
-      refresh = false;
-    }
-#else
     if (pwrCheck() == e_power_off) {
       break;
     }
-#endif
 
     checkBacklight();
 
@@ -900,10 +869,6 @@ void alert(const char *title, const char *msg, uint8_t sound) {
 
   RAISE_ALERT(title, msg, STR_PRESSANYKEY, sound);
 
-#if defined(PWR_BUTTON_PRESS)
-  bool refresh = false;
-#endif
-
   while (1) {
     RTOS_WAIT_MS(10);
 
@@ -920,14 +885,6 @@ void alert(const char *title, const char *msg, uint8_t sound) {
       drawSleepBitmap();
       boardOff();
       return;  // only happens in SIMU, required for proper shutdown
-    }
-#endif
-#if defined(PWR_BUTTON_PRESS)
-    else if (pwr_check == e_power_press) {
-      refresh = true;
-    } else if (pwr_check == e_power_on && refresh) {
-      RAISE_ALERT(title, msg, STR_PRESSANYKEY, AU_NONE);
-      refresh = false;
     }
 #endif
   }
@@ -1755,111 +1712,6 @@ int main()
   tasksStart();
 }
 
-#if !defined(SIMU)
-#if defined(PWR_BUTTON_PRESS)
-uint32_t pwr_press_time = 0;
-
-uint32_t pwrPressedDuration() {
-  if (pwr_press_time == 0) {
-    return 0;
-  } else {
-    return get_tmr10ms() - pwr_press_time;
-  }
-}
-
-uint32_t pwrCheck() {
-  const char *message = nullptr;
-
-  enum PwrCheckState {
-    PWR_CHECK_ON,
-    PWR_CHECK_OFF,
-    PWR_CHECK_PAUSED,
-  };
-
-  static uint8_t pwr_check_state = PWR_CHECK_ON;
-
-  if (pwr_check_state == PWR_CHECK_OFF) {
-    return e_power_off;
-  } else if (pwrPressed()) {
-    if (TELEMETRY_STREAMING()) {
-      message = STR_MODEL_STILL_POWERED;
-    }
-    if (pwr_check_state == PWR_CHECK_PAUSED) {
-      // nothing
-    } else if (pwr_press_time == 0) {
-      pwr_press_time = get_tmr10ms();
-      if (message && !g_eeGeneral.disableRssiPoweroffAlarm) {
-        audioEvent(AU_MODEL_STILL_POWERED);
-      }
-    } else {
-      inactivity.counter = 0;
-      if (g_eeGeneral.backlightMode != e_backlight_mode_off) {
-        BACKLIGHT_ENABLE();
-      }
-      if (get_tmr10ms() - pwr_press_time > PWR_PRESS_SHUTDOWN_DELAY) {
-#if defined(SHUTDOWN_CONFIRMATION)
-        while (1) {
-#else
-        while ((TELEMETRY_STREAMING() && !g_eeGeneral.disableRssiPoweroffAlarm)) {
-#endif
-          pwr_check_state = PWR_CHECK_OFF;
-          return e_power_off;
-        }
-#if defined(HAPTIC)
-        haptic.play(15, 3, PLAY_NOW);
-#endif
-        pwr_check_state = PWR_CHECK_OFF;
-        return e_power_off;
-      } else {
-        drawShutdownAnimation(pwrPressedDuration(), message);
-        return e_power_press;
-      }
-    }
-  } else {
-    pwr_check_state = PWR_CHECK_ON;
-    pwr_press_time = 0;
-  }
-
-  return e_power_on;
-}
-#elif defined(PCBI6X)
 uint32_t pwrCheck() {
   return e_power_on; // no software controlled power on i6X
 }
-#else
-uint32_t pwrCheck() {
-#if defined(SOFT_PWR_CTRL)
-  if (pwrPressed()) {
-    return e_power_on;
-  }
-#endif
-
-  if (usbPlugged()) {
-    return e_power_usb;
-  }
-
-#if defined(TRAINER_PWR)
-  if (TRAINER_CONNECTED()) {
-    return e_power_trainer;
-  }
-#endif
-
-  if (!g_eeGeneral.disableRssiPoweroffAlarm) {
-    if (TELEMETRY_STREAMING()) {
-      RAISE_ALERT(STR_MODEL, STR_MODEL_STILL_POWERED, STR_PRESS_ENTER_TO_CONFIRM, AU_MODEL_STILL_POWERED);
-      while (TELEMETRY_STREAMING()) {
-        resetForcePowerOffRequest();
-        RTOS_WAIT_MS(20);
-        if (pwrPressed()) {
-          return e_power_on;
-        } else if (readKeys() == (1 << KEY_ENTER)) {
-          return e_power_off;
-        }
-      }
-    }
-  }
-
-  return e_power_off;
-}
-#endif  // defined(PWR_BUTTON_PRESS)
-#endif  // !defined(SIMU)

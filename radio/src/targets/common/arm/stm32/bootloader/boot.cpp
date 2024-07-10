@@ -255,13 +255,6 @@ int main() {
   // init screen
   bootloaderInitScreen();
 
-#if defined(PWR_BUTTON_PRESS)
-  // wait until power button is released
-  while (pwrPressed()) {
-    wdt_reset();
-  }
-#endif
-
   for (;;) {
     wdt_reset();
 

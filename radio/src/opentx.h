@@ -208,11 +208,7 @@ void memswap(void * a, void * b, uint8_t size);
   #define IS_POT_SLIDER_AVAILABLE(x)   (true)
   #define IS_MULTIPOS_CALIBRATED(cal)  (false)
 
-#if defined(PWR_BUTTON_PRESS)
-  #define pwrOffPressed()              pwrPressed()
-#else
   #define pwrOffPressed()              (!pwrPressed())
-#endif
 
 #define PWR_PRESS_SHUTDOWN_DELAY       300 // 3s
 
