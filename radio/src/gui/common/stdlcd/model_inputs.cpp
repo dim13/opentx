@@ -187,12 +187,6 @@ void displayExpoLine(coord_t y, ExpoData * ed)
   if (ed->name[0]) {
     lcdDrawSizedText(EXPO_LINE_NAME_POS, y, ed->name, sizeof(ed->name), ZCHAR);
   }
-  
-#if LCD_DEPTH > 1
-  if (ed->mode!=3) {
-    lcdDrawChar(EXPO_LINE_SIDE_POS, y, ed->mode == 2 ? 126 : 127);
-  }
-#endif
 }
 #else
 #define EXPO_LINE_WEIGHT_POS           7*FW+8
@@ -365,23 +359,8 @@ void menuModelExposAll(event_t event)
   lcdDrawNumber(FW*sizeof(TR_MENUINPUTS)+FW+FW/2, 0, getExposCount(), RIGHT);
   lcdDrawText(FW*sizeof(TR_MENUINPUTS)+FW+FW/2, 0, STR_MAX(MAX_EXPOS));
 
-#if LCD_DEPTH > 1
-  // Value
-  uint8_t index = expoAddress(s_currIdx)->chn;
-  if (!s_currCh) {
-    lcdDrawNumber(127, 2, calcRESXto1000(anas[index]), PREC1|TINSIZE|RIGHT);
-  }
-#endif
-  
   SIMPLE_MENU(STR_MENUINPUTS, menuTabModel, MENU_MODEL_INPUTS, HEADER_LINE + s_maxLines);
 
-#if LCD_DEPTH > 1
-  // Gauge
-  if (!s_currCh) {
-    drawGauge(127, 1, 58, 6, anas[index], 1024);
-  }
-#endif
-  
   sub = menuVerticalPosition - HEADER_LINE;
   s_currCh = 0;
   int cur = 0;

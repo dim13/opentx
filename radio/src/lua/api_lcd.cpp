@@ -500,9 +500,6 @@ static int luaLcdDrawScreenTitle(lua_State *L)
   int cnt = luaL_checkinteger(L, 3);
 
   if (cnt) drawScreenIndex(idx-1, cnt, 0);
-#if LCD_DEPTH > 1
-  lcdDrawFilledRect(0, 0, LCD_W, FH, SOLID, FILL_WHITE|GREY_DEFAULT);
-#endif
   title(str);
 
   return 0;

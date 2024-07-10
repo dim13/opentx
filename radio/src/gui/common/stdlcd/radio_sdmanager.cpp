@@ -123,13 +123,6 @@ void onSdManagerMenu(const char * result)
     audioQueue.stopAll();
     audioQueue.playFile(lfn, 0, ID_PLAY_FROM_SD_MANAGER);
   }
-#if LCD_DEPTH > 1
-  else if (result == STR_ASSIGN_BITMAP) {
-    strAppendFilename(g_model.header.bitmap, line, sizeof(g_model.header.bitmap));
-    memcpy(modelHeaders[g_eeGeneral.currModel].bitmap, g_model.header.bitmap, sizeof(g_model.header.bitmap));
-    storageDirty(EE_MODEL);
-  }
-#endif
   else if (result == STR_VIEW_TEXT) {
     getSelectionFullPath(lfn);
     pushMenuTextView(lfn);
@@ -157,10 +150,6 @@ void menuRadioSdManager(event_t _event)
     }
   }
 
-#if LCD_DEPTH > 1
-  int lastPos = menuVerticalPosition;
-#endif
-
   event_t event = (EVT_KEY_MASK(_event) == KEY_ENTER ? 0 : _event);
   SIMPLE_MENU(SD_IS_HC() ? STR_SDHC_CARD : STR_SD_CARD, menuTabGeneral, MENU_RADIO_SD_MANAGER, HEADER_LINE + reusableBuffer.sdmanager.count);
 
@@ -168,9 +157,6 @@ void menuRadioSdManager(event_t _event)
     case EVT_ENTRY:
       f_chdir(ROOT_PATH);
       REFRESH_FILES();
-#if LCD_DEPTH > 1
-      lastPos = -1;
-#endif
       break;
 
     case EVT_ENTRY_UP:
@@ -224,13 +210,6 @@ void menuRadioSdManager(event_t _event)
           if (!strcasecmp(ext, SOUNDS_EXT)) {
             POPUP_MENU_ADD_ITEM(STR_PLAY_FILE);
           }
-#if LCD_DEPTH > 1
-          else if (isExtensionMatching(ext, BITMAPS_EXT)) {
-            if (!READ_ONLY() && (ext-line) <= (int)sizeof(g_model.header.bitmap)) {
-              POPUP_MENU_ADD_ITEM(STR_ASSIGN_BITMAP);
-            }
-          }
-#endif
           else if (!strcasecmp(ext, TEXT_EXT)) {
             POPUP_MENU_ADD_ITEM(STR_VIEW_TEXT);
           }
@@ -370,16 +349,4 @@ void menuRadioSdManager(event_t _event)
       }
     }
   }
-
-#if LCD_DEPTH > 1
-  const char * ext = getFileExtension(reusableBuffer.sdmanager.lines[index]);
-  if (ext && isExtensionMatching(ext, BITMAPS_EXT)) {
-    if (lastPos != menuVerticalPosition) {
-      if (!lcdLoadBitmap(modelBitmap, reusableBuffer.sdmanager.lines[index], MODEL_BITMAP_WIDTH, MODEL_BITMAP_HEIGHT)) {
-        memcpy(modelBitmap, logo_taranis, MODEL_BITMAP_SIZE);
-      }
-    }
-    lcdDrawBitmap(22*FW+2, 2*FH+FH/2, modelBitmap);
-  }
-#endif
 }

@@ -502,7 +502,6 @@ void aux4SerialSetIdleCb(void (*cb)());
 // LCD driver
 #define LCD_W                           128
 #define LCD_H                           64
-#define LCD_DEPTH                       1
 #define LCD_CONTRAST_MIN                30
 #define LCD_CONTRAST_MAX                63
 #define LCD_CONTRAST_DEFAULT            38

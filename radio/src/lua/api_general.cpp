@@ -861,26 +861,6 @@ static int luaKillEvents(lua_State * L)
   return 0;
 }
 
-#if LCD_DEPTH > 1
-/*luadoc
-@function GREY()
-
-Returns gray value which can be used in LCD functions
-
-@retval (number) a value that represents amount of *greyness* (from 0 to 15)
-
-@notice Only available on Taranis
-
-@status current Introduced in 2.0.13
-*/
-static int luaGrey(lua_State * L)
-{
-  int index = luaL_checkinteger(L, 1);
-  lua_pushunsigned(L, GREY(index));
-  return 1;
-}
-#endif
-
 /*luadoc
 @function getGeneralSettings()
 
@@ -1282,9 +1262,6 @@ const luaL_Reg opentxLib[] = {
   { "loadScript", luaLoadScript },
   { "getUsage", luaGetUsage },
   { "resetGlobalTimer", luaResetGlobalTimer },
-#if LCD_DEPTH > 1
-  { "GREY", luaGrey },
-#endif
   { "sportTelemetryPop", luaSportTelemetryPop },
   { "sportTelemetryPush", luaSportTelemetryPush },
   { "setTelemetryValue", luaSetTelemetryValue },
