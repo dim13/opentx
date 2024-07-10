@@ -159,7 +159,7 @@ int cliRead(const char ** argv)
 
   tmr10ms_t start = get_tmr10ms();
 
-  while (true) {
+  for (;;) {
     UINT read;
     result = f_read(&file, buffer, sizeof(buffer), &read);
     if (result == FR_OK) {

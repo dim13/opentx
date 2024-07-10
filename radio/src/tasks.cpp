@@ -109,7 +109,7 @@ TASK_FUNCTION(mixerTask) {
   mixerSchedulerInit();
   mixerSchedulerStart();
 
-  while (true) {
+  for (;;) {
     int timeout = 0;
     for (; timeout < MIXER_MAX_PERIOD; timeout += MIXER_FREQUENT_ACTIONS_PERIOD) {
 
@@ -189,7 +189,7 @@ TASK_FUNCTION(menusTask) {
   opentxInit();
 
 #if defined(PWR_BUTTON_PRESS)
-  while (true) {
+  for (;;) {
     uint32_t pwr_check = pwrCheck();
     if (pwr_check == e_power_off) {
       break;

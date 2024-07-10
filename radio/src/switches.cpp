@@ -501,7 +501,7 @@ void checkSwitches()
   swarnstate_t last_bad_switches = 0xff;
   swarnstate_t states = g_model.switchWarningState;
 
-  while (true) {
+  for (;;) {
 
 #if defined(PCBTARANIS) || defined(PCBHORUS) || defined(PCBI6X)
   #define GETADC_COUNT 1
