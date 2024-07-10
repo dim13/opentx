@@ -88,7 +88,6 @@ void postModelLoad(bool alarms) {
 #endif
 
   LOAD_MODEL_BITMAP();
-  LUA_LOAD_MODEL_SCRIPTS();
   SEND_FAILSAFE_1S();
 }
 

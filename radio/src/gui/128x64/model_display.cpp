@@ -102,7 +102,6 @@ void onTelemetryScriptFileSelectionMenu(const char * result)
     // The user choosed a file in the list
     memcpy(g_model.frsky.screens[screenIndex].script.file, result, sizeof(g_model.frsky.screens[screenIndex].script.file));
     storageDirty(EE_MODEL);
-    LUA_LOAD_MODEL_SCRIPTS();
   }
 }
 #endif

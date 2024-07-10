@@ -42,7 +42,6 @@ void onModelCustomScriptMenu(const char *result)
     copySelection(sd.file, result, sizeof(sd.file));
     memset(sd.inputs, 0, sizeof(sd.inputs));
     storageDirty(EE_MODEL);
-    LUA_LOAD_MODEL_SCRIPT(s_currIdx);
   }
 }
 
