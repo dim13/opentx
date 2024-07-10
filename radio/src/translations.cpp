@@ -112,9 +112,6 @@ const char STR_OPEN9X[]  =
     ISTR(VFORMULAS)
     ISTR(VPREC)
     ISTR(VCELLINDEX)
-#if defined(BLUETOOTH)
-    ISTR(BLUETOOTH_MODES)
-#endif
 #if !defined(PCBI6X)
     ISTR(VANTENNATYPES)
 #endif
@@ -683,16 +680,6 @@ const char STR_BLCOLOR[]   = TR_BLCOLOR;
 #endif
 
   const char STR_MODULE_RANGE[]  = TR_MODULE_RANGE;
-
-#if defined(BLUETOOTH)
-  const char STR_BLUETOOTH[]  = TR_BLUETOOTH;
-  const char STR_BLUETOOTH_DISC[]  = TR_BLUETOOTH_DISC;
-  const char STR_BLUETOOTH_INIT[]  = TR_BLUETOOTH_INIT;
-  const char STR_BLUETOOTH_DIST_ADDR[]  = TR_BLUETOOTH_DIST_ADDR;
-  const char STR_BLUETOOTH_LOCAL_ADDR[]  = TR_BLUETOOTH_LOCAL_ADDR;
-  const char STR_BLUETOOTH_PIN_CODE[]  = TR_BLUETOOTH_PIN_CODE;
-#endif
-
 
   const char STR_ABOUTUS[]  = TR_ABOUTUS;
   const char STR_ABOUT_OPENTX_1[]  = TR_ABOUT_OPENTX_1;

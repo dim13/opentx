@@ -199,12 +199,7 @@ extern const char STR_OPEN9X[];
   #define OFS_VFORMULAS         (OFS_VSENSORTYPES + sizeof(TR_VSENSORTYPES))
   #define OFS_VPREC             (OFS_VFORMULAS + sizeof(TR_VFORMULAS))
   #define OFS_VCELLINDEX        (OFS_VPREC + sizeof(TR_VPREC))
-#if defined(BLUETOOTH)
-  #define OFS_BLUETOOTH_MODES   (OFS_VCELLINDEX + sizeof(TR_VCELLINDEX))
-  #define OFS_VANTENNATYPES     (OFS_BLUETOOTH_MODES + sizeof(TR_BLUETOOTH_MODES))
-#else
   #define OFS_VANTENNATYPES     (OFS_VCELLINDEX + sizeof(TR_VCELLINDEX))
-#endif
   #define OFS_MAVLINK_BAUDS     (OFS_VANTENNATYPES + sizeof(TR_VANTENNATYPES))
   #define OFS_SPARE		(OFS_MAVLINK_BAUDS)
 
@@ -303,17 +298,6 @@ extern const char STR_OPEN9X[];
   #define STR_VPREC             (STR_OPEN9X + OFS_VPREC)
   #define STR_VCELLINDEX        (STR_OPEN9X + OFS_VCELLINDEX)
   #define STR_VANTENNATYPES     (STR_OPEN9X + OFS_VANTENNATYPES)
-
-#if defined(BLUETOOTH)
-  extern const char STR_BLUETOOTH[];
-extern const char STR_BLUETOOTH_DISC[];
-extern const char STR_BLUETOOTH_INIT[];
-extern const char STR_BLUETOOTH_DIST_ADDR[];
-extern const char STR_BLUETOOTH_LOCAL_ADDR[];
-  extern const char STR_BLUETOOTH_PIN_CODE[];
-  #define STR_BLUETOOTH_MODES   (STR_OPEN9X + OFS_BLUETOOTH_MODES)
-#endif
-
 
 // The 0-terminated-strings
 #define NO_INDENT(x) (x)+LEN_INDENT

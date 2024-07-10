@@ -846,35 +846,6 @@ int cliGps(const char ** argv)
 }
 #endif
 
-#if defined(BLUETOOTH)
-int cliBlueTooth(const char ** argv)
-{
-  int baudrate = 0;
-  if (!strncmp(argv[1], "AT", 2) || !strncmp(argv[1], "TTM", 3)) {
-    char command[32];
-    strAppend(strAppend(command, argv[1]), "\r\n");
-    bluetoothWriteString(command);
-    char * line = bluetoothReadline();
-    serialPrint("<BT %s", line);
-  }
-  else if (toInt(argv, 1, &baudrate) > 0) {
-    if (baudrate > 0) {
-      bluetoothInit(baudrate);
-      char * line = bluetoothReadline();
-      serialPrint("<BT %s", line);
-    }
-    else {
-      bluetoothDone();
-      serialPrint("BT turned off");
-    }
-  }
-  else {
-    serialPrint("%s: Invalid arguments", argv[0]);
-  }
-  return 0;
-}
-#endif
-
 const CliCommand cliCommands[] = {
   { "beep", cliBeep, "[<frequency>] [<duration>]" },
   #if defined(SDCARD)
@@ -904,9 +875,6 @@ const CliCommand cliCommands[] = {
 #endif
 #if defined(INTERNAL_GPS)
   { "gps", cliGps, "<baudrate>|$<command>|trace" },
-#endif
-#if defined(BLUETOOTH)
-  { "bt", cliBlueTooth, "<baudrate>|<command>" },
 #endif
   { nullptr, nullptr, nullptr }  /* sentinel */
 };

@@ -97,10 +97,6 @@ void execMixerFrequentActions()
     processSbusInput();
   }
 #endif
-
-#if defined(BLUETOOTH)
-      bluetoothWakeup();
-#endif
 }
 
 TASK_FUNCTION(mixerTask) {

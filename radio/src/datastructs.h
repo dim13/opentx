@@ -562,13 +562,7 @@ PACK(struct TrainerData {
   NOBACKUP(int8_t varioRepeat);                        \
   CustomFunctionData customFn[MAX_SPECIAL_FUNCTIONS];
 
-#if defined(BLUETOOTH)
-#define BLUETOOTH_FIELDS \
-  uint8_t spare;         \
-  char bluetoothName[LEN_BLUETOOTH_NAME];
-#else
 #define BLUETOOTH_FIELDS
-#endif
 #define EXTRA_GENERAL_FIELDS                                        \
   EXTRA_GENERAL_FIELDS_ARM                                          \
   uint8_t auxSerialMode : 4;                                        \

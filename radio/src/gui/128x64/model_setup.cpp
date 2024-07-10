@@ -732,12 +732,6 @@ void menuModelSetup(event_t event)
         lcdDrawTextAtIndex(MODEL_SETUP_2ND_COLUMN, y, STR_VTRAINERMODES, g_model.trainerMode, attr);
         if (attr) {
           g_model.trainerMode = checkIncDec(event, g_model.trainerMode, 0, TRAINER_MODE_MAX(), EE_MODEL, isTrainerModeAvailable);
-#if defined(BLUETOOTH)
-          if (checkIncDec_Ret) {
-            bluetoothState = BLUETOOTH_STATE_OFF;
-            bluetoothDistantAddr[0] = 0;
-          }
-#endif
         }
         break;
 

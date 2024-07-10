@@ -124,11 +124,7 @@
   #define CASE_SDCARD(x)
 #endif
 
-#if defined(BLUETOOTH)
-  #define CASE_BLUETOOTH(x) x,
-#else
   #define CASE_BLUETOOTH(x)
-#endif
 
 #if defined(HELI)
   #define CASE_HELI(x) x,
@@ -171,18 +167,8 @@
 
 #define IS_FAI_FORBIDDEN(idx) (IS_FAI_ENABLED() && isFaiForbidden(idx))
 
-#if defined(BLUETOOTH)
-#if defined(X9E) && !defined(USEHORUSBT)
-  #define IS_BLUETOOTH_TRAINER()       (g_model.trainerMode == TRAINER_MODE_SLAVE_BLUETOOTH)
-  #define IS_SLAVE_TRAINER()           (g_model.trainerMode == TRAINER_MODE_SLAVE)
-#else
-  #define IS_BLUETOOTH_TRAINER()       (g_model.trainerMode == TRAINER_MODE_MASTER_BLUETOOTH || g_model.trainerMode == TRAINER_MODE_SLAVE_BLUETOOTH)
-  #define IS_SLAVE_TRAINER()           (g_model.trainerMode == TRAINER_MODE_SLAVE || g_model.trainerMode == TRAINER_MODE_SLAVE_BLUETOOTH)
-#endif
-#else
   #define IS_BLUETOOTH_TRAINER()       false
   #define IS_SLAVE_TRAINER()           (g_model.trainerMode == TRAINER_MODE_SLAVE)
-#endif
 
   #define RADIO_TOOLS
 
@@ -1197,11 +1183,6 @@ extern JitterMeter<uint16_t> avgJitter[NUM_ANALOGS];
 #if defined(INTERNAL_GPS)
   #include "gps.h"
 #endif
-
-#if defined(BLUETOOTH)
-  #include "bluetooth.h"
-#endif
-
 
 inline bool isAsteriskDisplayed()
 {
