@@ -99,7 +99,7 @@ extern "C"
   }
 }
 
-#if defined(STM32F0) && defined(BOOT)
+#if defined(BOOT)
 volatile uint32_t __attribute__((section(".ram_vector,\"aw\",%nobits @"))) ram_vector[VECTOR_TABLE_SIZE];
 extern volatile uint32_t g_pfnVectors[VECTOR_TABLE_SIZE];
 #endif
@@ -189,7 +189,7 @@ void initBuzzerTimer()
 
 void boardInit()
 {
-#if defined(STM32F0) && defined(BOOT)
+#if defined(BOOT)
   // Move vect table to beginning of RAM
   RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
   for (uint32_t i = 0; i < VECTOR_TABLE_SIZE; i++) {
