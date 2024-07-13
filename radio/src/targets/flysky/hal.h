@@ -565,13 +565,6 @@ F072 IRQs
 #define PWM_RCC_APB2Periph              RCC_APB2Periph_TIM1
 #define PWM_TIMER                       TIM1
 
-// DFPlayer
-#if defined(DFPLAYER)
-#define DFPLAYER_GPIO_PORT              GPIOC
-#define DFPLAYER_GPIO_PIN_BUSY          GPIO_Pin_14
-#define DFPLAYER_BAUDRATE               9600
-#endif
-
 // Xms Interrupt
 #define INTERRUPT_xMS_RCC_APB1Periph    RCC_APB1Periph_TIM14
 #define INTERRUPT_xMS_TIMER             TIM14

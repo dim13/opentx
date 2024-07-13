@@ -30,62 +30,6 @@ CustomFunctionsContext globalFunctionsContext = { 0 };
  */
 void testFunc()
 {
-#ifdef SIMU
-  printf("testFunc\n"); fflush(stdout);
-#endif
-}
-#endif
-
-#if !defined(PCBI6X) || defined(DFPLAYER)
-PLAY_FUNCTION(playValue, source_t idx)
-{
-  if (IS_FAI_FORBIDDEN(idx))
-    return;
-
-  if (idx == MIXSRC_NONE)
-    return;
-
-  getvalue_t val = getValue(idx);
-
-  if (idx >= MIXSRC_FIRST_TELEM) {
-    TelemetrySensor & telemetrySensor = g_model.telemetrySensors[(idx-MIXSRC_FIRST_TELEM) / 3];
-    uint8_t attr = 0;
-    if (telemetrySensor.prec > 0) {
-      if (telemetrySensor.prec == 2) {
-        if (val >= 5000) {
-          val = div_and_round(val, 100);
-        }
-        else {
-          val = div_and_round(val, 10);
-          attr = PREC1;
-        }
-      }
-      else {
-        if (val >= 500) {
-          val = div_and_round(val, 10);
-        }
-        else {
-          attr = PREC1;
-        }
-      }
-    }
-    PLAY_NUMBER(val, telemetrySensor.unit == UNIT_CELLS ? UNIT_VOLTS : telemetrySensor.unit, attr);
-  }
-  else if (idx >= MIXSRC_FIRST_TIMER && idx <= MIXSRC_LAST_TIMER) {
-    PLAY_DURATION(val, 0);
-  }
-  else if (idx == MIXSRC_TX_TIME) {
-    PLAY_DURATION(val*60, PLAY_TIME);
-  }
-  else if (idx == MIXSRC_TX_VOLTAGE) {
-    PLAY_NUMBER(val, UNIT_VOLTS, PREC1);
-  }
-  else {
-    if (idx <= MIXSRC_LAST_CH) {
-      val = calcRESXto100(val);
-    }
-    PLAY_NUMBER(val, 0, 0);
-  }
 }
 #endif
 
@@ -100,14 +44,6 @@ void playCustomFunctionFile(const CustomFunctionData * sd, uint8_t id)
     strcat(filename + sizeof(SOUNDS_PATH), SOUNDS_EXT);
     PLAY_FILE(filename, sd->func == FUNC_BACKGND_MUSIC ? PLAY_BACKGROUND : 0, id);
   }
-}
-#elif defined(DFPLAYER)
-void playCustomFunctionFile(const CustomFunctionData * sd, uint8_t id)
-{
-  uint16_t val = sd->all.val;
- if (val != 0) { // Custom files start at DFPLAYER_CUSTOM_FILE_INDEX
-    PLAY_FILE(val, id);
- }
 }
 #endif
 
@@ -140,12 +76,7 @@ void evalFunctions(const CustomFunctionData * functions, CustomFunctionsContext 
   MASK_FUNC_TYPE newActiveFunctions  = 0;
   MASK_CFN_TYPE  newActiveSwitches = 0;
 
-#if defined(DFPLAYER)
-  uint8_t playFirstIndex = (functions == g_model.customFn ? 1 : 1+MAX_SPECIAL_FUNCTIONS);
-  #define PLAY_INDEX   (i+playFirstIndex)
-#else
   #define PLAY_INDEX   0
-#endif
 
 #if defined(ROTARY_ENCODERS) && defined(GVARS)
   static rotenc_t rePreviousValues[ROTARY_ENCODERS];
@@ -302,10 +233,6 @@ void evalFunctions(const CustomFunctionData * functions, CustomFunctionsContext 
 #endif
 #if defined(SDCARD) || defined(PCBI6X)
           case FUNC_PLAY_SOUND:
-#if defined(DFPLAYER)
-          case FUNC_PLAY_TRACK:
-          case FUNC_PLAY_VALUE:
-#endif
           {
             if (isRepeatDelayElapsed(functions, functionsContext, i)) {
               if (!IS_PLAYING(PLAY_INDEX)) {
@@ -318,15 +245,7 @@ void evalFunctions(const CustomFunctionData * functions, CustomFunctionsContext 
                     AUDIO_PLAY(AU_SPECIAL_SOUND_FIRST + CFN_PARAM(cfn));
                   }
                 }
-#if defined(DFPLAYER)
-                else if (CFN_FUNC(cfn) == FUNC_PLAY_VALUE) {
-                  PLAY_VALUE(CFN_PARAM(cfn), PLAY_INDEX);
-                }
-#endif
                 else {
-#if defined(DFPLAYER)
-                  playCustomFunctionFile(cfn, PLAY_INDEX);
-#endif
                 }
               }
             }

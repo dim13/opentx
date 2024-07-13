@@ -493,9 +493,6 @@ enum TimerModes {
 enum CountDownModes {
   COUNTDOWN_SILENT,
   COUNTDOWN_BEEPS,
-#if defined(VOICE) || defined(DFPLAYER)
-  COUNTDOWN_VOICE,
-#endif
   COUNTDOWN_COUNT
 };
 

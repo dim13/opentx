@@ -20,7 +20,6 @@
 
 #include "opentx.h"
 
-#if !defined(DFPLAYER)
 #define pushPrompt(value)
 #define pushCustomPrompt(value)
 #define pushNumberPrompt(value)
@@ -28,4 +27,3 @@
 bool isPlaying(uint8_t id){
 	return false;
 }
-#endif

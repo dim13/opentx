@@ -324,23 +324,6 @@ void menuSpecialFunctions(event_t event, CustomFunctionData * functions, CustomF
             break;
           }
 #endif // SDCARD
-#if defined(DFPLAYER)
-          else if (func == FUNC_PLAY_TRACK) {
-            val_min = DFPLAYER_CUSTOM_FILE_INDEX;
-            val_max = DFPLAYER_LAST_FILE_INDEX;
-            if (val_displayed < val_min) val_displayed = val_min;
-            // lcdDrawNumber(MODEL_SPECIAL_FUNC_3RD_COLUMN, y, val_displayed, attr|LEFT);
-            editChoice(MODEL_SPECIAL_FUNC_3RD_COLUMN, y, "", audioNames, val_displayed, DFPLAYER_CUSTOM_FILE_INDEX, DFPLAYER_LAST_FILE_INDEX, attr, event);
-          }
-          else if (func == FUNC_PLAY_VALUE) {
-            val_max = MIXSRC_LAST_TELEM;
-            drawSource(MODEL_SPECIAL_FUNC_3RD_COLUMN, y, val_displayed, attr);
-            if (active) {
-              INCDEC_SET_FLAG(eeFlags | INCDEC_SOURCE);
-              INCDEC_ENABLE_CHECK(functionsContext == &globalFunctionsContext ? isSourceAvailableInGlobalFunctions : isSourceAvailable);
-            }
-          }
-#endif // SDCARD || DFPLAYER
 #if !defined(PCBI6X)
           else if (func == FUNC_VOLUME) {
             val_max = MIXSRC_LAST_CH;

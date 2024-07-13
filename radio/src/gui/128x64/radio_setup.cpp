@@ -303,12 +303,6 @@ void menuRadioSetup(event_t event)
       case ITEM_SETUP_BEEP_VOLUME:
         SLIDER_5POS(y, g_eeGeneral.beepVolume, STR_BEEP_VOLUME, event, attr);
         break;
-#if defined(DFPLAYER)
-      case ITEM_SETUP_WAV_VOLUME:
-        SLIDER_5POS(y, g_eeGeneral.wavVolume, STR_WAV_VOLUME, event, attr);
-        dfplayerSetVolume(g_eeGeneral.wavVolume);
-        break;
-#endif
       // case ITEM_SETUP_BACKGROUND_VOLUME:
       //   SLIDER_5POS(y, g_eeGeneral.backgroundVolume, STR_BG_VOLUME, event, attr);
       //   break;

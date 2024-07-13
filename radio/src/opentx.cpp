@@ -1630,10 +1630,6 @@ void opentxInit()
   audioQueue.start();
 #endif
 
-#if defined(DFPLAYER)
-  dfplayerSetVolume(g_eeGeneral.wavVolume);
-#endif
-
   BACKLIGHT_ENABLE();
 
   if (g_eeGeneral.backlightMode != e_backlight_mode_off) {

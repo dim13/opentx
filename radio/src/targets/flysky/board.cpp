@@ -236,10 +236,6 @@ void boardInit()
 
   backlightInit();
 
-#if defined(DFPLAYER)
-  dfplayerInit();
-#endif
-
 #endif // !defined(SIMU)
 }
 

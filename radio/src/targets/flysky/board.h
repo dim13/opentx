@@ -173,10 +173,6 @@ uint32_t sdMounted(void);
 #define BUZZER_HEARTBEAT buzzerHeartbeat
 #endif
 
-#if defined(DFPLAYER)
-#include "dfplayer_driver.h"
-#endif
-
 // Flash Write driver
 #define FLASH_PAGESIZE 256
 void unlockFlash(void);
