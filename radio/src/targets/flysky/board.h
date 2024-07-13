@@ -25,7 +25,7 @@
 #include "stdbool.h"
 #include "flysky_gimbal_driver.h"
 
-#if defined(__cplusplus) && !defined(SIMU)
+#if defined(__cplusplus)
 extern "C" {
 #endif
 
@@ -59,7 +59,6 @@ extern "C" {
 #endif
 
 #include "usb_driver.h"
-#if !defined(SIMU)
   #include "usbd_cdc_core.h"
   #include "usbd_msc_core.h"
   #include "usbd_hid_core.h"
@@ -67,11 +66,10 @@ extern "C" {
   #include "usbd_desc.h"
   #include "usb_conf.h"
   #include "usbd_conf.h"
-#endif
 
 #include "hal.h"
 
-#if defined(__cplusplus) && !defined(SIMU)
+#if defined(__cplusplus)
 }
 #endif
 

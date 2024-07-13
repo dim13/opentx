@@ -36,11 +36,7 @@ extern "C" {
 
 uint8_t auxSerialTracesEnabled();
 
-#if defined(SIMU)
-  typedef void (*traceCallbackFunc)(const char * text);
-  extern traceCallbackFunc traceCallback;
-  void debugPrintf(const char * format, ...);
-#elif defined(SEMIHOSTING)
+#if defined(SEMIHOSTING)
   #include <stdio.h>
   #define debugPrintf(...) printf(__VA_ARGS__)
 #elif defined(DEBUG) && defined(CLI)

@@ -21,8 +21,6 @@
 #include "opentx.h"
 #include "mixer_scheduler.h"
 
-#if !defined(SIMU)
-
 // Global trigger flag
 RTOS_FLAG_HANDLE mixerFlag;
 
@@ -81,5 +79,3 @@ void mixerSchedulerISRTrigger()
 {
   RTOS_ISR_SET_FLAG(mixerFlag);
 }
-
-#endif

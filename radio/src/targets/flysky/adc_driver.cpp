@@ -20,16 +20,12 @@
 
 #include "opentx.h"
 
-#if defined(SIMU)
-// not needed
-#else
 const int8_t ana_direction[NUM_ANALOGS] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0};
 #if defined (FLYSKY_GIMBAL)
 const uint8_t ana_mapping[NUM_ANALOGS] =  {0, 1, 2, 3, 6, 7, 4, 5, 8, 9, 10};
 #else
 const uint8_t ana_mapping[NUM_ANALOGS] = {3, 2, 1, 0, 6, 7, 4, 5, 8, 9, 10};
 #endif // FLYSKY_GIMBAL                   
-#endif // SIMU
 
 #if NUM_PWMANALOGS > 0
 #define FIRST_ANALOG_ADC (ANALOGS_PWM_ENABLED() ? NUM_PWMANALOGS : 0)
@@ -169,7 +165,6 @@ void adcStop()
 {
 }
 
-#if !defined(SIMU)
 uint16_t getAnalogValue(uint8_t index)
 {
   if (IS_POT(index) && !IS_POT_SLIDER_AVAILABLE(index))
@@ -191,4 +186,3 @@ uint16_t* getAnalogValues()
   return adcValues;
 }
 #endif // FLYSKY_GIMBAL
-#endif // #if !defined(SIMU)

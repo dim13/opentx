@@ -20,7 +20,6 @@
 
 #include "opentx.h"
 
-#if !defined(SIMU)
 const AudioBuffer * nextBuffer = 0;
 
 void setSampleRate(uint32_t frequency)
@@ -168,4 +167,3 @@ extern "C" void AUDIO_DMA_Stream_IRQHandler()
     DAC->SR = DAC_SR_DMAUDR1;                      // Write 1 to clear flag
   }
 }
-#endif  // #if !defined(SIMU)

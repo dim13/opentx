@@ -29,11 +29,7 @@
 #include "opentx_types.h"
 #include "usbd_conf.h"
 
-#if defined(SIMU)
-  #define SWITCH_SIMU(a, b)  (a)
-#else
   #define SWITCH_SIMU(a, b)  (b)
-#endif
 
   #define IS_PCBSKY9X        false
   #define CASE_PCBSKY9X(x)
@@ -173,10 +169,6 @@
   #include "disk_cache.h"
 #endif
 
-#if defined(SIMU)
-  #include "targets/simu/simpgmspace.h"
-#endif
-
 #include "debug.h"
 
   #define SW_DSM2_BIND     SW_TRN
@@ -255,12 +247,10 @@ typedef struct {
 #include "strhelpers.h"
 #include "gui.h"
 
-#if !defined(SIMU)
   #define assert(x)
   #if !defined(DEBUG)
     #define printf printf_not_allowed
   #endif
-#endif
 
 extern const uint8_t bchout_ar[];
 extern const uint8_t modn12x3[];
@@ -367,14 +357,10 @@ extern uint8_t mixerCurrentFlightMode;
 extern uint8_t lastFlightMode;
 extern uint8_t flightModeTransitionLast;
 
-#if defined(SIMU)
-  inline int availableMemory() { return 1000; }
-#elif !defined(SIMU)
   extern unsigned char *heap;
   extern int _end;
   extern int _heap_end;
   #define availableMemory() ((unsigned int)((unsigned char *)&_heap_end - heap))
-#endif
 
 void evalFlightModeMixes(uint8_t mode, uint8_t tick10ms);
 void evalMixes(uint8_t tick10ms);
@@ -1101,11 +1087,7 @@ enum ClipboardType {
   CLIPBOARD_TYPE_SD_FILE,
 };
 
-#if defined(SIMU)
-  #define CLIPBOARD_PATH_LEN 1024
-#else
   #define CLIPBOARD_PATH_LEN 32
-#endif
 
 struct Clipboard {
   ClipboardType type;
@@ -1122,9 +1104,7 @@ struct Clipboard {
 extern Clipboard clipboard;
 #endif
 
-#if !defined(SIMU)
 extern uint16_t s_anaFilt[NUM_ANALOGS];
-#endif
 
 #if defined(JITTER_MEASURE)
 extern JitterMeter<uint16_t> rawJitter[NUM_ANALOGS];

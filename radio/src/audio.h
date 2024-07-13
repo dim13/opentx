@@ -471,10 +471,6 @@ class AudioFragmentFifo
 };
 
 class AudioQueue {
-
-#if defined(SIMU_AUDIO)
-  friend void fillAudioBuffer(void *, uint8_t *, int);
-#endif
 #if defined(CLI)
   friend void printAudioVars();
 #endif

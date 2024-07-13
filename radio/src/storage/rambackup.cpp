@@ -34,12 +34,7 @@ PACK(struct RamBackupUncompressed {
 
 Backup::RamBackupUncompressed ramBackupUncompressed __DMA;
 
-#if defined(SIMU)
-RamBackup _ramBackup;
-RamBackup * ramBackup = &_ramBackup;
-#else
 RamBackup * ramBackup = (RamBackup *)BKPSRAM_BASE;
-#endif
 
 void rambackupWrite()
 {

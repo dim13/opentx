@@ -20,13 +20,13 @@
 
 #include "opentx.h"
 
-#if defined(__cplusplus) && !defined(SIMU)
+#if defined(__cplusplus)
 extern "C"
 {
 #endif
 #include "usb_dcd_int.h"
 #include "usb_bsp.h"
-#if defined(__cplusplus) && !defined(SIMU)
+#if defined(__cplusplus)
 }
 #endif
 
@@ -198,7 +198,6 @@ void boardInit()
   SYSCFG->CFGR1 = (SYSCFG->CFGR1 & ~SYSCFG_CFGR1_MEM_MODE) | (SYSCFG_CFGR1_MEM_MODE__SRAM * SYSCFG_CFGR1_MEM_MODE_0);  // remap 0x0000000 to RAM
 #endif
 
-#if !defined(SIMU)
   RCC_AHBPeriphClockCmd(RCC_AHB1_LIST, ENABLE);
   RCC_APB1PeriphClockCmd(RCC_APB1_LIST, ENABLE);
   RCC_APB2PeriphClockCmd(RCC_APB2_LIST, ENABLE);
@@ -236,7 +235,6 @@ void boardInit()
 
   backlightInit();
 
-#endif // !defined(SIMU)
 }
 
 void boardOff()

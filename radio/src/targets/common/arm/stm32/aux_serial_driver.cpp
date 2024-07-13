@@ -133,13 +133,11 @@ void auxSerialInit(unsigned int mode, unsigned int protocol)
 
 void auxSerialPutc(char c)
 {
-#if !defined(SIMU)
   // do not wait, it can cause reboot and EdgeTX is not doing it
   if (auxSerialTxFifo.isFull()) return;
 
   auxSerialTxFifo.push(c);
   USART_ITConfig(AUX_SERIAL_USART, USART_IT_TXE, ENABLE);
-#endif
 }
 
 void auxSerialSbusInit()
@@ -250,12 +248,10 @@ void aux3SerialInit(void)
 
 void aux3SerialPutc(char c)
 {
-#if !defined(SIMU)
   if (aux3SerialTxFifo.isFull()) return;
 
   aux3SerialTxFifo.push(c);
   USART_ITConfig(AUX3_SERIAL_USART, USART_IT_TXE, ENABLE);
-#endif
 }
 #endif // AUX3_SERIAL
 
@@ -333,7 +329,6 @@ void aux4SerialSetIdleCb(void (*cb)()) {
 #endif // AUX4_SERIAL
 
 #if defined(AUX3_SERIAL) || defined(AUX4_SERIAL)
-#if !defined(SIMU)
 extern "C" void AUX34_SERIAL_USART_IRQHandler(void)
 {
   // Send
@@ -371,5 +366,4 @@ extern "C" void AUX34_SERIAL_USART_IRQHandler(void)
   }
 #endif
 }
-#endif // SIMU
 #endif // AUX3 || AUX4

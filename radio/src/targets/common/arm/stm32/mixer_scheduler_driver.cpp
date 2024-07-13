@@ -21,8 +21,6 @@
 #include "opentx.h"
 #include "mixer_scheduler.h"
 
-#if !defined(SIMU)
-
 // Start scheduler with default period
 void mixerSchedulerStart()
 {
@@ -84,5 +82,3 @@ extern "C" void MIXER_SCHEDULER_TIMER_IRQHandler(void)
   // trigger mixer start
   mixerSchedulerISRTrigger();
 }
-
-#endif

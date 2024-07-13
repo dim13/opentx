@@ -395,13 +395,11 @@ void evalInputs(uint8_t mode)
     if (IS_POT_MULTIPOS(i)) {
       v -= RESX;
     }
-#if !defined(SIMU)
     else {
       CalibData * calib = &g_eeGeneral.calib[i];
       v -= calib->mid;
       v = v * (int32_t) RESX / (max((int16_t) 100, (v > 0 ? calib->spanPos : calib->spanNeg)));
     }
-#endif
 
     if (v < -RESX) v = -RESX;
     if (v >  RESX) v =  RESX;
