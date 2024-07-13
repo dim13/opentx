@@ -25,11 +25,7 @@
 #define KEY_REPEAT_TRIGGER 48  // repeat trigger, used in combination with m_state to produce decreasing times between repeat events
 #define KEY_REPEAT_PAUSE_DELAY 64
 
-#ifdef SIMU
-#define FILTERBITS 1  // defines how many bits are used for debounce
-#else
 #define FILTERBITS 4  // defines how many bits are used for debounce
-#endif
 
 #define KSTATE_OFF 0
 #define KSTATE_RPTDELAY 95

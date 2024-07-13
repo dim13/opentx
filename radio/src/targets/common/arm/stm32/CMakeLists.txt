@@ -7,27 +7,6 @@ option(LUA_ALLOCATOR_TRACER "Trace Lua memory (de)allocations to debug port (als
 option(USB_SERIAL "Enable USB serial (CDC)" OFF)
 set(ARCH ARM)
 
-if(NOT CPU_TYPE STREQUAL STM32F0)
-  set(STM32USB_DIR ${THIRDPARTY_DIR}/STM32_USB-Host-Device_Lib_V2.2.0/Libraries)
-  add_definitions(-DSTM32 -DVARIO)
-  include_directories(${RADIO_SRC_DIRECTORY}/targets/common/arm/stm32)
-  include_directories(${STM32USB_DIR}/STM32_USB_OTG_Driver/inc)
-  include_directories(${STM32USB_DIR}/STM32_USB_Device_Library/Core/inc)
-  include_directories(${STM32USB_DIR}/STM32_USB_Device_Library/Class/msc/inc)
-  include_directories(${STM32USB_DIR}/STM32_USB_Device_Library/Class/hid/inc)
-  include_directories(${STM32USB_DIR}/STM32_USB_Device_Library/Class/cdc/inc)
-  include_directories(${STM32USB_DIR}/STM32_USB_Device_Library/Core/inc/)
-  include_directories(${STM32USB_DIR}/STM32_USB_OTG_Driver/inc)
-
-  set(STM32USB_SRC
-    STM32_USB_OTG_Driver/src/usb_core.c
-    STM32_USB_OTG_Driver/src/usb_dcd.c
-    STM32_USB_OTG_Driver/src/usb_dcd_int.c
-    STM32_USB_Device_Library/Core/src/usbd_core.c
-    STM32_USB_Device_Library/Core/src/usbd_ioreq.c
-    STM32_USB_Device_Library/Core/src/usbd_req.c
-    )
-else() # STM32F0
   set(STM32USB_DIR ${THIRDPARTY_DIR}/STM32F0x2_USB-FS-Device_Lib_V1.0.0/Libraries)
   add_definitions(-DSTM32 -DVARIO)
   include_directories(${RADIO_SRC_DIRECTORY}/targets/common/arm/stm32)
@@ -46,7 +25,6 @@ else() # STM32F0
     STM32_USB_Device_Library/Core/src/usbd_ioreq.c
     STM32_USB_Device_Library/Core/src/usbd_req.c
     )
-endif()
 
 set(TARGET_SRC
   ${TARGET_SRC}

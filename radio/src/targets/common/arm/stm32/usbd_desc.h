@@ -28,18 +28,6 @@
 #include "usb_dcd.h"
 #include "usbd_def.h"
 
-/** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
-  * @{
-  */
-  
-/** @defgroup USB_DESC
-  * @brief general defines for the usb device library file
-  * @{
-  */ 
-
-/** @defgroup USB_DESC_Exported_Defines
-  * @{
-  */
 #define USB_DEVICE_DESCRIPTOR_TYPE              0x01
 #define USB_CONFIGURATION_DESCRIPTOR_TYPE       0x02
 #define USB_STRING_DESCRIPTOR_TYPE              0x03

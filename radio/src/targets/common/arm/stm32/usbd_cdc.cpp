@@ -18,10 +18,6 @@
  * GNU General Public License for more details.
  */
 
-#ifdef USB_OTG_HS_INTERNAL_DMA_ENABLED
-#pragma     data_alignment = 4
-#endif /* USB_OTG_HS_INTERNAL_DMA_ENABLED */
-
 #include "opentx.h"
 
 extern "C" {

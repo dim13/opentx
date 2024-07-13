@@ -32,28 +32,6 @@
 
 #include "usb_driver.h"
 
-/** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
-  * @{
-  */
-
-
-/** @defgroup USBD_DESC
-  * @brief USBD descriptors module
-  * @{
-  */
-
-/** @defgroup USBD_DESC_Private_TypesDefinitions
-  * @{
-  */
-/**
-  * @}
-  */
-
-
-/** @defgroup USBD_DESC_Private_Defines
-  * @{
-  */
-
 #define USBD_VID                            0x0483
 
 #define USBD_LANGID_STRING                  0x409
