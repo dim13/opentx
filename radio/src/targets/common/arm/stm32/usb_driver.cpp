@@ -81,33 +81,17 @@ int usbPlugged()
 #endif // USB_GPIO_PIN_VBUS
 }
 
-#if defined(STM32F0)
 USB_CORE_HANDLE USB_Device_dev;
-#else
-USB_OTG_CORE_HANDLE USB_OTG_dev;
-#endif
 
-#if defined(STM32F0)
 extern "C" void USB_IRQHandler()
 {
   USB_Istr();
 }
-#else
-extern "C" void OTG_FS_IRQHandler()
-{
-  DEBUG_INTERRUPT(INT_OTG_FS);
-  USBD_OTG_ISR_Handler(&USB_OTG_dev);
-}
-#endif
 
 void usbInit()
 {
   // Initialize hardware
-#if defined(STM32F0)
   USB_BSP_Init(&USB_Device_dev);
-#else
-  USB_OTG_BSP_Init(&USB_OTG_dev);
-#endif
   usbDriverStarted = false;
 }
 
@@ -117,32 +101,20 @@ void usbStart()
 #if !defined(BOOT)
     case USB_JOYSTICK_MODE:
       // initialize USB as HID device
-#if defined(STM32F0)
       USBD_Init(&USB_Device_dev, &USR_desc, &USBD_HID_cb, &USR_cb);
-#else
-      USBD_Init(&USB_OTG_dev, USB_OTG_FS_CORE_ID, &USR_desc, &USBD_HID_cb, &USR_cb);
-#endif
       break;
 #endif
 #if defined(USB_SERIAL)
     case USB_SERIAL_MODE:
       // initialize USB as CDC device (virtual serial port)
-#if defined(STM32F0)
       USBD_Init(&USB_Device_dev, &USR_desc, &USBD_CDC_cb, &USR_cb);
-#else
-      USBD_Init(&USB_OTG_dev, USB_OTG_FS_CORE_ID, &USR_desc, &USBD_CDC_cb, &USR_cb);
-#endif
       break;
 #endif
 #if !defined(PCBI6X) || defined(PCBI6X_USB_MSD)
     default:
     case USB_MASS_STORAGE_MODE:
       // initialize USB as MSC device
-#if defined(STM32F0)
       USBD_Init(&USB_Device_dev, &USR_desc, &USBD_MSC_cb, &USR_cb);
-#else
-      USBD_Init(&USB_OTG_dev, USB_OTG_FS_CORE_ID, &USR_desc, &USBD_MSC_cb, &USR_cb);
-#endif
       break;
 #endif
   }
@@ -152,11 +124,7 @@ void usbStart()
 void usbStop()
 {
   usbDriverStarted = false;
-#if defined(STM32F0)
   USBD_DeInit(&USB_Device_dev);
-#else
-  USBD_DeInit(&USB_OTG_dev);
-#endif
 }
 
 bool usbStarted()

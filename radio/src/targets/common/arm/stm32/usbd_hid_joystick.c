@@ -23,63 +23,10 @@
 #include "usbd_hid_core.h"
 #include "usbd_req.h"
 
-/** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY
-  * @{
-  */
-
-
-/** @defgroup USBD_HID 
-  * @brief usbd core module
-  * @{
-  */ 
-
-/** @defgroup USBD_HID_Private_TypesDefinitions
-  * @{
-  */ 
-/**
-  * @}
-  */ 
-
-
-/** @defgroup USBD_HID_Private_Defines
-  * @{
-  */ 
-
-/**
-  * @}
-  */ 
-
-
-/** @defgroup USBD_HID_Private_Macros
-  * @{
-  */ 
-/**
-  * @}
-  */ 
-
-
-
-
-/** @defgroup USBD_HID_Private_FunctionPrototypes
-  * @{
-  */
-
-
-static uint8_t  USBD_HID_Init (void  *pdev, 
-                               uint8_t cfgidx);
-
-static uint8_t  USBD_HID_DeInit (void  *pdev, 
-                                 uint8_t cfgidx);
-
-static uint8_t  USBD_HID_Setup (void  *pdev, 
-                                USB_SETUP_REQ *req);
-
+static uint8_t  USBD_HID_Init (void  *pdev, uint8_t cfgidx);
+static uint8_t  USBD_HID_DeInit (void  *pdev, uint8_t cfgidx);
+static uint8_t  USBD_HID_Setup (void  *pdev, USB_SETUP_REQ *req);
 static const uint8_t  *USBD_HID_GetCfgDesc (uint8_t speed, uint16_t *length);
-/**
-  * @}
-  */ 
-
-
 
 #ifdef USB_OTG_HS_INTERNAL_DMA_ENABLED
   #if defined ( __ICCARM__ ) /*!< IAR Compiler */
@@ -141,7 +88,6 @@ __ALIGN_BEGIN static const uint8_t HID_JOYSTICK_ReportDesc[] __ALIGN_END =
   */ 
 
 const USBD_Class_cb_TypeDef  USBD_HID_cb = 
-#if defined (STM32F0)
 {
   USBD_HID_Init,
   USBD_HID_DeInit,
@@ -152,23 +98,6 @@ const USBD_Class_cb_TypeDef  USBD_HID_cb =
   NULL, /*DataOut*/
   NULL, /*SOF */    
   USBD_HID_GetCfgDesc,
-#else
-{
-  USBD_HID_Init,
-  USBD_HID_DeInit,
-  USBD_HID_Setup,
-  NULL, /*EP0_TxSent*/  
-  NULL, /*EP0_RxReady*/
-  NULL, /*DataIn*/
-  NULL, /*DataOut*/
-  NULL, /*SOF */
-  NULL,
-  NULL,      
-  USBD_HID_GetCfgDesc,
-#ifdef USB_OTG_HS_CORE  
-  USBD_HID_GetCfgDesc, /* use same config as per FS */
-#endif  
-#endif
 };
 
 #ifdef USB_OTG_HS_INTERNAL_DMA_ENABLED
@@ -248,14 +177,6 @@ __ALIGN_BEGIN static const uint8_t USBD_HID_CfgDesc[USB_HID_CONFIG_DESC_SIZ] __A
 } ;
 
 /**
-  * @}
-  */ 
-
-/** @defgroup USBD_HID_Private_Functions
-  * @{
-  */ 
-
-/**
   * @brief  USBD_HID_Init
   *         Initialize the HID interface
   * @param  pdev: device instance
@@ -271,11 +192,7 @@ static uint8_t  USBD_HID_Init (void  *pdev,
   DCD_EP_Open(pdev,
               HID_IN_EP,
               HID_IN_PACKET,
-#if defined(STM32F0)
               USB_EP_INT);
-#else
-              USB_OTG_EP_INT);
-#endif
 
   return USBD_OK;
 }
@@ -390,7 +307,6 @@ static uint8_t  USBD_HID_Setup (void  *pdev,
   * @param  buff: pointer to report, if this parameter is NULL then function just test if new buffer can be sent
   * @retval status
   */
-#if defined(STM32F0)
 uint8_t USBD_HID_SendReport(USB_CORE_HANDLE  *pdev, uint8_t * report, uint16_t len)
 {
   if (pdev->dev.device_status == USB_CONFIGURED) {
@@ -398,14 +314,6 @@ uint8_t USBD_HID_SendReport(USB_CORE_HANDLE  *pdev, uint8_t * report, uint16_t l
   }
   return USBD_OK;
 }
-#else
-uint8_t USBD_HID_SendReport(USB_OTG_CORE_HANDLE  *pdev, uint8_t * report, uint16_t len)
-{
-  if (pdev->dev.device_status == USB_OTG_CONFIGURED) {
-    DCD_EP_Tx (pdev, HID_IN_EP, report, len);
-  return USBD_OK;
-}
-#endif
 
 /**
   * @brief  USBD_HID_GetCfgDesc 
@@ -419,19 +327,5 @@ static const uint8_t  *USBD_HID_GetCfgDesc (uint8_t speed, uint16_t *length)
   *length = sizeof (USBD_HID_CfgDesc);
   return USBD_HID_CfgDesc;
 }
-
-/**
-  * @}
-  */ 
-
-
-/**
-  * @}
-  */ 
-
-
-/**
-  * @}
-  */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
