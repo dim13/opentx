@@ -542,11 +542,9 @@ void menuRadioSetup(event_t event)
         lcdDrawText(lcdLastRightPos, y, STR_MS, attr);
         if (attr) CHECK_INCDEC_GENVAR(event, g_eeGeneral.switchesDelay, -15, 100-15);
         break;
-#if defined(STM32)
       case ITEM_SETUP_USB_MODE:
         g_eeGeneral.USBMode = editChoice(RADIO_SETUP_2ND_COLUMN, y, STR_USBMODE, STR_USBMODES, g_eeGeneral.USBMode, USB_UNSELECTED_MODE, USB_MAX_MODE, attr, event);
         break;
-#endif
       case ITEM_SETUP_RX_CHANNEL_ORD:
         lcdDrawTextAlignedLeft(y, STR_RXCHANNELORD); // RAET->AETR
         for (uint8_t i=1; i<=4; i++) {

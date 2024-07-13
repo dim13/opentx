@@ -322,14 +322,9 @@ void eepromWriteWait(EepromWriteState state /* = EEPROM_IDLE*/)
 {
   while (eepromWriteState != state)
   {
-#if defined(STM32)
     // Waits a little bit for CS transitions
     RTOS_WAIT_MS(2);
-#endif
     eepromWriteProcess();
-#ifdef SIMU
-    sleep(5 /*ms*/);
-#endif
   }
 }
 

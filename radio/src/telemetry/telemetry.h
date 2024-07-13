@@ -247,11 +247,7 @@ inline void telemetryOutputSetTrigger(uint8_t byte)
   outputTelemetryBufferTrigger = byte;
 }
 
-#if defined(STM32)
-    #define IS_TELEMETRY_INTERNAL_MODULE() (true)
-#else
-  #define IS_TELEMETRY_INTERNAL_MODULE() (false)
-#endif
+#define IS_TELEMETRY_INTERNAL_MODULE() (true)
 
 // Module pulse synchronization
 struct ModuleSyncStatus

@@ -30,7 +30,6 @@ uint8_t mainRequestFlags = 0;
 extern void elrsStop();
 #endif
 
-#if defined(STM32)
 void onUSBConnectMenu(const char *result)
 {
 #if !defined(PCBI6X) || defined(PCBI6X_USB_MSD)
@@ -48,11 +47,9 @@ void onUSBConnectMenu(const char *result)
   }
 #endif
 }
-#endif
 
 void handleUsbConnection()
 {
-#if defined(STM32) && !defined(SIMU)
   if (!usbStarted() && usbPlugged()) {
     if (getSelectedUsbMode() == USB_UNSELECTED_MODE) {
       if (g_eeGeneral.USBMode == USB_UNSELECTED_MODE && popupMenuItemsCount == 0) {
@@ -92,7 +89,6 @@ void handleUsbConnection()
     #endif
     setSelectedUsbMode(USB_UNSELECTED_MODE);
   }
-#endif // defined(STM32) && !defined(SIMU)
 }
 
 void checkSpeakerVolume()
@@ -303,7 +299,7 @@ void perMain()
   }
 #endif
 
-#if defined(STM32) && defined(SDCARD)
+#if defined(SDCARD)
   if (!usbPlugged() && SD_CARD_PRESENT() && !sdMounted()) {
     sdMount();
   }
@@ -317,7 +313,6 @@ void perMain()
   }
 #endif
 
-#if defined(STM32)
   if (usbPlugged() && getSelectedUsbMode() == USB_MASS_STORAGE_MODE) {
     // disable access to menus
     lcdClear();
@@ -325,7 +320,6 @@ void perMain()
     lcdRefresh();
     return;
   }
-#endif
 
 #if defined(GUI)
   DEBUG_TIMER_START(debugTimerGuiMain);

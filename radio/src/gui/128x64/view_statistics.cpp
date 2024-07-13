@@ -201,7 +201,6 @@ void menuStatisticsDebug(event_t event)
   lcdInvertLastLine();
 }
 
-#if defined(STM32)
 void menuStatisticsDebug2(event_t event)
 {
   TITLE(STR_MENUDEBUG);
@@ -230,4 +229,3 @@ void menuStatisticsDebug2(event_t event)
   lcdDrawText(4*FW, 7*FH+1, STR_MENUTORESET);
   lcdInvertLastLine();
 }
-#endif

@@ -29,23 +29,12 @@
   #define UNUSED(x)           ((void)(x)) /* to avoid warnings */
 #endif
 
-#if defined(SIMU)
-  #define __ALIGNED(x)
-  #define __SECTION_USED(s)
-#else
   #define __ALIGNED(x)        __attribute__((aligned(x)))
   #define __SECTION_USED(s)   __attribute__((section(s), used))
-#endif
 
-#if defined(SIMU)
-  #define __DMA
-#elif (defined(STM32F4) && !defined(BOOT)) || defined(SDRAM)
-  #define __DMA               __attribute__((section(".ram"), aligned(4)))
-#else
   #define __DMA               __ALIGNED(4)
-#endif
 
-#if defined(SDRAM) && !defined(SIMU)
+#if defined(SDRAM)
   #define __SDRAM   __attribute__((section(".sdram"), aligned(4)))
   #define __NOINIT  __attribute__((section(".noinit")))
 #else
@@ -59,13 +48,8 @@
   #define PACK( __Declaration__ )      __pragma( pack(push, 1) ) __Declaration__ __pragma( pack(pop) )
 #endif
 
-#if defined(SIMU)
-  #define CONVERT_PTR_UINT(x) ((uint32_t)(uint64_t)(x))
-  #define CONVERT_UINT_PTR(x) ((uint32_t*)(uint64_t)(x))
-#else
   #define CONVERT_PTR_UINT(x) ((uint32_t)(x))
   #define CONVERT_UINT_PTR(x) ((uint32_t *)(x))
-#endif
 
 #if !defined(DIM)
   #define DIM(__arr) (sizeof((__arr)) / sizeof((__arr)[0]))

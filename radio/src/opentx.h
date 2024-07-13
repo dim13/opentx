@@ -27,9 +27,7 @@
 #include <stdlib.h>
 #include "definitions.h"
 #include "opentx_types.h"
-#if defined(STM32)
 #include "usbd_conf.h"
-#endif
 
 #if defined(SIMU)
   #define SWITCH_SIMU(a, b)  (a)
@@ -40,11 +38,7 @@
   #define IS_PCBSKY9X        false
   #define CASE_PCBSKY9X(x)
 
-#if defined(STM32)
   #define CASE_STM32(x)     x,
-#else
-  #define CASE_STM32(x)
-#endif
 
   #define CASE_LUA(x)
 
@@ -486,15 +480,7 @@ extern uint16_t maxMixerDuration;
   #define RESET_THR_TRACE() s_timeCum16ThrP = s_timeCumThr = 0
 #endif
 
-#if defined(SIMU)
-  uint16_t getTmr2MHz();
-  uint16_t getTmr16KHz();
-#elif defined(STM32)
   static inline uint16_t getTmr2MHz() { return TIMER_2MHz_TIMER->CNT; }
-#else
-  uint16_t getTmr16KHz();
-#endif
-
 
 #if defined(SPLASH)
   void doSplash();
@@ -1027,10 +1013,8 @@ union ReusableBuffer
     int8_t preset;
   } curveEdit;
 
-#if defined(STM32)
   // Data for the USB mass storage driver. If USB mass storage runs no menu is not allowed to be displayed
   uint8_t MSC_BOT_Data[MSC_MEDIA_PACKET];
-#endif
 
 #if defined(RADIO_TOOLS)
   uint8_t cToolData[CTOOL_DATA_SIZE];
@@ -1111,9 +1095,7 @@ void varioWakeup();
 
 #define IS_IMPERIAL_ENABLE() (g_eeGeneral.imperial)
 
-#if defined(STM32)
 void usbPluggedIn();
-#endif
 
 #if defined(SDCARD)
 enum ClipboardType {

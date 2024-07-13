@@ -20,7 +20,6 @@
 
 #include "opentx.h"
 
-#if defined(STM32)
 #define PRIM_REQ_POWERUP    (0)
 #define PRIM_REQ_VERSION    (1)
 #define PRIM_CMD_DOWNLOAD   (3)
@@ -122,11 +121,6 @@ void sportProcessUpdatePacket(uint8_t * packet)
 
 bool sportWaitState(SportUpdateState state, int timeout)
 {
-#if defined(SIMU)
-  UNUSED(state);
-  UNUSED(timeout);
-  return true;
-#else
   watchdogSuspend(timeout / 10);
   for (int i=timeout/2; i>=0; i--) {
     uint8_t byte ;
@@ -142,7 +136,6 @@ bool sportWaitState(SportUpdateState state, int timeout)
     RTOS_WAIT_TICKS(1);
   }
   return false;
-#endif
 }
 
 void sportClearPacket(uint8_t * packet)
@@ -303,16 +296,13 @@ void sportFlashDevice(ModuleIndex module, const char * filename)
 
   resumePulses();
 }
-#endif
 
 void sportProcessPacket(uint8_t * packet)
 {
-#if defined(STM32)
   if (sportUpdateState != SPORT_IDLE) {
     sportProcessUpdatePacket(packet);	// Uses different chksum
     return;
   }
-#endif
 
   sportProcessTelemetryPacket(packet);
 }

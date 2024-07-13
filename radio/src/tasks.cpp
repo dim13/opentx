@@ -155,11 +155,9 @@ TASK_FUNCTION(mixerTask) {
       RTOS_UNLOCK_MUTEX(mixerMutex);
       DEBUG_TIMER_STOP(debugTimerMixer);
 
-#if defined(STM32) && !defined(SIMU)
       if (getSelectedUsbMode() == USB_JOYSTICK_MODE) {
         usbJoystickUpdate();
       }
-#endif
 
       /**
        * Workaround for PCBI6X:
