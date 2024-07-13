@@ -156,12 +156,6 @@ void storageFormat()
 {
   ENABLE_SYNC_WRITE(true);
 
-#if defined(SIMU)
-  // write zero to the end of the new EEPROM file to set it's proper size
-  static uint8_t dummy = 0;
-  eepromWriteBlock(&dummy, EEPROM_SIZE-1, 1);
-#endif
-
   memclear(&eeFs, sizeof(eeFs));
   eeFs.version  = EEFS_VERS;
   eeFs.mySize   = sizeof(eeFs);
@@ -181,15 +175,6 @@ void storageFormat()
 bool eepromOpen()
 {
   eepromReadBlock((uint8_t *)&eeFs, 0, sizeof(eeFs));
-
-#if defined(SIMU)
-  if (eeFs.version != EEFS_VERS) {
-    TRACE("bad eeFs.version (%d instead of %d)", eeFs.version, EEFS_VERS);
-  }
-  if (eeFs.mySize != sizeof(eeFs)) {
-    TRACE("bad eeFs.mySize (%d instead of %d)", (int)eeFs.mySize, (int)sizeof(eeFs));
-  }
-#endif
 
   if (eeFs.version != EEFS_VERS || eeFs.mySize != sizeof(eeFs)) {
     return false;
@@ -488,10 +473,6 @@ const char * eeBackupModel(uint8_t i_fileSrc)
 #endif
 
   strcpy(&buf[len], STR_MODELS_EXT);
-
-#ifdef SIMU
-  TRACE("SD-card backup filename=%s", buf);
-#endif
 
   FRESULT result = f_open(&g_oLogFile, buf, FA_CREATE_ALWAYS | FA_WRITE);
   if (result != FR_OK) {
@@ -896,11 +877,6 @@ void eepromBackup()
     eepromReadBlock(buffer, i, 1024);
     f_write(&file, buffer, 1024, &count);
     drawProgressBar(STR_WRITING, i, EEPROM_SIZE);
-#if defined(SIMU)
-    // add an artificial delay and check for simu quit
-    if (SIMU_SLEEP_OR_EXIT_MS(100))
-      break;
-#endif
   }
 
   f_close(&file);
