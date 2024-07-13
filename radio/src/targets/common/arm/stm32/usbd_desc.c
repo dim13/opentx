@@ -159,11 +159,7 @@ uint8_t *  USBD_USR_DeviceDescriptor( uint8_t speed , uint16_t *length)
       0x00,                       /*bDeviceClass*/
       0x00,                       /*bDeviceSubClass*/
       0x00,                       /*bDeviceProtocol*/
-#if defined(STM32F0)
       USB_MAX_EP0_SIZE,       /*bMaxPacketSize*/
-#else
-      USB_OTG_MAX_EP0_SIZE,       /*bMaxPacketSize*/
-#endif
       LOBYTE(vid),               /*idVendor*/
       HIBYTE(vid),               /*idVendor*/
       LOBYTE(pid),               /*idVendor*/

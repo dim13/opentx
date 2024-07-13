@@ -25,9 +25,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usb_core.h"
-#if defined(STM32F0)
 #include "usb_dcd.h"
-#endif
 #include "usbd_def.h"
 
 /** @addtogroup STM32_USB_OTG_DEVICE_LIBRARY

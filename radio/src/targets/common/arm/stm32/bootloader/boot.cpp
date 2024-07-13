@@ -36,7 +36,6 @@
 #endif
 
 typedef void (*voidFunction)(void);
-#if defined(STM32F0)
 #define jumpTo(addr)                                 \
   {                                                  \
     __disable_irq();                                 \
@@ -45,16 +44,6 @@ typedef void (*voidFunction)(void);
     voidFunction jumpFn = (voidFunction)jumpAddress; \
     jumpFn();                                        \
   }
-#else
-#define jumpTo(addr)                                 \
-  {                                                  \
-    SCB->VTOR = addr;                                \
-    __set_MSP(*(__IO uint32_t *)addr);               \
-    uint32_t jumpAddress = *(uint32_t *)(addr + 4);  \
-    voidFunction jumpFn = (voidFunction)jumpAddress; \
-    jumpFn();                                        \
-  }
-#endif
 
 // Bootloader marker:
 // -> used to detect valid bootloader files

@@ -34,21 +34,11 @@
 /* Class Layer Parameter */
 
 #define MSC_IN_EP                    0x81
-#if defined(STM32F0)
 #define MSC_OUT_EP                   0x02
-#else
-#define MSC_OUT_EP                   0x01
-#endif
 #define MSC_MAX_PACKET               64
 
 // Save some RAM on smaller STM32 processors. Slightly lowers USB mass storage speed
-#if defined(STM32F2) && !defined(BOOT)
 #define MSC_MEDIA_PACKET             512
-#elif defined(STM32F0)
-#define MSC_MEDIA_PACKET             512
-#else
-#define MSC_MEDIA_PACKET             4096
-#endif
 
 #define HID_IN_EP                    0x81
 #define HID_OUT_EP                   0x01
