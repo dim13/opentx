@@ -148,7 +148,9 @@
   #define IS_BLUETOOTH_TRAINER()       false
   #define IS_SLAVE_TRAINER()           (g_model.trainerMode == TRAINER_MODE_SLAVE)
 
+#if defined(PCBI6X_ELRS) || defined(PCBI6X_HELLO) || defined(PCBI6X_INAV)
   #define RADIO_TOOLS
+#endif
 
 #if defined(PCBI6X_ELRS)
 #define CTOOL_DATA_SIZE (468 + 176 + 140 + 4) // 788
