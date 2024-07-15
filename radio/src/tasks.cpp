@@ -27,20 +27,12 @@ RTOS_DEFINE_STACK(menusStack, MENUS_STACK_SIZE);
 RTOS_TASK_HANDLE mixerTaskId;
 RTOS_DEFINE_STACK(mixerStack, MIXER_STACK_SIZE);
 
-#if defined(VOICE)
-RTOS_TASK_HANDLE audioTaskId;
-RTOS_DEFINE_STACK(audioStack, AUDIO_STACK_SIZE);
-#endif
-
 RTOS_MUTEX_HANDLE audioMutex;
 RTOS_MUTEX_HANDLE mixerMutex;
 
 void stackPaint() {
   menusStack.paint();
   mixerStack.paint();
-#if defined(VOICE)
-  audioStack.paint();
-#endif
 #if defined(CLI)
   cliStack.paint();
 #endif

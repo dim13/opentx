@@ -132,26 +132,15 @@ PACK(struct CustomFunctionData {
   int16_t swtch : 9;
   uint16_t func : 7;
   PACK(union {
-#if !defined(PCBI6X) // SDCARD + VOICE
-    NOBACKUP(PACK(struct {
-      char name[LEN_FUNCTION_NAME];
-    }) play);
-#endif
     PACK(struct {
       int16_t val;
       uint8_t mode;
       uint8_t param;
-#if !defined(PCBI6X) // SDCARD + VOICE
-      NOBACKUP(CFN_SPARE_TYPE spare);
-#endif
     })
     all;
 
     NOBACKUP(PACK(struct {
       int32_t val1;
-#if !defined(PCBI6X) // SDCARD + VOICE
-      NOBACKUP(CFN_SPARE_TYPE val2);
-#endif
     }) clear);
   });
   uint8_t active;

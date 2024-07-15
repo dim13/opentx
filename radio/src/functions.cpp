@@ -33,21 +33,6 @@ void testFunc()
 }
 #endif
 
-#if defined(VOICE)
-void playCustomFunctionFile(const CustomFunctionData * sd, uint8_t id)
-{
-  if (sd->play.name[0] != '\0') {
-    char filename[sizeof(SOUNDS_PATH) + LEN_FUNCTION_NAME + sizeof(SOUNDS_EXT)] = SOUNDS_PATH "/";
-    strncpy(filename + SOUNDS_PATH_LNG_OFS, currentLanguagePack->id, 2);
-    strncpy(filename + sizeof(SOUNDS_PATH), sd->play.name, LEN_FUNCTION_NAME);
-    filename[sizeof(SOUNDS_PATH) + LEN_FUNCTION_NAME] = '\0';
-    strcat(filename + sizeof(SOUNDS_PATH), SOUNDS_EXT);
-    PLAY_FILE(filename, sd->func == FUNC_BACKGND_MUSIC ? PLAY_BACKGROUND : 0, id);
-  }
-}
-#endif
-
-#if defined(VOICE) || defined(PCBI6X)
 bool isRepeatDelayElapsed(const CustomFunctionData * functions, CustomFunctionsContext & functionsContext, uint8_t index)
 {
   const CustomFunctionData * cfn = &functions[index];
@@ -64,9 +49,6 @@ bool isRepeatDelayElapsed(const CustomFunctionData * functions, CustomFunctionsC
     return false;
   }
 }
-#else
-#define isRepeatDelayElapsed(...) true
-#endif
 
 #define VOLUME_HYSTERESIS 10            // how much must a input value change to actually be considered for new volume setting
 getvalue_t requiredSpeakerVolumeRawLast = 1024 + 1; //initial value must be outside normal range

@@ -284,22 +284,6 @@ void menuRadioSetup(event_t event)
         break;
 #endif
 
-#if defined(VOICE)
-      case ITEM_SETUP_SPEAKER_VOLUME:
-      {
-        lcdDrawTextAlignedLeft(y, STR_SPEAKER_VOLUME);
-        uint8_t b = g_eeGeneral.speakerVolume+VOLUME_LEVEL_DEF;
-        drawSlider(RADIO_SETUP_2ND_COLUMN, y, b, VOLUME_LEVEL_MAX, attr);
-        if (attr) {
-          CHECK_INCDEC_GENVAR(event, b, 0, VOLUME_LEVEL_MAX);
-          if (checkIncDec_Ret) {
-            g_eeGeneral.speakerVolume = (int8_t)b-VOLUME_LEVEL_DEF;
-          }
-        }
-        break;
-      }
-#endif
-
       case ITEM_SETUP_BEEP_VOLUME:
         SLIDER_5POS(y, g_eeGeneral.beepVolume, STR_BEEP_VOLUME, event, attr);
         break;

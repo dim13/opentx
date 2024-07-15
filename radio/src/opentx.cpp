@@ -251,13 +251,6 @@ void generalDefault() {
   g_eeGeneral.lightAutoOff = 2;
   g_eeGeneral.inactivityTimer = 10;
 
-#if defined(VOICE) // PCBI6X no voice
-  g_eeGeneral.ttsLanguage[0] = 'e';
-  g_eeGeneral.ttsLanguage[1] = 'n';
-  g_eeGeneral.wavVolume = 2;
-  g_eeGeneral.backgroundVolume = 1;
-#endif
-
   for (int i = 0; i < NUM_STICKS; ++i) {
     g_eeGeneral.trainer.mix[i].mode = 2;
     g_eeGeneral.trainer.mix[i].srcChn = channelOrder(i + 1) - 1;
