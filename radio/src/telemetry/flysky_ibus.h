@@ -23,10 +23,6 @@
 
 #include <stdint.h>
 
-#if defined(MULTIMODULE)
-void processFlySkyTelemetryData(uint8_t data);
-#endif
-
 #if defined(AFHDS2A)
 void processFlySkyTelemetryFrame(uint8_t * frame);
 #endif

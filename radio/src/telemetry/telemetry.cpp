@@ -41,20 +41,6 @@ void processTelemetryData(uint8_t data)
     return;
   }
 #endif
-#if defined(MULTIMODULE)
-  if (telemetryProtocol == PROTOCOL_SPEKTRUM) {
-    processSpektrumTelemetryData(data);
-    return;
-  }
-  if (telemetryProtocol == PROTOCOL_FLYSKY_IBUS) {
-    processFlySkyTelemetryData(data);
-    return;
-  }
-  if (telemetryProtocol == PROTOCOL_MULTIMODULE) {
-    processMultiTelemetryData(data);
-    return;
-  }
-#endif
 #if defined(TELEMETRY_FRSKY)
 #if !defined(PCBI6X)
   processFrskyTelemetryData(data);
@@ -219,17 +205,6 @@ void telemetryInit(uint8_t protocol)
 	  telemetryPortInit(0, TELEMETRY_SERIAL_DEFAULT);
 	  auxSerialTelemetryInit(PROTOCOL_FRSKY_D_SECONDARY);
   	  break;
-#endif
-#if defined(MULTIMODULE)
-  case PROTOCOL_MULTIMODULE:
-  case PROTOCOL_FLYSKY_IBUS:
-	  // The DIY Multi module always speaks 100000 baud regardless of the telemetry protocol in use
-	  telemetryPortInit(MULTIMODULE_BAUDRATE, TELEMETRY_SERIAL_8E2);
-	  break;
-  case PROTOCOL_SPEKTRUM:
-	  // Spektrum's own small race RX (SPM4648) uses 125000 8N1, use the same since there is no real standard
-	  telemetryPortInit(125000, TELEMETRY_SERIAL_DEFAULT);
-	  break;
 #endif
 #if defined(CROSSFIRE)
   case PROTOCOL_PULSES_CROSSFIRE:

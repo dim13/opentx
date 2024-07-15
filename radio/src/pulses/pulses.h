@@ -61,14 +61,7 @@ enum ModuleSettingsMode
   #define IS_DSM2_SERIAL_PROTOCOL(protocol)  (0)
 #endif
 
-#if defined(MULTIMODULE)
-  #define IS_MULTIMODULE_PROTOCOL(protocol)  (protocol==PROTOCOL_CHANNELS_MULTIMODULE)
-  #if !defined(DSM2)
-     #error You need to enable DSM2 = PPM for MULTIMODULE support
-  #endif
-#else
   #define IS_MULTIMODULE_PROTOCOL(protocol)  (0)
-#endif
 
   #define IS_SBUS_PROTOCOL(protocol)         (protocol == PROTOCOL_CHANNELS_SBUS)
 

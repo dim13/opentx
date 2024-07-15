@@ -29,17 +29,6 @@ inline bool isModuleA7105(uint8_t idx){
   return idx == INTERNAL_MODULE;
 }
 
-#if defined(MULTIMODULE)
-inline bool isModuleMultimodule(uint8_t idx)
-{
-  return idx == EXTERNAL_MODULE && g_model.moduleData[EXTERNAL_MODULE].type == MODULE_TYPE_MULTIMODULE;
-}
-
-inline bool isModuleMultimoduleDSM2(uint8_t idx)
-{
-  return isModuleMultimodule(idx) && g_model.moduleData[idx].getMultiProtocol(true) == MM_RF_PROTO_DSM2;
-}
-#else
 inline bool isModuleMultimodule(uint8_t)
 {
   return false;
@@ -49,7 +38,6 @@ inline bool isModuleMultimoduleDSM2(uint8_t)
 {
   return false;
 }
-#endif
 
 inline bool isModuleXJT(uint8_t idx)
 {

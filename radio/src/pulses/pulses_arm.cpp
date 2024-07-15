@@ -78,11 +78,6 @@ uint8_t getRequiredProtocol(uint8_t port) {
           required_protocol = PROTOCOL_CHANNELS_SBUS;
           break;
 #endif
-#if defined(MULTIMODULE)
-        case MODULE_TYPE_MULTIMODULE:
-          required_protocol = PROTOCOL_CHANNELS_MULTIMODULE;
-          break;
-#endif
 #if defined(DSM2)
         case MODULE_TYPE_DSM2:
           required_protocol = limit<uint8_t>(PROTO_DSM2_LP45, PROTO_DSM2_LP45 + g_model.moduleData[EXTERNAL_MODULE].rfProtocol, PROTO_DSM2_DSMX);
@@ -180,9 +175,6 @@ bool setupPulses(uint8_t port) {
         break;
 #endif
 
-#if defined(MULTIMODULE)
-      case PROTOCOL_CHANNELS_MULTIMODULE:
-#endif
       case PROTOCOL_CHANNELS_AFHDS2A_SPI:
         disable_afhds2a(port);
         break;
@@ -249,13 +241,6 @@ bool setupPulses(uint8_t port) {
         sportSendBuffer(modulePulsesData[port].pxx2.getData(), modulePulsesData[port].pxx2.getSize());
       }
       scheduleNextMixerCalculation(port, PXX2_PERIOD);
-      break;
-#endif
-
-#if defined(MULTIMODULE)
-    case PROTOCOL_CHANNELS_MULTIMODULE:
-      setupPulsesMultimodule(port);
-      scheduleNextMixerCalculation(port, MULTIMODULE_PERIOD);
       break;
 #endif
 

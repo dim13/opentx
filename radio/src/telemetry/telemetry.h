@@ -32,11 +32,6 @@
 #if defined(CROSSFIRE)
   #include "crossfire.h"
 #endif
-#if defined(MULTIMODULE)
-  #include "spektrum.h"
-  #include "flysky_ibus.h"
-  #include "multi.h"
-#endif
   #include "iface_a7105.h"
   #include "flysky_ibus.h"
 
@@ -192,12 +187,7 @@ PACK(struct CellValue
 #define IS_SPEED_UNIT(unit)            ((unit) >= UNIT_KTS && (unit) <= UNIT_MPH)
 
 #define IS_FRSKY_D_PROTOCOL()          (telemetryProtocol == PROTOCOL_FRSKY_D)
-#if defined (MULTIMODULE)
-#define IS_D16_MULTI()                 ((g_model.moduleData[EXTERNAL_MODULE].getMultiProtocol(false) == MM_RF_PROTO_FRSKY) && (g_model.moduleData[EXTERNAL_MODULE].subType == MM_RF_FRSKY_SUBTYPE_D16 || g_model.moduleData[EXTERNAL_MODULE].subType == MM_RF_FRSKY_SUBTYPE_D16_8CH))
-#define IS_FRSKY_SPORT_PROTOCOL()      (telemetryProtocol == PROTOCOL_FRSKY_SPORT || (telemetryProtocol == PROTOCOL_MULTIMODULE && IS_D16_MULTI()))
-#else
 #define IS_FRSKY_SPORT_PROTOCOL()      (telemetryProtocol == PROTOCOL_FRSKY_SPORT)
-#endif
 #define IS_SPEKTRUM_PROTOCOL()         (telemetryProtocol == PROTOCOL_SPEKTRUM)
 
 inline uint8_t modelTelemetryProtocol()
@@ -212,12 +202,6 @@ inline uint8_t modelTelemetryProtocol()
     return g_model.telemetryProtocol;
   }
   
-#if defined(MULTIMODULE)
-  if (!IS_INTERNAL_MODULE_ENABLED() && g_model.moduleData[EXTERNAL_MODULE].type == MODULE_TYPE_MULTIMODULE) {
-    return PROTOCOL_MULTIMODULE;
-  }
-#endif
-
   if (IS_INTERNAL_MODULE_ENABLED()) {
     return PROTOCOL_FLYSKY_IBUS;
   }

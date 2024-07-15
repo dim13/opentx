@@ -74,17 +74,9 @@ enum MenuModelSetupItems {
   ITEM_MODEL_INTERNAL_MODULE_FAILSAFE,
   ITEM_MODEL_EXTERNAL_MODULE_LABEL,
   ITEM_MODEL_EXTERNAL_MODULE_MODE,
-#if defined(MULTIMODULE)
-  ITEM_MODEL_EXTERNAL_MODULE_SUBTYPE,
-  ITEM_MODEL_EXTERNAL_MODULE_STATUS,
-  ITEM_MODEL_EXTERNAL_MODULE_SYNCSTATUS,
-#endif
   ITEM_MODEL_EXTERNAL_MODULE_CHANNELS,
   ITEM_MODEL_EXTERNAL_MODULE_BIND,
   ITEM_MODEL_EXTERNAL_MODULE_OPTIONS,
-#if defined(MULTIMODULE)
-  ITEM_MODEL_EXTERNAL_MODULE_AUTOBIND,
-#endif
   ITEM_MODEL_EXTERNAL_MODULE_POWER,
   ITEM_MODEL_EXTERNAL_MODULE_FAILSAFE,
   ITEM_MODEL_TRAINER_LABEL,
@@ -616,15 +608,6 @@ void menuModelSetup(event_t event)
           lcdDrawTextAtIndex(MODEL_SETUP_2ND_COLUMN+5*FW, y, STR_DSM_PROTOCOLS, g_model.moduleData[EXTERNAL_MODULE].rfProtocol, menuHorizontalPosition==1 ? attr : 0);
         else if (isModuleR9M(EXTERNAL_MODULE)){
           lcdDrawTextAtIndex(MODEL_SETUP_2ND_COLUMN+5*FW, y, STR_R9M_REGION, g_model.moduleData[EXTERNAL_MODULE].subType, (menuHorizontalPosition==1 ? attr : 0));
-        }
-#endif
-#if defined(MULTIMODULE)
-        else if (isModuleMultimodule(EXTERNAL_MODULE)) {
-          int multi_rfProto = g_model.moduleData[EXTERNAL_MODULE].getMultiProtocol(false);
-          if (g_model.moduleData[EXTERNAL_MODULE].multi.customProto)
-            lcdDrawText(MODEL_SETUP_2ND_COLUMN+5*FW, y, STR_MULTI_CUSTOM, menuHorizontalPosition==1 ? attr : 0);
-          else
-            lcdDrawTextAtIndex(MODEL_SETUP_2ND_COLUMN+5*FW, y, STR_MULTI_PROTOCOLS, multi_rfProto, menuHorizontalPosition==1 ? attr : 0);
         }
 #endif
         if (attr && (editMode>0 || p1valdiff)) {

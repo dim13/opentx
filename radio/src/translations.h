@@ -151,12 +151,7 @@ extern const char STR_OPEN9X[];
 #else
   #define OFS_I6X_PROTOCOLS            (OFS_TELEMETRY_PROTOCOLS /* + sizeof(TR_TELEMETRY_PROTOCOLS) */)
 #endif
-#if defined(MULTIMODULE)
-  #define OFS_MULTI_PROTOCOLS   (OFS_I6X_PROTOCOLS + sizeof(TR_I6X_PROTOCOLS))
-  #define OFS_VOLTSRC           (OFS_MULTI_PROTOCOLS + sizeof(TR_MULTI_PROTOCOLS))
-#else
   #define OFS_VOLTSRC           (OFS_I6X_PROTOCOLS + sizeof(TR_I6X_PROTOCOLS))
-#endif
   #define OFS_CURVE_TYPES       (OFS_VOLTSRC + sizeof(TR_VOLTSRC))
   #define OFS_VSENSORTYPES      (OFS_CURVE_TYPES + sizeof(TR_CURVE_TYPES))
   #define OFS_VFORMULAS         (OFS_VSENSORTYPES + sizeof(TR_VSENSORTYPES))
@@ -249,9 +244,6 @@ extern const char STR_OPEN9X[];
   #define STR_XJT_PROTOCOLS     (STR_OPEN9X + OFS_XJT_PROTOCOLS)
   #define STR_DSM_PROTOCOLS     (STR_OPEN9X + OFS_DSM_PROTOCOLS)
   #define STR_I6X_PROTOCOLS     (STR_OPEN9X + OFS_I6X_PROTOCOLS)
-#if defined(MULTIMODULE)
-  #define STR_MULTI_PROTOCOLS   (STR_OPEN9X + OFS_MULTI_PROTOCOLS)
-#endif
   #define STR_CURVE_TYPES       (STR_OPEN9X + OFS_CURVE_TYPES)
   #define STR_VSENSORTYPES      (STR_OPEN9X + OFS_VSENSORTYPES)
   #define STR_VFORMULAS         (STR_OPEN9X + OFS_VFORMULAS)
@@ -469,26 +461,6 @@ extern const char STR_GF[];
 
 extern const char STR_FAS_OFFSET[];
 
-#if defined(MULTIMODULE)
-extern const char STR_MULTI_CUSTOM[];
-extern const char STR_MULTI_OPTION[];
-extern const char STR_MULTI_VIDFREQ[];
-extern const char STR_MULTI_RFTUNE[];
-extern const char STR_MULTI_TELEMETRY[];
-extern const char STR_MULTI_AUTOBIND[];
-extern const char STR_MULTI_DSM_AUTODTECT[];
-extern const char STR_MULTI_LOWPOWER[];
-extern const char STR_MODULE_NO_SERIAL_MODE[];
-extern const char STR_MODULE_NO_INPUT[];
-extern const char STR_MODULE_WAITFORBIND[];
-extern const char STR_MODULE_NO_TELEMETRY[];
-extern const char STR_MODULE_BINDING[];
-extern const char STR_PROTOCOL_INVALID[];
-extern const char STR_MODULE_STATUS[];
-extern const char STR_MODULE_SYNC[];
-extern const char STR_MULTI_SERVOFREQ[];
-extern const char STR_SUBTYPE[];
-#endif
 extern const char STR_RECEIVER_NUM[];
 extern const char STR_RECEIVER[];
 extern const char STR_REBIND[];

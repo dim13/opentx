@@ -307,44 +307,6 @@ void processFlySkyTelemetryFrame(uint8_t * frame) {
 }
 #endif // AFHDS2A
 
-#if defined(MULTIMODULE)
-void processFlySkyTelemetryData(uint8_t data, uint8_t *rxBuffer, uint8_t &rxBufferCount) {
-  if (rxBufferCount == 0)
-    return;
-
-  if (data == 0xAA || data == 0xAC) {
-    TRACE("[IBUS] Packet 0x%02X", data);
-  } else {
-    TRACE("[IBUS] invalid start byte 0x%02X", data);
-    rxBufferCount = 0;
-    return;
-  }
-
-  if (rxBufferCount < TELEMETRY_RX_PACKET_SIZE) {
-    rxBuffer[rxBufferCount++] = data;
-  } else {
-    TRACE("[IBUS] array size %d error", rxBufferCount);
-    rxBufferCount = 0;
-  }
-
-  if (rxBufferCount >= FLYSKY_TELEMETRY_LENGTH) {
-    // debug print the content of the packets
-#if 0
-    debugPrintf(", rssi 0x%02X: ", rxBuffer[1]);
-    for (int i=0; i<7; i++) {
-      debugPrintf("[%02X %02X %02X%02X] ", rxBuffer[i*4+2], rxBuffer[i*4 + 3],
-                  rxBuffer[i*4 + 4], rxBuffer[i*4 + 5]);
-    }
-    debugPrintf(CRLF);
-#endif
-    if (data == 0xAA)
-      processFlySkyPacket(rxBuffer + 1);
-    else if (data == 0xAC)
-      processFlySkyPacketAC(rxBuffer + 1);
-    rxBufferCount = 0;
-  }
-}
-#endif
 const FlySkySensor *getFlySkySensor(uint16_t id) {
   for (const FlySkySensor *sensor = flySkySensors; sensor->id; sensor++) {
     if (id == sensor->id)
