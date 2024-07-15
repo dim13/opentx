@@ -48,22 +48,6 @@ void stackPaint() {
 
 volatile uint16_t timeForcePowerOffPressed = 0;
 
-bool isForcePowerOffRequested() {
-  if (pwrOffPressed()) {
-    if (timeForcePowerOffPressed == 0) {
-      timeForcePowerOffPressed = get_tmr10ms();
-    } else {
-      uint16_t delay = (uint16_t)get_tmr10ms() - timeForcePowerOffPressed;
-      if (delay > 1000 /*10s*/) {
-        return true;
-      }
-    }
-  } else {
-    resetForcePowerOffRequest();
-  }
-  return false;
-}
-
 bool isModuleSynchronous(uint8_t moduleIdx) {
   switch (g_model.moduleData[moduleIdx].type) {
     case MODULE_TYPE_CROSSFIRE:
@@ -127,16 +111,6 @@ TASK_FUNCTION(mixerTask) {
     // re-enable trigger
     mixerSchedulerClearTrigger();
     mixerSchedulerEnableTrigger();
-
-#if defined(SIMU)
-    if (pwrCheck() == e_power_off) {
-      TASK_RETURN();
-    }
-#elif !defined(PCBI6X)
-    if (isForcePowerOffRequested()) {
-      pwrOff();
-    }
-#endif
 
     if (!s_pulses_paused) {
       uint16_t t0 = getTmr2MHz();
