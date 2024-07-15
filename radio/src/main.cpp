@@ -32,12 +32,10 @@ extern void elrsStop();
 
 void onUSBConnectMenu(const char *result)
 {
-#if !defined(PCBI6X) || defined(PCBI6X_USB_MSD)
   if (result == STR_USB_MASS_STORAGE) {
     setSelectedUsbMode(USB_MASS_STORAGE_MODE);
   }
   else
-#endif
   if (result == STR_USB_JOYSTICK) {
     setSelectedUsbMode(USB_JOYSTICK_MODE);
   }
@@ -54,9 +52,7 @@ void handleUsbConnection()
     if (getSelectedUsbMode() == USB_UNSELECTED_MODE) {
       if (g_eeGeneral.USBMode == USB_UNSELECTED_MODE && popupMenuItemsCount == 0) {
         POPUP_MENU_ADD_ITEM(STR_USB_JOYSTICK);
-  #if !defined(PCBI6X) || defined(PCBI6X_USB_MSD)
         POPUP_MENU_ADD_ITEM(STR_USB_MASS_STORAGE);
-  #endif
   #if defined(DEBUG) && !defined(PCBI6X)
         POPUP_MENU_ADD_ITEM(STR_USB_SERIAL);
   #endif
@@ -67,7 +63,6 @@ void handleUsbConnection()
       }
     }
     else {
-      #if !defined(PCBI6X) || defined(PCBI6X_USB_MSD)
       if (getSelectedUsbMode() == USB_MASS_STORAGE_MODE) {
         #if defined(PCBI6X_ELRS)
         elrsStop();
@@ -75,18 +70,15 @@ void handleUsbConnection()
         opentxClose(false);
         usbPluggedIn();
       }
-      #endif
       usbStart();
     }
   }
 
   if (usbStarted() && !usbPlugged()) {
     usbStop();
-    #if !defined(PCBI6X) || defined(PCBI6X_USB_MSD)
     if (getSelectedUsbMode() == USB_MASS_STORAGE_MODE) {
       opentxResume();
     }
-    #endif
     setSelectedUsbMode(USB_UNSELECTED_MODE);
   }
 }

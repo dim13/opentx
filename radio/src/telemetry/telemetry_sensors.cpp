@@ -31,15 +31,6 @@ bool isFaiForbidden(source_t idx) {
   TelemetrySensor* sensor = &g_model.telemetrySensors[(idx - MIXSRC_FIRST_TELEM) / 3];
 
   switch (telemetryProtocol) {
-#if defined(TELEMETRY_FRSKY_SPORT)
-    case PROTOCOL_FRSKY_SPORT:
-      if (sensor->id == RSSI_ID) {
-        return false;
-      } else if (sensor->id == BATT_ID) {
-        return false;
-      }
-      break;
-#endif
 #if defined(TELEMETRY_FRSKY)
     case PROTOCOL_FRSKY_D:
       if (sensor->id == D_RSSI_ID) {
@@ -486,11 +477,6 @@ int setTelemetryValue(TelemetryProtocol protocol, uint16_t id, uint8_t subId, ui
   if (index >= 0) {
     storageDirty(EE_MODEL);
     switch (protocol) {
-#if defined(TELEMETRY_FRSKY_SPORT)
-      case TELEM_PROTO_FRSKY_SPORT:
-        frskySportSetDefault(index, id, subId, instance);
-        break;
-#endif
 #if defined(TELEMETRY_FRSKY) && !defined(PCBI6X)
       case TELEM_PROTO_FRSKY_D:
         frskyDSetDefault(index, id);

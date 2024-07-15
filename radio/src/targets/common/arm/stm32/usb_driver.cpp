@@ -110,13 +110,11 @@ void usbStart()
       USBD_Init(&USB_Device_dev, &USR_desc, &USBD_CDC_cb, &USR_cb);
       break;
 #endif
-#if !defined(PCBI6X) || defined(PCBI6X_USB_MSD)
     default:
     case USB_MASS_STORAGE_MODE:
       // initialize USB as MSC device
       USBD_Init(&USB_Device_dev, &USR_desc, &USBD_MSC_cb, &USR_cb);
       break;
-#endif
   }
   usbDriverStarted = true;
 }

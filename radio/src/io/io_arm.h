@@ -23,24 +23,6 @@
 
 #include "dataconstants.h"
 
-#if defined(TELEMETRY_FRSKY_SPORT)
-PACK(union SportTelemetryPacket
-{
-  struct {
-    uint8_t physicalId;
-    uint8_t primId;
-    uint16_t dataId;
-    uint32_t value;
-  };
-  uint8_t raw[8];
-});
-
-void sportProcessPacket(uint8_t * packet);
-bool isSportOutputBufferAvailable();
-void sportOutputPushPacket(SportTelemetryPacket * packet);
-void sportFlashDevice(ModuleIndex module, const char * filename);
-#endif
-
 bool isBootloader(const char * filename);
 void bootloaderFlash(const char * filename);
   
