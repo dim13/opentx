@@ -89,10 +89,6 @@ const char * logsOpen()
 
   char * tmp = &filename[len];
 
-#if defined(RTCLOCK)
-  tmp = strAppendDate(&filename[len]);
-#endif
-
   strcpy(tmp, STR_LOGS_EXT);
 
   result = f_open(&g_oLogFile, filename, FA_OPEN_ALWAYS | FA_WRITE | FA_OPEN_APPEND);

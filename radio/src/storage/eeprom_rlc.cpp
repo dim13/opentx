@@ -467,11 +467,6 @@ const char * eeBackupModel(uint8_t i_fileSrc)
     len = sizeof(MODELS_PATH) + PSIZE(TR_MODEL) + 2;
   }
 
-#if defined(RTCLOCK)
-  char * tmp = strAppendDate(&buf[len]);
-  len = tmp - buf;
-#endif
-
   strcpy(&buf[len], STR_MODELS_EXT);
 
   FRESULT result = f_open(&g_oLogFile, buf, FA_CREATE_ALWAYS | FA_WRITE);

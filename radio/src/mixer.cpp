@@ -354,11 +354,7 @@ getvalue_t getValue(mixsrc_t i)
   }
   else if (i < MIXSRC_FIRST_TIMER) {
     // TX_TIME + SPARES
-#if defined(RTCLOCK)
-    return (g_rtcTime % SECS_PER_DAY) / 60; // number of minutes from midnight
-#else
     return 0;
-#endif
   }
   else if (i <= MIXSRC_LAST_TIMER) {
     return timersStates[i-MIXSRC_FIRST_TIMER].val;

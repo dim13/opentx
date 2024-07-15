@@ -118,11 +118,6 @@ void TelemetryItem::setValue(const TelemetrySensor& sensor, int32_t val, uint32_
       datetime.hour = (uint8_t)((data & 0xff000000) >> 24);
       datetime.min = (uint8_t)((data & 0x00ff0000) >> 16);
       datetime.sec = (uint8_t)((data & 0x0000ff00) >> 8);
-#if defined(RTCLOCK)
-      if (g_eeGeneral.adjustRTC) {
-        rtcAdjust(datetime.year, datetime.month, datetime.day, datetime.hour, datetime.min, datetime.sec);
-      }
-#endif
     }
     newVal = 0;
   } else if (unit == UNIT_GPS_LATITUDE) {

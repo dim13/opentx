@@ -116,18 +116,6 @@ enum MenuRadioSetupItems {
 
 void menuRadioSetup(event_t event)
 {
-#if defined(RTCLOCK)
-  struct gtm t;
-  gettime(&t);
-
-  if ((menuVerticalPosition==ITEM_SETUP_DATE+HEADER_LINE || menuVerticalPosition==ITEM_SETUP_TIME+HEADER_LINE) &&
-      (s_editMode>0) &&
-      (event==EVT_KEY_FIRST(KEY_ENTER) || event==EVT_KEY_FIRST(KEY_EXIT) || IS_ROTARY_BREAK(event) || IS_ROTARY_LONG(event))) {
-    // set the date and time into RTC chip
-    rtcSetTime(&t);
-  }
-#endif
-
 #if defined(FAI_CHOICE)
   if (warningResult) {
     warningResult = 0;
@@ -190,65 +178,6 @@ void menuRadioSetup(event_t event)
     uint8_t attr = (sub == k ? blink : 0);
 
     switch (k) {
-#if defined(RTCLOCK)
-      case ITEM_SETUP_DATE:
-        lcdDrawTextAlignedLeft(y, STR_DATE);
-        lcdDrawChar(RADIO_SETUP_DATE_COLUMN, y, '-');
-        lcdDrawChar(RADIO_SETUP_DATE_COLUMN+3*FW-2, y, '-');
-        for (uint8_t j=0; j<3; j++) {
-          uint8_t rowattr = (menuHorizontalPosition==j ? attr : 0);
-          switch (j) {
-            case 0:
-              lcdDrawNumber(RADIO_SETUP_DATE_COLUMN, y, t.tm_year+TM_YEAR_BASE, rowattr|RIGHT);
-              if (rowattr && (s_editMode>0 || p1valdiff)) t.tm_year = checkIncDec(event, t.tm_year, 112, 200, 0);
-              break;
-            case 1:
-              lcdDrawNumber(RADIO_SETUP_DATE_COLUMN+3*FW-2, y, t.tm_mon+1, rowattr|LEADING0|RIGHT, 2);
-              if (rowattr && (s_editMode>0 || p1valdiff)) t.tm_mon = checkIncDec(event, t.tm_mon, 0, 11, 0);
-              break;
-            case 2:
-            {
-              int16_t year = TM_YEAR_BASE + t.tm_year;
-              int8_t dlim = (((((year%4==0) && (year%100!=0)) || (year%400==0)) && (t.tm_mon==1)) ? 1 : 0);
-              static const uint8_t dmon[]  = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-              dlim += dmon[t.tm_mon];
-              lcdDrawNumber(RADIO_SETUP_DATE_COLUMN+6*FW-4, y, t.tm_mday, rowattr|LEADING0|RIGHT, 2);
-              if (rowattr && (s_editMode>0 || p1valdiff)) t.tm_mday = checkIncDec(event, t.tm_mday, 1, dlim, 0);
-              break;
-            }
-          }
-        }
-        if (attr && checkIncDec_Ret) {
-          g_rtcTime = gmktime(&t); // update local timestamp and get wday calculated
-        }
-        break;
-
-      case ITEM_SETUP_TIME:
-        lcdDrawTextAlignedLeft(y, STR_TIME);
-        lcdDrawChar(RADIO_SETUP_TIME_COLUMN+1, y, ':'); lcdDrawChar(RADIO_SETUP_TIME_COLUMN+3*FW-2, y, ':');
-        for (uint8_t j=0; j<3; j++) {
-          uint8_t rowattr = (menuHorizontalPosition==j ? attr : 0);
-          switch (j) {
-            case 0:
-              lcdDrawNumber(RADIO_SETUP_TIME_COLUMN, y, t.tm_hour, rowattr|LEADING0|RIGHT, 2);
-              if (rowattr && (s_editMode>0 || p1valdiff)) t.tm_hour = checkIncDec(event, t.tm_hour, 0, 23, 0);
-              break;
-            case 1:
-              lcdDrawNumber(RADIO_SETUP_TIME_COLUMN+3*FWNUM, y, t.tm_min, rowattr|LEADING0|RIGHT, 2);
-              if (rowattr && (s_editMode>0 || p1valdiff)) t.tm_min = checkIncDec(event, t.tm_min, 0, 59, 0);
-              break;
-            case 2:
-              lcdDrawNumber(RADIO_SETUP_TIME_COLUMN+6*FWNUM, y, t.tm_sec, rowattr|LEADING0|RIGHT, 2);
-              if (rowattr && (s_editMode>0 || p1valdiff)) t.tm_sec = checkIncDec(event, t.tm_sec, 0, 59, 0);
-              break;
-          }
-        }
-        if (attr && checkIncDec_Ret) {
-          g_rtcTime = gmktime(&t); // update local timestamp and get wday calculated
-        }
-        break;
-#endif
-
 #if defined(BATTGRAPH)
       case ITEM_SETUP_BATT_RANGE:
         lcdDrawTextAlignedLeft(y, STR_BATTERY_RANGE);

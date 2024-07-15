@@ -269,22 +269,6 @@ bool gpsNewFrameNMEA(char c)
             case FRAME_RMC:
               gpsData.speed = gps_Msg.speed;
               gpsData.groundCourse = gps_Msg.groundCourse;
-#if defined(RTCLOCK)
-              // set RTC clock if needed
-              if (g_eeGeneral.adjustRTC && gps_Msg.fix) {
-                div_t qr = div(gps_Msg.date, 100);
-                uint8_t year = qr.rem;
-                qr = div(qr.quot, 100);
-                uint8_t mon = qr.rem;
-                uint8_t day = qr.quot;
-                qr = div(gps_Msg.time, 100);
-                uint8_t sec = qr.rem;
-                qr = div(qr.quot, 100);
-                uint8_t min = qr.rem;
-                uint8_t hour = qr.quot;
-                rtcAdjust(year+2000, mon, day, hour, min, sec);
-              }
-#endif
           } // end switch
         }
         else {

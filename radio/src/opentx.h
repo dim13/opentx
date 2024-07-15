@@ -38,11 +38,7 @@
 
   #define CASE_LUA(x)
 
-#if defined(RTCLOCK)
-  #define CASE_RTCLOCK(x) x,
-#else
   #define CASE_RTCLOCK(x)
-#endif
 
 #if defined(BUZZER)
   #define CASE_BUZZER(x) x,

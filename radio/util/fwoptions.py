@@ -61,7 +61,6 @@ options_ar9x = {
     "faimode": ("FAI", "YES", None),
     "faichoice": ("FAI", "CHOICE", None),
     "nooverridech": ("OVERRIDE_CHANNEL_FUNCTION", "NO", "YES"),
-    # "rtc": ("RTCLOCK", "YES", "NO"),
     "multimodule": ("MULTIMODULE", "YES", "NO"),
     "flexr9m": ("MODULE_R9M_FLEX_FW", "YES", None)
 }

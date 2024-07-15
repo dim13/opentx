@@ -106,23 +106,6 @@ void per10ms()
     trimsDisplayTimer--;
   else
     trimsDisplayMask = 0;
-
-#if defined(RTCLOCK)
-  /* Update global Date/Time every 100 per10ms cycles */
-  if (++g_ms100 == 100) {
-    g_rtcTime++;  // inc global unix timestamp one second
-#if defined(COPROCESSOR)
-    if (g_rtcTime < 60 || rtc_count < 5) {
-      rtcInit();
-      rtc_count++;
-    } else {
-      coprocReadData(true);
-    }
-#endif
-    g_ms100 = 0;
-  }
-#endif
-
   readKeysAndTrims();
 
 #if defined(ROTARY_ENCODER_NAVIGATION)
@@ -1558,10 +1541,6 @@ void opentxInit()
 #if MENUS_LOCK != 2 /*no menus*/
   menuHandlers[1] = menuModelSelect;
 #endif
-#endif
-
-#if defined(RTCLOCK) && !defined(COPROCESSOR)
-  rtcInit();  // RTC must be initialized before rambackupRestore() is called
 #endif
 
 #if defined(EEPROM)

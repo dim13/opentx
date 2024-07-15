@@ -596,13 +596,6 @@ void drawTelemetryTopBar()
   lcdInvertLine(0);
 }
 
-#if defined(RTCLOCK)
-void drawRtcTime(coord_t x, coord_t y, LcdFlags att)
-{
-  drawTimer(x, y, getValue(MIXSRC_TX_TIME), att, att);
-}
-#endif
-
 void drawTimer(coord_t x, coord_t y, int32_t tme, LcdFlags att, LcdFlags att2)
 {
   div_t qr;
