@@ -347,10 +347,10 @@ void lcdDrawSizedText(coord_t x, coord_t y, const char * s, uint8_t len, LcdFlag
       lcdDrawChar(x, y, c, flags);
       x = lcdNextPos;
     }
-    else if (c == 0x1F) {  //X-coord prefix
+    else if (c == 0x1F) {  //X-coord prefix: US Unit Separator \037
       setx = true;
     }
-    else if (c == 0x1E) {  //NEWLINE
+    else if (c == 0x1E) {  //NEWLINE: RS Record Separator \036
       len = orig_len;
       x = orig_x;
       y += FH;
@@ -362,7 +362,7 @@ void lcdDrawSizedText(coord_t x, coord_t y, const char * s, uint8_t len, LcdFlag
         y--;
       if (y >= LCD_H) break;
     }
-    else if (c == 0x1D) {  // TAB
+    else if (c == 0x1D) {  // TAB: GS Group Separator \035
       x |= 0x3F;
       x += 1;
     }
