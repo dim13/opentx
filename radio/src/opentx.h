@@ -30,15 +30,7 @@
 #include "usbd_conf.h"
 
   #define SWITCH_SIMU(a, b)  (b)
-
-  #define IS_PCBSKY9X        false
-  #define CASE_PCBSKY9X(x)
-
   #define CASE_STM32(x)     x,
-
-  #define CASE_LUA(x)
-
-  #define CASE_RTCLOCK(x)
 
 #if defined(BUZZER)
   #define CASE_BUZZER(x) x,
@@ -51,8 +43,6 @@
 #else
   #define CASE_AUDIO(x)
 #endif
-
-  #define CASE_DFPLAYER(x)
 
 #if defined(PWM_BACKLIGHT)
   #define CASE_PWM_BACKLIGHT(x) x,
@@ -71,8 +61,6 @@
 #else
   #define CASE_VARIO(x)
 #endif
-
-  #define CASE_HAPTIC(x)
 
 #if defined(SPLASH)
   #define CASE_SPLASH(x) x,
@@ -98,8 +86,6 @@
   #define CASE_SDCARD(x)
 #endif
 
-  #define CASE_BLUETOOTH(x)
-
 #if defined(HELI)
   #define CASE_HELI(x) x,
 #else
@@ -117,12 +103,6 @@
 #else
   #define CASE_GVARS(x)
 #endif
-
-  #define CASE_PCBX9E_PCBX9DP(x)
-
-  #define CASE_PCBX9E(x)
-
-  #define CASE_CAPACITY(x)
 
 #if ROTARY_ENCODERS > 0
   #define ROTARY_ENCODER_NAVIGATION
