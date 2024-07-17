@@ -20,3 +20,4 @@ radio/src/CmakeFiles/*
 build.sh
 firm.sh
 *.patch
+firmware.bin
