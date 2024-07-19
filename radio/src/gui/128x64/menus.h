@@ -108,7 +108,6 @@ static const MenuHandlerFunc menuTabGeneral[]  = {
 enum MenuModelIndexes {
   MENU_MODEL_SELECT,
   MENU_MODEL_SETUP,
-  CASE_HELI(MENU_MODEL_HELI)
   CASE_FLIGHT_MODES(MENU_MODEL_FLIGHT_MODES)
   MENU_MODEL_INPUTS,
   MENU_MODEL_MIXES,
@@ -144,7 +143,6 @@ void menuModelGVarOne(event_t event);
 static const MenuHandlerFunc menuTabModel[]  = {
   menuModelSelect,
   menuModelSetup,
-  CASE_HELI(menuModelHeli)
   CASE_FLIGHT_MODES(menuModelFlightModesAll)
   menuModelExposAll,
   menuModelMixAll,

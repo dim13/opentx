@@ -67,9 +67,6 @@ const char STR_OPEN9X[]  =
 #endif
     ISTR(VARIOSRC)
     ISTR(VTELEMSCREENTYPE)
-#if defined(HELI)
-    ISTR(VSWASHTYPE)
-#endif
     ISTR(VKEYS)
     ISTR(VSWITCHES)
     ISTR(VSRCRAW)
@@ -146,16 +143,6 @@ const char STR_FADEIN[]  = TR_FADEIN;
 const char STR_FADEOUT[]  = TR_FADEOUT;
 const char STR_DEFAULT[]  = TR_DEFAULT;
 const char STR_CHECKTRIMS[]  = TR_CHECKTRIMS;
-#ifdef HELI
-const char STR_SWASHTYPE[]  = TR_SWASHTYPE;
-const char STR_COLLECTIVE[]  = TR_COLLECTIVE;
-const char STR_AILERON[]  = TR_AILERON;
-const char STR_ELEVATOR[]  = TR_ELEVATOR;
-const char STR_SWASHRING[]  = TR_SWASHRING;
-const char STR_ELEDIRECTION[]  = TR_ELEDIRECTION;
-const char STR_AILDIRECTION[]  = TR_AILDIRECTION;
-const char STR_COLDIRECTION[]  = TR_COLDIRECTION;
-#endif
 const char STR_MODE[]  = TR_MODE;
 #if defined(AUDIO) && defined(BUZZER)
 const char STR_SPEAKER[]  = TR_SPEAKER;
@@ -303,10 +290,6 @@ const char STR_MENUMODELSEL[]  = TR_MENUMODELSEL;
 const char STR_MENUSETUP[]  = TR_MENUSETUP;
 const char STR_MENUFLIGHTMODE[]  = TR_MENUFLIGHTMODE;
 const char STR_MENUFLIGHTMODES[]  = TR_MENUFLIGHTMODES;
-
-#ifdef HELI
-const char STR_MENUHELISETUP[]  = TR_MENUHELISETUP;
-#endif
 
 const char STR_MENUINPUTS[]  = TR_MENUINPUTS;
 const char STR_MENULIMITS[]  = TR_MENULIMITS;

@@ -109,11 +109,7 @@ extern const char STR_OPEN9X[];
 #define OFS_VSCREEN            (OFS_VARIOSRC + sizeof(TR_VARIOSRC))
 #define OFS_VTEMPLATES         (OFS_VSCREEN + sizeof(TR_VTELEMSCREENTYPE))
 #define OFS_VSWASHTYPE         (OFS_VTEMPLATES)
-#if defined(HELI)
-  #define OFS_VKEYS             (OFS_VSWASHTYPE + sizeof(TR_VSWASHTYPE))
-#else
   #define OFS_VKEYS             (OFS_VSWASHTYPE)
-#endif
 #define OFS_VSWITCHES           (OFS_VKEYS + sizeof(TR_VKEYS))
 #define OFS_VSRCRAW             (OFS_VSWITCHES + sizeof(TR_VSWITCHES))
 #define OFS_VTMRMODES           (OFS_VSRCRAW + sizeof(TR_VSRCRAW))
@@ -202,11 +198,6 @@ extern const char STR_OPEN9X[];
 #define STR_VARIOSRC            (STR_OPEN9X + OFS_VARIOSRC)
 #define STR_VTELEMSCREENTYPE    (STR_OPEN9X + OFS_VSCREEN)
 #define STR_TELEMCHNS           (STR_OPEN9X + OFS_TELEMCHNS)
-
-
-#if defined(HELI)
-  #define STR_VSWASHTYPE        (STR_OPEN9X + OFS_VSWASHTYPE)
-#endif
 
 #define STR_VKEYS               (STR_OPEN9X + OFS_VKEYS)
 #define STR_VSWITCHES           (STR_OPEN9X + OFS_VSWITCHES)
