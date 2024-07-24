@@ -168,17 +168,26 @@ uint32_t switchState(uint8_t index)
 void keysInit()
 {
   // RCC_AHBPeriphClockCmd(KEYS_RCC_AHB1Periph, ENABLE);
-  GPIO_InitTypeDef gpio_init;
+
   //default state is low
-  gpio_init.GPIO_Mode = GPIO_Mode_IN;
-  gpio_init.GPIO_OType = GPIO_OType_PP;
-  gpio_init.GPIO_Speed = GPIO_Speed_2MHz;
-  gpio_init.GPIO_PuPd = GPIO_PuPd_UP;
-  gpio_init.GPIO_Pin = KEYS_LINES_PINS;
-  GPIO_Init(KEYS_MATRIX_LINES_GPIO, &gpio_init);
-  gpio_init.GPIO_Mode = GPIO_Mode_OUT;
-  gpio_init.GPIO_Pin = KEYS_COLUMNS_PINS;
-  GPIO_Init(KEYS_MATRIX_COLUMNS_GPIO, &gpio_init);
-  //set to height
-  KEYS_MATRIX_COLUMNS_GPIO->BSRR = KEYS_COLUMNS_PINS;
+  GPIO_InitTypeDef gpio_init_d = {
+    .GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15,
+    .GPIO_Mode = GPIO_Mode_IN,
+    .GPIO_Speed = GPIO_Speed_Level_1, // 2MHz
+    .GPIO_OType = GPIO_OType_PP,      // Push/Pull
+    .GPIO_PuPd = GPIO_PuPd_UP,        // Pull up
+  };
+  GPIO_Init(GPIOD, &gpio_init_d);
+
+  GPIO_InitTypeDef gpio_init_c = {
+    .GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8,
+    .GPIO_Mode = GPIO_Mode_OUT,
+    .GPIO_Speed = GPIO_Speed_Level_1, // 2MHz
+    .GPIO_OType = GPIO_OType_PP,      // Push/Pull
+    .GPIO_PuPd = GPIO_PuPd_UP,        // Pull up
+  };
+  GPIO_Init(GPIOC, &gpio_init_c);
+
+  //set to high
+  GPIOC->BSRR = GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8;
 }

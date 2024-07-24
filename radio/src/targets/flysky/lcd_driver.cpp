@@ -101,22 +101,21 @@ static void lcdReset(void);
 
 const static unsigned char lcdInitSequence[] =
 {
-	LCD_CMD_RESET,
-	LCD_CMD_DISPLAY_OFF,
-	LCD_CMD_MODE_RAM,
-    //LCD_CMD_MODE_ALLBLACK,
-	LCD_CMD_BIAS_1_7,
-	LCD_CMD_COM_NORMAL,
-	LCD_CMD_SEG_INVERSE,
-	LCD_CMD_POWERCTRL_ALL_ON,
-	LCD_CMD_REG_RATIO_011,
-	LCD_CMD_EV,
-	LCD_CONTRAST_DEFAULT,
-	LCD_CMD_SET_STARTLINE,
-    LCD_CMD_SET_PAGESTART,
-	LCD_CMD_SET_COL_LO,
-    LCD_CMD_SET_COL_HI,
-	LCD_CMD_DISPLAY_ON
+	0xE2, // LCD_CMD_RESET,
+	0xAE, // LCD_CMD_DISPLAY_OFF,
+  0xA4, // LCD_CMD_MODE_RAM,
+	0xA3, // LCD_CMD_BIAS_1_7,
+	0xC0, // LCD_CMD_COM_NORMAL,
+	0xA1, // LCD_CMD_SEG_INVERSE,
+	0x2F, // LCD_CMD_POWERCTRL_ALL_ON,
+	0x23, // LCD_CMD_REG_RATIO_011,
+	0x81, // LCD_CMD_EV,
+	0x38, // LCD_CONTRAST_DEFAULT,
+	0x40, // LCD_CMD_SET_STARTLINE,
+  0xB0, // LCD_CMD_SET_PAGESTART,
+	0x00, // LCD_CMD_SET_COL_LO,
+  0x10, // LCD_CMD_SET_COL_HI,
+	0xAF, // LCD_CMD_DISPLAY_ON
 };
 
 static void lcdSendCtl(uint8_t data) {
@@ -134,21 +133,35 @@ static void lcdSendGFX(uint8_t data) {
 }
 
 void lcdInit() {
-  GPIO_InitTypeDef gpio_init;
-  // set all gpio directions to output
-  gpio_init.GPIO_Mode  = GPIO_Mode_OUT;
-  gpio_init.GPIO_OType = GPIO_OType_PP;
-  gpio_init.GPIO_Speed = GPIO_Speed_50MHz;
-  gpio_init.GPIO_PuPd  = GPIO_PuPd_NOPULL;
+  // data
+  GPIO_InitTypeDef gpio_init_e = {
+    .GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7,
+    .GPIO_Mode = GPIO_Mode_OUT,
+    .GPIO_Speed = GPIO_Speed_Level_3, // 50MHz
+    .GPIO_OType = GPIO_OType_PP,      // Push/Pull
+    .GPIO_PuPd = GPIO_PuPd_NOPULL,    // none
+  };
+  GPIO_Init(GPIOE, &gpio_init_e);
 
-  gpio_init.GPIO_Pin   = LCD_DATA_PIN;
-  GPIO_Init(LCD_DATA_GPIO, &gpio_init);
+  // RS, RST, RW
+  GPIO_InitTypeDef gpio_init_b = {
+    .GPIO_Pin = GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5,
+    .GPIO_Mode = GPIO_Mode_OUT,
+    .GPIO_Speed = GPIO_Speed_Level_3, // 50MHz
+    .GPIO_OType = GPIO_OType_PP,      // Push/Pull
+    .GPIO_PuPd = GPIO_PuPd_NOPULL,    // none
+  };
+  GPIO_Init(GPIOB, &gpio_init_b);
 
-  gpio_init.GPIO_Pin   = LCD_RW_PIN | LCD_RST_PIN | LCD_RS_PIN;
-  GPIO_Init(LCD_RW_RST_RS_GPIO, &gpio_init);
-
-  gpio_init.GPIO_Pin   = LCD_RD_PIN | LCD_CS_PIN;
-  GPIO_Init(LCD_RD_CS_GPIO, &gpio_init);
+  // CS, RD
+  GPIO_InitTypeDef gpio_init_d = {
+    .GPIO_Pin = GPIO_Pin_2 | GPIO_Pin_7,
+    .GPIO_Mode = GPIO_Mode_OUT,
+    .GPIO_Speed = GPIO_Speed_Level_3, // 50MHz
+    .GPIO_OType = GPIO_OType_PP,      // Push/Pull
+    .GPIO_PuPd = GPIO_PuPd_NOPULL,    // none
+  };
+  GPIO_Init(GPIOD, &gpio_init_d);
 
   LCD_RST_LO();
   LCD_CS_LO(); // Enable access to LCD
