@@ -454,12 +454,6 @@ void auxSerialStop(void);
 #endif
 
 // Aux2 serial port driver
-#if defined(FLYSKY_GIMBAL)
-#define AUX4_SERIAL
-#define AUX4_SERIAL_BAUDRATE FLYSKY_HALL_BAUDRATE // 921600
-#define AUX4_SERIAL_RXFIFO_SIZE HALLSTICK_BUFF_SIZE // 128
-void flysky_gimbal_init();
-#endif
 #if defined(DFPLAYER)
 #define AUX3_SERIAL
 #define AUX3_SERIAL_BAUDRATE DFPLAYER_BAUDRATE

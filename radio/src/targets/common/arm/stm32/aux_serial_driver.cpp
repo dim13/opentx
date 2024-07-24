@@ -24,8 +24,6 @@
 uint8_t auxSerialMode = UART_MODE_COUNT;  // Prevent debug output before port is setup
 #if defined(DEBUG)
 Fifo<uint8_t, 256> auxSerialTxFifo;
-#elif defined(FLYSKY_GIMBAL)
-Fifo<uint8_t, 64> auxSerialTxFifo;
 #else
 Fifo<uint8_t, 128> auxSerialTxFifo;
 #endif

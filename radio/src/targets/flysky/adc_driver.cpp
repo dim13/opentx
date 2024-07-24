@@ -21,18 +21,11 @@
 #include "opentx.h"
 
 const int8_t ana_direction[NUM_ANALOGS] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0};
-#if defined (FLYSKY_GIMBAL)
-const uint8_t ana_mapping[NUM_ANALOGS] =  {0, 1, 2, 3, 6, 7, 4, 5, 8, 9, 10};
-#else
 const uint8_t ana_mapping[NUM_ANALOGS] = {3, 2, 1, 0, 6, 7, 4, 5, 8, 9, 10};
-#endif // FLYSKY_GIMBAL                   
 
 #if NUM_PWMANALOGS > 0
 #define FIRST_ANALOG_ADC (ANALOGS_PWM_ENABLED() ? NUM_PWMANALOGS : 0)
 #define NUM_ANALOGS_ADC (ANALOGS_PWM_ENABLED() ? (NUM_ANALOGS - NUM_PWMANALOGS) : NUM_ANALOGS)
-#elif defined (FLYSKY_GIMBAL)
-#define FIRST_ANALOG_ADC 4
-#define NUM_ANALOGS_ADC (NUM_ANALOGS - 4)
 #else
 #define FIRST_ANALOG_ADC 0
 #define NUM_ANALOGS_ADC (NUM_ANALOGS)
@@ -56,11 +49,7 @@ void adcInit()
   GPIO_StructInit(&gpio_init);
 
   // set up analog inputs ADC0...ADC7(PA0...PA7)
-  #if defined(FLYSKY_GIMBAL)
-  gpio_init.GPIO_Pin = 0b11110000;
-  #else
   gpio_init.GPIO_Pin = 0b11111111;
-  #endif
 
   gpio_init.GPIO_Mode = GPIO_Mode_AN;
   GPIO_Init(GPIOA, &gpio_init);
@@ -92,9 +81,6 @@ void adcInit()
 
   // configure each channel
   ADC_ChannelConfig(ADC_MAIN,
-  #if !defined(FLYSKY_GIMBAL)
-    ADC_Channel_0 | ADC_Channel_1 | ADC_Channel_2 | ADC_Channel_3 |
-  #endif
     ADC_Channel_4 | ADC_Channel_5 | ADC_Channel_6 | ADC_Channel_7 | ADC_Channel_8 | ADC_Channel_9 | ADC_Channel_10, ADC_SAMPTIME);
 
 
@@ -180,9 +166,3 @@ uint16_t getAnalogValue(uint8_t index)
   else
     return adcValues[index];
 }
-#if defined(FLYSKY_GIMBAL)
-uint16_t* getAnalogValues()
-{
-  return adcValues;
-}
-#endif // FLYSKY_GIMBAL
