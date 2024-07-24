@@ -118,21 +118,6 @@ void menuModelSelect(event_t event)
       }
       break;
 
-#if defined(ROTARY_ENCODERS)
-    case EVT_ROTARY_LONG:
-      killEvents(event);
-      if (s_editMode < 0) {
-        popMenu();
-        break;
-      }
-      else if (!s_copyMode) {
-        menuVerticalPosition = sub = g_eeGeneral.currModel;
-        s_copyMode = 0;
-        s_editMode = EDIT_MODE_INIT;
-      }
-      // no break
-#endif
-
     case EVT_KEY_BREAK(KEY_EXIT):
       if (s_copyMode) {
         sub = menuVerticalPosition = (s_copyMode == MOVE_MODE || s_copySrcRow<0) ? (MAX_MODELS+sub+s_copyTgtOfs) % MAX_MODELS : s_copySrcRow;
@@ -145,15 +130,6 @@ void menuModelSelect(event_t event)
         popMenu();
       }
       break;
-
-#if defined(ROTARY_ENCODERS)
-    case EVT_ROTARY_BREAK:
-      if (s_editMode == -1) {
-        s_editMode = 0;
-        break;
-      }
-      // no break;
-#endif
 
     case EVT_KEY_LONG(KEY_ENTER):
     case EVT_KEY_BREAK(KEY_ENTER):
@@ -228,15 +204,8 @@ void menuModelSelect(event_t event)
       }
       break;
 
-#if defined(ROTARY_ENCODER_NAVIGATION)
-    case EVT_ROTARY_LEFT:
-    case EVT_ROTARY_RIGHT:
-#endif
     case EVT_KEY_BREAK(KEY_RIGHT):
     case EVT_KEY_LONG(KEY_RIGHT):
-#if defined(ROTARY_ENCODER_NAVIGATION)
-      if ((!IS_ROTARY_RIGHT(event) && !IS_ROTARY_LEFT(event)) || s_editMode < 0) {
-#endif
       if (sub == g_eeGeneral.currModel) {
         chainMenu((IS_ROTARY_RIGHT(event) || event == EVT_KEY_BREAK(KEY_RIGHT)) ? menuModelSetup : menuTabModel[DIM(menuTabModel)-1]);
         if (event == EVT_KEY_LONG(KEY_RIGHT)) {
@@ -247,10 +216,6 @@ void menuModelSelect(event_t event)
         AUDIO_WARNING2();
       }
       break;
-#if defined(ROTARY_ENCODER_NAVIGATION)
-      }
-      // no break
-#endif
 
     case EVT_KEY_FIRST(KEY_UP):
     case EVT_KEY_REPT(KEY_UP):
@@ -289,11 +254,7 @@ void menuModelSelect(event_t event)
   lcdDrawNumber(17*FW, 0, reusableBuffer.modelsel.eepromfree, RIGHT);
 #endif
 
-#if defined(ROTARY_ENCODER_NAVIGATION)
-  drawScreenIndex(MENU_MODEL_SELECT, DIM(menuTabModel), (sub == g_eeGeneral.currModel) ? ((IS_ROTARY_ENCODER_NAVIGATION_ENABLE() && s_editMode < 0) ? INVERS|BLINK : INVERS) : 0);
-#else
   drawScreenIndex(MENU_MODEL_SELECT, DIM(menuTabModel), (sub == g_eeGeneral.currModel) ? INVERS : 0);
-#endif
 
   TITLE(STR_MENUMODELSEL);
 

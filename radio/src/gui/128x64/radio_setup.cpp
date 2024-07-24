@@ -303,15 +303,6 @@ void menuRadioSetup(event_t event)
         if(attr) g_eeGeneral.inactivityTimer = checkIncDec(event, g_eeGeneral.inactivityTimer, 0, 250, EE_GENERAL); //0..250minutes
         break;
 
-#if defined(ROTARY_ENCODERS)
-      case ITEM_SETUP_RE_NAVIGATION:
-        g_eeGeneral.reNavigation = editChoice(RADIO_SETUP_2ND_COLUMN, y, STR_RENAVIG, STR_VRENAVIG, g_eeGeneral.reNavigation, 0, NUM_ROTARY_ENCODERS, attr, event);
-        if (attr && checkIncDec_Ret) {
-          ROTARY_ENCODER_NAVIGATION_VALUE = 0;
-        }
-        break;
-#endif
-
       case ITEM_SETUP_BACKLIGHT_LABEL:
         lcdDrawTextAlignedLeft(y, STR_BACKLIGHT_LABEL);
         break;

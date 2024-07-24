@@ -157,11 +157,7 @@ PACK(struct trim_t {
 
 typedef int16_t gvar_t;
 
-#if MAX_ROTARY_ENCODERS > 0
-#define FLIGHT_MODE_ROTARY_ENCODERS_FIELD int16_t rotaryEncoders[MAX_ROTARY_ENCODERS];
-#else
 #define FLIGHT_MODE_ROTARY_ENCODERS_FIELD
-#endif
 
 PACK(struct FlightModeData {
   trim_t trim[NUM_TRIMS];

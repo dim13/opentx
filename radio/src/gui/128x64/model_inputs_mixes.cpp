@@ -382,14 +382,7 @@ void menuModelMixOne(event_t event)
   MixData * md2 = mixAddress(s_currIdx) ;
   putsChn(lcdLastRightPos+1*FW, 0, md2->destCh+1,0);
 
-#if defined(ROTARY_ENCODERS)
-  if ((menuVerticalPosition == MIX_FIELD_TRIM && md2->srcRaw > NUM_STICKS) || (menuVerticalPosition == MIX_FIELD_CURVE && md2->curveMode == MODE_CURVE))
-    SUBMENU_NOTITLE(MIX_FIELD_COUNT, {0, 0, 0, 0, 0, 0, CASE_FLIGHT_MODES((MAX_FLIGHT_MODES-1) | NAVIGATION_LINE_BY_LINE) 0, 0 /*, ...*/})
-  else
-    SUBMENU_NOTITLE(MIX_FIELD_COUNT, {0, 0, 0, 0, 1, 1, CASE_FLIGHT_MODES((MAX_FLIGHT_MODES-1) | NAVIGATION_LINE_BY_LINE) 0, 0 /*, ...*/});
-#else
   SUBMENU_NOTITLE(MIX_FIELD_COUNT, {0, 0, 0, 0, 1, 1, CASE_FLIGHT_MODES((MAX_FLIGHT_MODES-1) | NAVIGATION_LINE_BY_LINE) 0, 0 /*, ...*/});
-#endif
 
   int8_t sub = menuVerticalPosition;
   int8_t editMode = s_editMode;
@@ -617,12 +610,6 @@ void menuModelExpoMix(uint8_t expo, event_t event)
         event = 0;
       }
       // no break
-#if defined(ROTARY_ENCODER_NAVIGATION)
-    case EVT_ROTARY_LONG:
-      if (s_copyMode) {
-        killEvents(event);
-      }
-#endif
     case EVT_KEY_BREAK(KEY_EXIT):
       if (s_copyMode) {
         if (s_copyTgtOfs) {
@@ -704,10 +691,6 @@ void menuModelExpoMix(uint8_t expo, event_t event)
         return;
       }
       break;
-#if defined(ROTARY_ENCODER_NAVIGATION)
-    case EVT_ROTARY_LEFT:
-    case EVT_ROTARY_RIGHT:
-#endif
     case EVT_KEY_FIRST(KEY_UP):
     case EVT_KEY_REPT(KEY_UP):
     case EVT_KEY_FIRST(KEY_DOWN):

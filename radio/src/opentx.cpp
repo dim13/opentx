@@ -108,44 +108,6 @@ void per10ms()
     trimsDisplayMask = 0;
   readKeysAndTrims();
 
-#if defined(ROTARY_ENCODER_NAVIGATION)
-  if (IS_ROTARY_ENCODER_NAVIGATION_ENABLE()) {
-    static rotenc_t rePreviousValue;
-    static bool cw = false;
-    rotenc_t reNewValue = (ROTARY_ENCODER_NAVIGATION_VALUE / ROTARY_ENCODER_GRANULARITY);
-    rotenc_t scrollRE = reNewValue - rePreviousValue;
-    if (scrollRE) {
-      static uint32_t lastEvent;
-      rePreviousValue = reNewValue;
-
-      bool new_cw = (scrollRE < 0) ? false : true;
-      if ((g_tmr10ms - lastEvent >= 10) || (cw == new_cw)) {  // 100ms
-
-        putEvent(new_cw ? EVT_ROTARY_RIGHT : EVT_ROTARY_LEFT);
-
-        // rotary encoder navigation speed (acceleration) detection/calculation
-        static uint32_t delay = 2 * ROTENC_DELAY_MIDSPEED;
-
-        if (new_cw == cw) {
-          // Modified moving average filter used for smoother change of speed
-          delay = (((g_tmr10ms - lastEvent) << 3) + delay) >> 1;
-        } else {
-          delay = 2 * ROTENC_DELAY_MIDSPEED;
-        }
-
-        if (delay < ROTENC_DELAY_HIGHSPEED)
-          rotencSpeed = ROTENC_HIGHSPEED;
-        else if (delay < ROTENC_DELAY_MIDSPEED)
-          rotencSpeed = ROTENC_MIDSPEED;
-        else
-          rotencSpeed = ROTENC_LOWSPEED;
-        cw = new_cw;
-        lastEvent = g_tmr10ms;
-      }
-    }
-  }
-#endif
-
 #if defined(TELEMETRY_FRSKY) || defined(TELEMETRY_JETI)
   if (!IS_DSM2_SERIAL_PROTOCOL(moduleState[0].protocol)) {
     telemetryInterrupt10ms();
@@ -399,14 +361,6 @@ void modelDefault(uint8_t id) {
   }
 #endif
 
-#if defined(FLIGHT_MODES) && defined(ROTARY_ENCODERS)
-  for (int p = 1; p < MAX_FLIGHT_MODES; p++) {
-    for (int i = 0; i < ROTARY_ENCODERS; i++) {
-      g_model.flightModeData[p].rotaryEncoders[i] = ROTARY_ENCODER_MAX + 1;
-    }
-  }
-#endif
-
 #if !defined(EEPROM)
   strcpy(g_model.header.name, "\015\361\374\373\364");
   g_model.header.name[5] = '\033' + id / 10;
@@ -526,35 +480,6 @@ bool setTrimValue(uint8_t phase, uint8_t idx, int trim) {
   storageDirty(EE_MODEL);
   return true;
 }
-
-#if defined(ROTARY_ENCODERS)
-uint8_t getRotaryEncoderFlightMode(uint8_t idx) {
-  uint8_t phase = mixerCurrentFlightMode;
-  for (uint8_t i = 0; i < MAX_FLIGHT_MODES; i++) {
-    if (phase == 0)
-      return 0;
-    int16_t value = flightModeAddress(phase)->rotaryEncoders[idx];
-    if (value <= ROTARY_ENCODER_MAX)
-      return phase;
-    uint8_t result = value - ROTARY_ENCODER_MAX - 1;
-    if (result >= phase)
-      result++;
-    phase = result;
-  }
-  return 0;
-}
-
-int16_t getRotaryEncoder(uint8_t idx) {
-  return flightModeAddress(getRotaryEncoderFlightMode(idx))->rotaryEncoders[idx];
-}
-
-void incRotaryEncoder(uint8_t idx, int8_t inc) {
-  rotencValue[idx] += inc;
-  int16_t *value = &(flightModeAddress(getRotaryEncoderFlightMode(idx))->rotaryEncoders[idx]);
-  *value = limit((int16_t)-RESX, (int16_t)(*value + (inc * 8)), (int16_t) + RESX);
-  storageDirty(EE_MODEL);
-}
-#endif
 
 getvalue_t convert16bitsTelemValue(source_t channel, ls_telemetry_value_t value) {
   return value;
@@ -1522,16 +1447,6 @@ void moveTrimsToOffsets()  // copy state of 3 primary to subtrim
   AUDIO_WARNING2();
 }
 
-#if defined(ROTARY_ENCODERS)
-volatile rotenc_t rotencValue[ROTARY_ENCODERS] = {0};
-#elif defined(ROTARY_ENCODER_NAVIGATION)
-volatile rotenc_t rotencValue[1] = {0};
-#endif
-
-#if defined(ROTARY_ENCODER_NAVIGATION)
-uint8_t rotencSpeed;
-#endif
-
 void opentxInit()
 {
   TRACE("opentxInit");
@@ -1654,10 +1569,6 @@ int main()
 
 #if defined(DSM2_SERIAL) && !defined(TELEMETRY_FRSKY)
   DSM2_Init();
-#endif
-
-#if defined(MENU_ROTARY_SW)
-  init_rotary_sw();
 #endif
 
 #if !defined(EEPROM)

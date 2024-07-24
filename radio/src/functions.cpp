@@ -60,10 +60,6 @@ void evalFunctions(const CustomFunctionData * functions, CustomFunctionsContext 
 
   #define PLAY_INDEX   0
 
-#if defined(ROTARY_ENCODERS) && defined(GVARS)
-  static rotenc_t rePreviousValues[ROTARY_ENCODERS];
-#endif
-
 #if defined(OVERRIDE_CHANNEL_FUNCTION)
   for (uint8_t i=0; i<MAX_OUTPUT_CHANNELS; i++) {
     safetyCh[i] = OVERRIDE_CHANNEL_UNDEFINED;
@@ -134,15 +130,6 @@ void evalFunctions(const CustomFunctionData * functions, CustomFunctionsContext 
                 telemetryReset();
                 break;
 #endif
-                  
-#if ROTARY_ENCODERS > 0
-              case FUNC_RESET_ROTENC1:
-#if ROTARY_ENCODERS > 1
-              case FUNC_RESET_ROTENC2:
-#endif
-                rotencValue[CFN_PARAM(cfn)-FUNC_RESET_ROTENC1] = 0;
-                break;
-#endif
             }
             if (CFN_PARAM(cfn)>=FUNC_RESET_PARAM_FIRST_TELEM) {
               uint8_t item = CFN_PARAM(cfn)-FUNC_RESET_PARAM_FIRST_TELEM;
@@ -188,14 +175,6 @@ void evalFunctions(const CustomFunctionData * functions, CustomFunctionsContext 
             else if (CFN_PARAM(cfn) >= MIXSRC_FIRST_TRIM && CFN_PARAM(cfn) <= MIXSRC_LAST_TRIM) {
               trimGvar[CFN_PARAM(cfn)-MIXSRC_FIRST_TRIM] = CFN_GVAR_INDEX(cfn);
             }
-#if defined(ROTARY_ENCODERS)
-            else if (CFN_PARAM(cfn) >= MIXSRC_REa && CFN_PARAM(cfn) < MIXSRC_TrimRud) {
-              int8_t scroll = rePreviousValues[CFN_PARAM(cfn)-MIXSRC_REa] - (rotencValue[CFN_PARAM(cfn)-MIXSRC_REa] / ROTARY_ENCODER_GRANULARITY);
-              if (scroll) {
-                SET_GVAR(CFN_GVAR_INDEX(cfn), limit<int16_t>(MODEL_GVAR_MIN(CFN_GVAR_INDEX(cfn)), GVAR_VALUE(CFN_GVAR_INDEX(cfn), getGVarFlightMode(mixerCurrentFlightMode, CFN_GVAR_INDEX(cfn))) + scroll, MODEL_GVAR_MAX(CFN_GVAR_INDEX(cfn))), mixerCurrentFlightMode);
-              }
-            }
-#endif
             else {
               SET_GVAR(CFN_GVAR_INDEX(cfn), limit<int16_t>(MODEL_GVAR_MIN(CFN_GVAR_INDEX(cfn)), calcRESXto100(getValue(CFN_PARAM(cfn))), MODEL_GVAR_MAX(CFN_GVAR_INDEX(cfn))), mixerCurrentFlightMode);
             }
@@ -348,11 +327,5 @@ void evalFunctions(const CustomFunctionData * functions, CustomFunctionsContext 
 
   functionsContext.activeSwitches   = newActiveSwitches;
   functionsContext.activeFunctions  = newActiveFunctions;
-
-#if defined(ROTARY_ENCODERS) && defined(GVARS)
-  for (uint8_t i=0; i<ROTARY_ENCODERS; i++) {
-    rePreviousValues[i] = (rotencValue[i] / ROTARY_ENCODER_GRANULARITY);
-  }
-#endif
 }
 

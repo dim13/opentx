@@ -100,10 +100,6 @@
   #define CASE_GVARS(x)
 #endif
 
-#if ROTARY_ENCODERS > 0
-  #define ROTARY_ENCODER_NAVIGATION
-#endif
-
 #if defined(FAI)
   #define IS_FAI_ENABLED() true
   #define IF_FAI_CHOICE(x)
@@ -167,11 +163,7 @@ void memswap(void * a, void * b, uint8_t size);
 #define GET_LOWRES_POT_POSITION(i)     (getValue(MIXSRC_FIRST_POT+(i)) >> 4)
 #define SAVE_POT_POSITION(i)           g_model.potsWarnPosition[i] = GET_LOWRES_POT_POSITION(i)
 
-#if ROTARY_ENCODERS > 0
-  #define IF_ROTARY_ENCODERS(x) x,
-#else
   #define IF_ROTARY_ENCODERS(x)
-#endif
 
 #define PPM_CENTER                     1500
 
@@ -245,25 +237,6 @@ extern uint8_t channelOrder(uint8_t x);
 
 #define SPLASH_NEEDED()              (g_eeGeneral.splashMode != 3)
 #define SPLASH_TIMEOUT               (g_eeGeneral.splashMode==-4 ? 1500 : (g_eeGeneral.splashMode<=0 ? (400-g_eeGeneral.splashMode*200) : (400-g_eeGeneral.splashMode*100)))
-
-#if defined(ROTARY_ENCODERS)
-  #define IS_ROTARY_ENCODER_NAVIGATION_ENABLE()  g_eeGeneral.reNavigation
-  extern volatile rotenc_t rotencValue[ROTARY_ENCODERS];
-  #define ROTARY_ENCODER_NAVIGATION_VALUE        rotencValue[g_eeGeneral.reNavigation - 1]
-#elif defined(ROTARY_ENCODER_NAVIGATION)
-  #define IS_ROTARY_ENCODER_NAVIGATION_ENABLE()  true
-  extern volatile rotenc_t rotencValue[1];
-  #define ROTARY_ENCODER_NAVIGATION_VALUE        rotencValue[0]
-#endif
-
-#if defined(ROTARY_ENCODER_NAVIGATION)
-  extern uint8_t rotencSpeed;
-  #define ROTENC_LOWSPEED              1
-  #define ROTENC_MIDSPEED              5
-  #define ROTENC_HIGHSPEED             50
-  #define ROTENC_DELAY_MIDSPEED        32
-  #define ROTENC_DELAY_HIGHSPEED       16
-#endif
 
 #define HEART_TIMER_10MS               1
 #define HEART_TIMER_PULSES             2 // when multiple modules this is the first one
@@ -383,11 +356,6 @@ trim_t getRawTrimValue(uint8_t phase, uint8_t idx);
 int getTrimValue(uint8_t phase, uint8_t idx);
 
 bool setTrimValue(uint8_t phase, uint8_t idx, int trim);
-
-#if defined(ROTARY_ENCODERS)
-  int16_t getRotaryEncoder(uint8_t idx);
-  void incRotaryEncoder(uint8_t idx, int8_t inc);
-#endif
 
   #define ROTARY_ENCODER_GRANULARITY (2)
 

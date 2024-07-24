@@ -121,24 +121,6 @@ void menuModelFlightModeOne(event_t event)
         }
         break;
 
-#if ROTARY_ENCODERS > 0
-      case ITEM_MODEL_FLIGHT_MODE_ROTARY_ENCODERS:
-        lcdDrawTextAlignedLeft(y, STR_ROTARY_ENCODER);
-        for (uint8_t t=0; t<NUM_ROTARY_ENCODERS; t++) {
-          putsRotaryEncoderMode(MIXES_2ND_COLUMN+(t*FW), y, s_currIdx, t, menuHorizontalPosition==t ? attr : 0);
-          if (attr && menuHorizontalPosition==t && ((editMode>0) || p1valdiff)) {
-            int16_t v = flightModeAddress(s_currIdx)->rotaryEncoders[t];
-            if (v < ROTARY_ENCODER_MAX) v = ROTARY_ENCODER_MAX;
-            v = checkIncDec(event, v, ROTARY_ENCODER_MAX, ROTARY_ENCODER_MAX+MAX_FLIGHT_MODES-1, EE_MODEL);
-            if (checkIncDec_Ret) {
-              if (v == ROTARY_ENCODER_MAX) v = 0;
-              flightModeAddress(s_currIdx)->rotaryEncoders[t] = v;
-            }
-          }
-        }
-        break;
-#endif
-
       case ITEM_MODEL_FLIGHT_MODE_FADE_IN:
         fm->fadeIn = EDIT_DELAY(0, y, event, attr, STR_FADEIN, fm->fadeIn);
         break;
@@ -191,27 +173,9 @@ void menuModelFlightModeOne(event_t event)
   }
 }
 
-#if defined(ROTARY_ENCODERS)
-  #if ROTARY_ENCODERS > 2
-    #define NAME_OFS                   (-4-12)
-    #define SWITCH_OFS                 (-FW/2-2-13)
-    #define TRIMS_OFS                  (-FW/2-4-15)
-    #define ROTARY_ENC_OFS             (0)
-  #else
-    #define NAME_OFS                   (-4)
-    #define SWITCH_OFS                 (-FW/2-2)
-    #define TRIMS_OFS                  (-FW/2-4)
-    #define ROTARY_ENC_OFS             (2)
-  #endif
-#elif defined(PCBTARANIS) || defined(PCBI6X)
   #define NAME_POS                     20
   #define SWITCH_POS                   59
   #define TRIMS_POS                    79
-#else
-  #define NAME_OFS                     0
-  #define SWITCH_OFS                   (FW/2)
-  #define TRIMS_OFS                    (FW/2)
-#endif
 
 void menuModelFlightModesAll(event_t event)
 {
@@ -227,9 +191,7 @@ void menuModelFlightModesAll(event_t event)
         trimsCheckTimer = 200; // 2 seconds
       }
       // no break
-#if !defined(PCBX7)
     case EVT_KEY_FIRST(KEY_RIGHT):
-#endif
       if (sub >= 0 && sub < MAX_FLIGHT_MODES) {
         s_currIdx = sub;
         pushMenu(menuModelFlightModeOne);

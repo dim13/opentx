@@ -279,23 +279,9 @@ void menuChannelsViewCommon(event_t event);
 #define CURSOR_MOVED_LEFT(event)       (IS_ROTARY_LEFT(event) || EVT_KEY_MASK(event) == KEY_LEFT)
 #define CURSOR_MOVED_RIGHT(event)      (IS_ROTARY_RIGHT(event) || EVT_KEY_MASK(event) == KEY_RIGHT)
 
-#if defined(ROTARY_ENCODERS)
-#define CASE_EVT_ROTARY_BREAK          case EVT_ROTARY_BREAK:
-#define CASE_EVT_ROTARY_LONG           case EVT_ROTARY_LONG:
-#else
 #define CASE_EVT_ROTARY_BREAK
 #define CASE_EVT_ROTARY_LONG
-#endif
 
-#if defined(ROTARY_ENCODER_NAVIGATION)
-  #define IS_ROTARY_LEFT(evt)          (evt == EVT_ROTARY_LEFT)
-  #define IS_ROTARY_RIGHT(evt)         (evt == EVT_ROTARY_RIGHT)
-  #define IS_ROTARY_BREAK(evt)         (evt == EVT_ROTARY_BREAK)
-  #define IS_ROTARY_LONG(evt)          (evt == EVT_ROTARY_LONG)
-  #define IS_ROTARY_EVENT(evt)         (EVT_KEY_MASK(evt) >= 0x0e)
-  void repeatLastCursorMove(event_t event);
-  #define REPEAT_LAST_CURSOR_MOVE()    { if (EVT_KEY_MASK(event) >= 0x0e) putEvent(event); else repeatLastCursorMove(event); }
-#else
   #define IS_ROTARY_LEFT(evt)          (0)
   #define IS_ROTARY_RIGHT(evt)         (0)
   #define IS_ROTARY_BREAK(evt)         (0)
@@ -303,7 +289,6 @@ void menuChannelsViewCommon(event_t event);
   #define IS_ROTARY_EVENT(evt)         (0)
   void repeatLastCursorMove(event_t event);
   #define REPEAT_LAST_CURSOR_MOVE()    repeatLastCursorMove(event)
-#endif
 
 // TODO enum
 #define EDIT_MODE_INIT                 -1

@@ -62,20 +62,5 @@ void menuRadioDiagKeys(event_t event)
       }
     }
   }
-
-#if defined(ROTARY_ENCODER_NAVIGATION)
-  for (uint8_t i=0; i<DIM(rotencValue); i++) {
-
-    coord_t y = MENU_HEADER_HEIGHT /* ??? + 1 ??? */ + i*FH;
-    coord_t x = 19*FW;
-    lcdDrawTextAtIndex(14*FW, y, STR_VRENCODERS, i, 0);
-  #if defined(ROTARY_ENCODERS)
-    lcdDrawNumber(x, y, rotencValue[i], LEFT|(keyState(BTN_REa+i) ? INVERS : 0));
-  #else
-    lcdDrawNumber(x, y, rotencValue[i], LEFT);
-  #endif
-  }
-#endif
-
 }
 #endif
