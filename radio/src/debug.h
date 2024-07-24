@@ -195,7 +195,7 @@ public:
 #endif  // defined(JITTER_MEASURE)
 
 
-#if defined(DEBUG_INTERRUPTS) && !defined(BOOT)
+#if defined(DEBUG_INTERRUPTS)
 
 enum InterruptNames {
   INT_TICK,

@@ -60,7 +60,6 @@
 /*-----------------------------------------------------------------------*/
 /* Lock / unlock functions                                               */
 /*-----------------------------------------------------------------------*/
-#if !defined(BOOT)
 static OS_MutexID ioMutex;
 
 int ff_cre_syncobj (BYTE vol, _SYNC_t *mutex)
@@ -83,7 +82,6 @@ int ff_del_syncobj (_SYNC_t mutex)
 {
   return 1;
 }
-#endif
 
 static const DWORD socket_state_mask_cp = (1 << 0);
 static const DWORD socket_state_mask_wp = (1 << 1);
@@ -922,14 +920,6 @@ FATFS g_FATFS_Obj;
 FIL g_telemetryFile = {};
 #endif
 
-#if defined(BOOT)
-void sdInit(void)
-{
-  if (f_mount(&g_FATFS_Obj, "", 1) == FR_OK) {
-    f_chdir("/");
-  }
-}
-#else
 // TODO shouldn't be there!
 void sdInit(void)
 {
@@ -969,7 +959,6 @@ void sdDone()
     f_mount(nullptr, "", 0); // unmount SD
   }
 }
-#endif
 
 uint32_t sdMounted()
 {

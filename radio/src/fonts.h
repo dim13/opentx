@@ -24,7 +24,7 @@
 extern const unsigned char font_5x7[];
 extern const unsigned char font_10x14[];
 
-#if defined(BOLD_FONT) &&  !defined(BOOT)
+#if defined(BOLD_FONT)
   #define BOLD_SPECIFIC_FONT
   extern const unsigned char font_5x7_B[];
 #endif

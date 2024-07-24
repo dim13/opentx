@@ -39,11 +39,7 @@
 #define USBD_SERIALNUMBER_FS_STRING         "00000000001B"
 
 
-#if defined(BOOT)
-  #define USBD_MSC_PRODUCT_FS_STRING          USB_NAME " Bootloader"
-#else
-  #define USBD_MSC_PRODUCT_FS_STRING          USB_NAME " Mass Storage"
-#endif
+#define USBD_MSC_PRODUCT_FS_STRING          USB_NAME " Mass Storage"
 
 #define USBD_MSC_PID                        0x5720
 #define USBD_MSC_CONFIGURATION_FS_STRING    "MSC Config"

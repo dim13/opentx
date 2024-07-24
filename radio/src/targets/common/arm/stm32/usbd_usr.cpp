@@ -109,11 +109,6 @@ void USBD_USR_DeviceConnected (void)
 */
 void USBD_USR_DeviceDisconnected (void)
 {
-#if !defined(BOOT) && defined(EEPROM)
-  // TODO is it really needed if we didn't write the EEPROM?
-//  if (getSelectedUsbMode() == USB_MASS_STORAGE_MODE)
-//    NVIC_SystemReset();
-#endif
 }
 
 

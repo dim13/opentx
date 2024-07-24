@@ -144,7 +144,6 @@ uint8_t keyState(uint8_t index)
   return keys[index].state();
 }
 
-#if !defined(BOOT)
 uint32_t switchState(uint8_t index)
 {
   uint32_t xxx = 0;
@@ -165,7 +164,6 @@ uint32_t switchState(uint8_t index)
   //TRACE("switch idx %d sw_num %d value %d pos %d xxx %d", index, sw_num, value, pos, xxx);
   return xxx;
 }
-#endif
 
 void keysInit()
 {

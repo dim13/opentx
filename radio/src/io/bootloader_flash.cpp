@@ -19,58 +19,6 @@
  */
 
 #include "opentx.h"
-#if defined(BOOT)
-bool isBootloader(const char * filename)
-{
-  FIL file;
-  f_open(&file, filename, FA_READ);
-  uint8_t buffer[1024];
-  UINT count;
-
-  if (f_read(&file, buffer, 1024, &count) != FR_OK || count != 1024) {
-    return false;
-  }
-
-  return isBootloaderStart(buffer);
-}
-
-void bootloaderFlash(const char * filename)
-{
-  FIL file;
-  f_open(&file, filename, FA_READ);
-  uint8_t buffer[1024];
-  UINT count;
-
-  static uint8_t unlocked = 0;
-  if (!unlocked) {
-    unlocked = 1;
-    unlockFlash();
-  }
-
-  for (int i=0; i<BOOTLOADER_SIZE; i+=1024) {
-    watchdogSuspend(100/*1s*/);
-    if (f_read(&file, buffer, 1024, &count) != FR_OK || count != 1024) {
-      POPUP_WARNING(STR_SDCARD_ERROR);
-      break;
-    }
-    if (i==0 && !isBootloaderStart(buffer)) {
-      POPUP_WARNING(STR_INCOMPATIBLE);
-      break;
-    }
-    for (int j=0; j<1024; j+=FLASH_PAGESIZE) {
-      flashWrite(CONVERT_UINT_PTR(FIRMWARE_ADDRESS+i+j), (uint32_t *)(buffer+j));
-    }
-    drawProgressBar(STR_WRITING, i, BOOTLOADER_SIZE);
-  }
-
-  if (unlocked) {
-    lockFlash();
-    unlocked = 0;
-  }
-
-  f_close(&file);
-}
-#else
 bool isBootloader(const char * filename)
 {
     return false;
@@ -79,4 +27,3 @@ void bootloaderFlash(const char * filename)
 {
     
 }
-#endif

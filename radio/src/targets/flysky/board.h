@@ -124,13 +124,6 @@ void delay_ms(uint32_t ms);
 }
 #endif
 
-// #if !defined(BOOT)
-// #define usbPlugged() (false)
-// #define usbStarted() (false)
-// #define getSelectedUsbMode() (USB_UNSELECTED_MODE)
-// #endif
-
-
 // CPU Unique ID
 #define LEN_CPU_UID                     (3*8+2)
 void getCPUUniqueID(char * s);
@@ -166,10 +159,8 @@ uint32_t sdMounted(void);
 #endif
 
 //buzzer
-#if !defined(BOOT)
 #include "buzzer_driver.h"
 #define BUZZER_HEARTBEAT buzzerHeartbeat
-#endif
 
 // Flash Write driver
 #define FLASH_PAGESIZE 256

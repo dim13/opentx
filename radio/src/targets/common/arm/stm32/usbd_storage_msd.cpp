@@ -276,33 +276,18 @@ int8_t STORAGE_GetMaxLun (void)
 
 /* Firmware.txt */
 const char firmware_txt[] =
-#if defined(BOOT)
-  "OpenI6X Bootloader"
-#else
   "OpenI6X Firmware"
-#endif
 #if !defined(PCBI6X)
   " for " FLAVOUR "\r\n\r\n"
 #else
   "\r\n\r\n"
 #endif
-#if defined(BOOT)
-  "BOOTVER    "
-#else
   "FWVERSION  "
-#endif
   "openi6x-" VERSION " (" GIT_STR ")\r\n"
   "DATE       " DATE "\r\n"
   "TIME       " TIME "\r\n"
 #if defined(SDCARD)
   "req SD ver " REQUIRED_SDCARD_VERSION "\r\n"
-#endif
-#if !defined(PCBI6X)
-#if !defined(BOOT)
-"BOOTVER    "
-#else
-"FWVERSION  "
-#endif
 #endif
   ;
 
@@ -438,11 +423,7 @@ const FATDirEntry_t g_DIRroot[] =
     {
       { 'F', 'I', 'R', 'M', 'W', 'A', 'R', 'E'},
       { 'B', 'I', 'N'},
-#if defined(BOOT)
-      0x20,          // Archive
-#else
       0x21,          // Readonly+Archive
-#endif
       0x00,
       0x3E,
       0xA301,
@@ -584,36 +565,7 @@ int32_t fat12Write(const uint8_t * buffer, uint16_t sector, uint16_t count)
     // reserved, read-only
   }
   else if (sector < RESERVED_SECTORS + (FLASHSIZE/BLOCK_SIZE)) {
-#if !defined(BOOT) // Don't allow overwrite of running firmware
     return -1;
-#else
-    // firmware
-    uint32_t address;
-    address = sector - RESERVED_SECTORS;
-    address *= BLOCK_SIZE;
-    address += FIRMWARE_ADDRESS;
-    while (count) {
-      for (uint32_t i=0; i<BLOCK_SIZE/FLASH_PAGESIZE; i++) {
-        if (address >= FIRMWARE_ADDRESS+BOOTLOADER_SIZE/*protect bootloader*/ && address <= FIRMWARE_ADDRESS+FLASHSIZE-FLASH_PAGESIZE) {
-          if (address == FIRMWARE_ADDRESS+BOOTLOADER_SIZE && isFirmwareStart(buffer)) {
-            TRACE("FIRMWARE start found in sector %d", sector);
-            operation = FATWRITE_FIRMWARE;
-          }
-          if (operation == FATWRITE_FIRMWARE) {
-            flashWrite((uint32_t *)address, (uint32_t *)buffer);
-          }
-        }
-        address += FLASH_PAGESIZE;
-        buffer += FLASH_PAGESIZE;
-      }
-      sector++;
-      count--;
-      if (sector-RESERVED_SECTORS >= (FLASHSIZE/BLOCK_SIZE)) {
-        TRACE("FIRMWARE end written at sector %d", sector-1);
-        operation = FATWRITE_NONE;
-      }
-    }
-#endif
   }
 #if defined(EEPROM)
   else if (sector < RESERVED_SECTORS + (EEPROM_SIZE/BLOCK_SIZE) + (FLASHSIZE/BLOCK_SIZE)) {

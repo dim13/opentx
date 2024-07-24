@@ -28,7 +28,6 @@ char * strSetCursor(char * dest, int position);
 char * strAppendDate(char * str, bool time=false);
 char * strAppendFilename(char * dest, const char * filename, const int size);
 
-#if !defined(BOOT)
 char * getStringAtIndex(char * dest, const char * s, int idx);
 char * strAppendStringWithIndex(char * dest, const char * s, int idx);
 #define LEN_TIMER_STRING               10 // "-00:00:00"
@@ -37,6 +36,5 @@ char * getCurveString(char * dest, int idx);
 char * getGVarString(char * dest, int idx);
 char * getSwitchPositionName(char * dest, swsrc_t idx);
 char * getSourceString(char * dest, mixsrc_t idx);
-#endif
 
 #endif // _STRHELPERS_H_

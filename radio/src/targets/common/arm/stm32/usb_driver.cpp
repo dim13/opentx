@@ -34,11 +34,7 @@ extern "C" {
 #endif
 
 static bool usbDriverStarted = false;
-#if defined(BOOT)
-static usbMode selectedUsbMode = USB_MASS_STORAGE_MODE;
-#else
 static usbMode selectedUsbMode = USB_UNSELECTED_MODE;
-#endif
 
 int getSelectedUsbMode()
 {
@@ -98,12 +94,10 @@ void usbInit()
 void usbStart()
 {
   switch (getSelectedUsbMode()) {
-#if !defined(BOOT)
     case USB_JOYSTICK_MODE:
       // initialize USB as HID device
       USBD_Init(&USB_Device_dev, &USR_desc, &USBD_HID_cb, &USR_cb);
       break;
-#endif
 #if defined(USB_SERIAL)
     case USB_SERIAL_MODE:
       // initialize USB as CDC device (virtual serial port)
@@ -130,7 +124,6 @@ bool usbStarted()
   return usbDriverStarted;
 }
 
-#if !defined(BOOT)
 /*
   Prepare and send new USB data packet
 
@@ -167,4 +160,3 @@ void usbJoystickUpdate()
     USBD_HID_SendReport(&USB_Device_dev, HID_Buffer, HID_IN_PACKET);
   }
 }
-#endif // BOOT

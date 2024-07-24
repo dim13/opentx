@@ -93,7 +93,6 @@ uint32_t sdGetSize();
 uint32_t sdGetFreeSectors();
 const char * sdCheckAndCreateDirectory(const char * path);
 
-#if !defined(BOOT)
 inline const char * SDCARD_ERROR(FRESULT result)
 {
   if (result == FR_NOT_READY)
@@ -101,7 +100,6 @@ inline const char * SDCARD_ERROR(FRESULT result)
   else
     return STR_SDCARD_ERROR;
 }
-#endif
 
 // NOTE: 'size' must = 0 or be a valid character position within 'filename' array -- it is NOT validated
 const char * getFileExtension(const char * filename, uint8_t size=0, uint8_t extMaxLen=0, uint8_t *fnlen=NULL, uint8_t *extlen=NULL);
