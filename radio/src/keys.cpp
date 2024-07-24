@@ -164,19 +164,15 @@ void killEvents(event_t event) {
 
 bool clearKeyEvents() {
   // loop until all keys are up
-#if !defined(BOOT)
   tmr10ms_t start = get_tmr10ms();
-#endif
 
   while (keyDown()) {
     wdt_reset();
 
-#if !defined(BOOT)
     if ((get_tmr10ms() - start) >= 300) {  // wait no more than 3 seconds
       //timeout expired, at least one key stuck
       return false;
     }
-#endif
   }
 
   memclear(keys, sizeof(keys));

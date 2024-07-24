@@ -115,7 +115,6 @@ void lcdPutPattern(coord_t x, coord_t y, const uint8_t * pattern, uint8_t width,
   }
 }
 
-#if !defined(BOOT)
 struct PatternData
 {
   uint8_t width;
@@ -210,7 +209,6 @@ uint8_t getCharWidth(char c, LcdFlags flags)
   getCharPattern(&pattern, c, flags);
   return getPatternWidth(&pattern);
 }
-#endif
 
 void lcdDrawChar(coord_t x, coord_t y, const unsigned char c, LcdFlags flags)
 {
@@ -218,7 +216,6 @@ void lcdDrawChar(coord_t x, coord_t y, const unsigned char c, LcdFlags flags)
 
   lcdNextPos = x-1;
 
-#if !defined(BOOT)
   uint32_t fontsize = FONTSIZE(flags);
   unsigned char c_remapped = 0;
 
@@ -271,13 +268,8 @@ void lcdDrawChar(coord_t x, coord_t y, const unsigned char c, LcdFlags flags)
   }
 #endif
   else
-#endif
   {
-#if !defined(BOOT)
     q = (c < 0xC0) ? &font_5x7[(c-0x20)*5] : &font_5x7_extra[(c-0xC0)*5];
-#else
-    q = &font_5x7[(c-0x20)*5];
-#endif
     lcdPutPattern(x, y, q, 5, 7, flags);
   }
 }
@@ -287,7 +279,6 @@ void lcdDrawChar(coord_t x, coord_t y, const unsigned char c)
   lcdDrawChar(x, y, c, 0);
 }
 
-#if !defined(BOOT)
 uint8_t getTextWidth(const char * s, uint8_t len, LcdFlags flags)
 {
   uint8_t width = 0;
@@ -301,7 +292,6 @@ uint8_t getTextWidth(const char * s, uint8_t len, LcdFlags flags)
   }
   return width;
 }
-#endif
 
 void lcdDrawSizedText(coord_t x, coord_t y, const char * s, uint8_t len, LcdFlags flags)
 {
@@ -310,7 +300,6 @@ void lcdDrawSizedText(coord_t x, coord_t y, const char * s, uint8_t len, LcdFlag
   const uint8_t orig_len = len;
   uint32_t fontsize = FONTSIZE(flags);
 
-#if !defined(BOOT)
   uint8_t width = 0;
   if (flags & RIGHT) {
     width = getTextWidth(s, len, flags);
@@ -320,17 +309,14 @@ void lcdDrawSizedText(coord_t x, coord_t y, const char * s, uint8_t len, LcdFlag
     width = getTextWidth(s, len, flags);
     x -= width / 2;
   }
-#endif
 
   bool setx = false;
   while (len--) {
     unsigned char c;
     switch (flags & ZCHAR) {
-#if !defined(BOOT)
       case ZCHAR:
         c = zchar2char(*s);
         break;
-#endif
       default:
         c = *s;
         break;
@@ -373,7 +359,6 @@ void lcdDrawSizedText(coord_t x, coord_t y, const char * s, uint8_t len, LcdFlag
   }
   lcdLastRightPos = x;
   lcdNextPos = x;
-#if !defined(BOOT)
   if (fontsize == MIDSIZE) {
     lcdLastRightPos += 1;
   }
@@ -386,7 +371,6 @@ void lcdDrawSizedText(coord_t x, coord_t y, const char * s, uint8_t len, LcdFlag
   else {
     lcdLastLeftPos = orig_x;
   }
-#endif
 }
 
 void lcdDrawSizedText(coord_t x, coord_t y, const char * s, uint8_t len)
@@ -409,7 +393,6 @@ void lcdDrawTextAlignedLeft(coord_t y, const char * s)
   lcdDrawText(0, y, s);
 }
 
-#if !defined(BOOT)
 void lcdDrawTextAtIndex(coord_t x, coord_t y, const char * s,uint8_t idx, LcdFlags flags)
 {
   uint8_t length;
@@ -469,14 +452,12 @@ void lcdDrawNumber(coord_t x, coord_t y, int val, LcdFlags flags, uint8_t len)
   flags &= ~(LEADING0 | PREC1 | PREC2);
   lcdDrawText(x, y, s, flags);
 }
-#endif
 
 void lcdDrawSolidHorizontalLine(coord_t x, coord_t y, coord_t w, LcdFlags att)
 {
   lcdDrawHorizontalLine(x, y, w, 0xff, att);
 }
 
-#if !defined(BOOT)
 void lcdDrawLine(coord_t x1, coord_t y1, coord_t x2, coord_t y2, uint8_t pat, LcdFlags att)
 {
   int dx = x2-x1;      /* the horizontal distance of the line */
@@ -519,8 +500,6 @@ void lcdDrawLine(coord_t x1, coord_t y1, coord_t x2, coord_t y2, uint8_t pat, Lc
     }
   }
 }
-#endif
-
 
 void lcdDrawVerticalLine(coord_t x, coord_t y, coord_t h, uint8_t pat, LcdFlags att)
 {
@@ -572,7 +551,6 @@ void lcdDrawRect(coord_t x, coord_t y, coord_t w, coord_t h, uint8_t pat, LcdFla
   lcdDrawHorizontalLine(x, y, w, pat, att);
 }
 
-#if !defined(BOOT)
 void lcdDrawFilledRect(coord_t x, coord_t y, coord_t w, coord_t h, uint8_t pat, LcdFlags att)
 {
   for (coord_t i=y; i<y+h; i++) {    // cast to coord_t needed otherwise (y+h) is promoted to int (see #5055)
@@ -971,8 +949,6 @@ void lcdDraw1bitBitmap(coord_t x, coord_t y, const uint8_t * img, uint8_t idx, L
     }
   }
 }
-
-#endif
 
 void lcdMaskPoint(uint8_t * p, uint8_t mask, LcdFlags att)
 {

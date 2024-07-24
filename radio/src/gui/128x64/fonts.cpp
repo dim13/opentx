@@ -30,13 +30,10 @@ const unsigned char font_5x7_B[]  = {
 };
 #endif
 
-#if !defined(BOOT)
 const unsigned char font_10x14[]  = {
 #include "font_10x14_compressed.lbm"
 };
-#endif
 
-#if !defined(BOOT)
 const unsigned char font_3x5[]  = {
 #include "font_03x05.lbm"
 };
@@ -64,5 +61,3 @@ const unsigned char font_5x7_extra[]  = {
 const unsigned char font_10x14_extra[]  = {
 #include "font_10x14_extra.lbm"
 };
-
-#endif // !defined(BOOT)

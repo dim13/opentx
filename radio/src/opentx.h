@@ -270,12 +270,8 @@ extern uint8_t channelOrder(uint8_t x);
 #define HEART_WDT_CHECK                (HEART_TIMER_10MS + (HEART_TIMER_PULSES << 0) + (HEART_TIMER_PULSES << 1))
 extern uint8_t heartbeat;
 
-#if !defined(BOOT)
 void watchdogSuspend(uint32_t timeout);
 #define WATCHDOG_SUSPEND(x)            watchdogSuspend(x)
-#else
-#define WATCHDOG_SUSPEND(...)
-#endif
 
 #define MAX_ALERT_TIME   60
 
@@ -484,10 +480,6 @@ template<class t> inline void SWAP(t & a, t & b) { t tmp = b; b = a; a = tmp; }
 
 uint16_t isqrt32(uint32_t n);
 
-#if defined(BOOT)
-#define pauseMixerCalculations()
-#define resumeMixerCalculations()
-#else
 #include "tasks.h"
 extern RTOS_MUTEX_HANDLE mixerMutex;
 inline void pauseMixerCalculations()
@@ -499,7 +491,6 @@ inline void resumeMixerCalculations()
 {
   RTOS_UNLOCK_MUTEX(mixerMutex);
 }
-#endif
 
 void generalDefault();
 void modelDefault(uint8_t id);

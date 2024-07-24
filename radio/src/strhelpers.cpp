@@ -20,7 +20,6 @@
 
 #include "opentx.h"
 
-#if !defined(BOOT)
 const char s_charTab[]  = "_-.,";
 
 char hex2zchar(uint8_t hex)
@@ -139,9 +138,7 @@ char * strcat_zchar(char * dest, const char * name, uint8_t size, const char * d
 
   return &dest[len];
 }
-#endif
 
-#if !defined(BOOT)
 char * getStringAtIndex(char * dest, const char * s, int idx)
 {
   uint8_t len = s[0];
@@ -366,7 +363,6 @@ char * getSourceString(char * dest, mixsrc_t idx)
 
   return dest;
 }
-#endif
 
 char * strAppendUnsigned(char * dest, uint32_t value, uint8_t digits, uint8_t radix)
 {
