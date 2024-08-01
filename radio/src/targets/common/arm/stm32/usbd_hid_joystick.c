@@ -288,7 +288,7 @@ __ALIGN_BEGIN static const uint8_t USBD_HID_CfgDesc[USB_HID_CONFIG_DESC_SIZ] __A
   0x03,          /*bmAttributes: Interrupt endpoint*/
   0x40,          /*wMaxPacketSize: 4 Byte max */
   0x00,
-  0x07,          /*bInterval: Polling Interval (7 ms)*/
+  0x04,          /*bInterval: Polling Interval (4 ms)*/
   /* 34 */
 } ;
 
