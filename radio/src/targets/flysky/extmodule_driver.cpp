@@ -112,15 +112,16 @@ void extmodulePpmStart() {
 
   EXTERNAL_MODULE_ON();
 
-  GPIO_PinAFConfig(EXTMODULE_TX_GPIO, EXTMODULE_TX_GPIO_PinSource, EXTMODULE_TX_GPIO_AF);
+  GPIO_PinAFConfig(GPIOF, GPIO_PinSource10, GPIO_AF_0);
 
-  GPIO_InitTypeDef GPIO_InitStructure;
-  GPIO_InitStructure.GPIO_Pin = EXTMODULE_TX_GPIO_PIN;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-  GPIO_Init(EXTMODULE_TX_GPIO, &GPIO_InitStructure);
+  GPIO_InitTypeDef gpio_init_f = {
+    .GPIO_Pin = GPIO_Pin_10,
+    .GPIO_Mode = GPIO_Mode_AF,
+    .GPIO_Speed = GPIO_Speed_Level_1, // 2MHz
+    .GPIO_OType = GPIO_OType_PP,      // Push/Pull
+    .GPIO_PuPd = GPIO_PuPd_NOPULL,    // no pull-up
+  };
+  GPIO_Init(GPIOF, &gpio_init_f);
 
   EXTMODULE_TIMER->CCER |= TIM_CCER_CC2E;
 }

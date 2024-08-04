@@ -21,7 +21,7 @@
 #include "opentx.h"
 
 #if defined(PXX2)
-#include "io/pxx2.h"
+#define PXX2_PERIOD              4 // 4ms
 #include "pulses/pxx2.h"
 #endif
 #include "mixer_scheduler.h"

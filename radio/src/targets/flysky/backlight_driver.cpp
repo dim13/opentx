@@ -22,31 +22,33 @@
 
 void backlightInit()
 {
-  GPIO_InitTypeDef GPIO_InitStructure;
-  GPIO_InitStructure.GPIO_Pin = BACKLIGHT_GPIO_PIN;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_PuPd  = GPIO_PuPd_NOPULL;
-  GPIO_Init(BACKLIGHT_GPIO, &GPIO_InitStructure);
-  GPIO_PinAFConfig(BACKLIGHT_GPIO, BACKLIGHT_GPIO_PinSource, BACKLIGHT_GPIO_AF);
+  GPIO_InitTypeDef gpio_init_c = {
+    .GPIO_Pin = GPIO_Pin_9,
+    .GPIO_Mode = GPIO_Mode_AF,
+    .GPIO_Speed = GPIO_Speed_Level_1, // 2MHz
+    .GPIO_OType = GPIO_OType_PP,      // Push/Pull
+    .GPIO_PuPd = GPIO_PuPd_NOPULL,    // no pull-up
+  };
+  GPIO_Init(GPIOC, &gpio_init_c);
+  GPIO_PinAFConfig(GPIOC, GPIO_PinSource9, GPIO_AF_0);
 
-  BACKLIGHT_TIMER->ARR = 100;
-  BACKLIGHT_TIMER->PSC = BACKLIGHT_TIMER_FREQ / 50000 - 1; // 20us * 100 = 2ms => 500Hz
-  BACKLIGHT_TIMER->CCMR2 = BACKLIGHT_CCMR2; // PWM
-  BACKLIGHT_TIMER->CCER = BACKLIGHT_CCER;
-  BACKLIGHT_COUNTER_REGISTER = 100;
-  BACKLIGHT_TIMER->EGR = 0;
-  BACKLIGHT_TIMER->CR1 = TIM_CR1_CEN;  // Counter enable
+  TIM3->ARR = 100;
+  TIM3->PSC = BACKLIGHT_TIMER_FREQ / 50000 - 1; // 20us * 100 = 2ms => 500Hz
+  TIM3->CCMR2 = BACKLIGHT_CCMR2; // PWM
+  TIM3->CCER = BACKLIGHT_CCER;
+  TIM3->CCR4 = 100;
+  TIM3->EGR = 0;
+  TIM3->CR1 = TIM_CR1_CEN;  // Counter enable
 
   // std
-  GPIO_InitTypeDef gpio_init;
-  gpio_init.GPIO_Mode  = GPIO_Mode_OUT;
-  gpio_init.GPIO_OType = GPIO_OType_PP;
-  gpio_init.GPIO_Speed = GPIO_Speed_2MHz;
-  gpio_init.GPIO_PuPd  = GPIO_PuPd_NOPULL;
-  gpio_init.GPIO_Pin   = BACKLIGHT_STD_GPIO_PIN;
-  GPIO_Init(BACKLIGHT_STD_GPIO, &gpio_init);
+  GPIO_InitTypeDef gpio_init_f = {
+    .GPIO_Pin = GPIO_Pin_3,
+    .GPIO_Mode = GPIO_Mode_OUT,
+    .GPIO_Speed = GPIO_Speed_Level_1, // 2MHz
+    .GPIO_OType = GPIO_OType_PP,      // Push/Pull
+    .GPIO_PuPd = GPIO_PuPd_NOPULL,    // no pull-up
+  };
+  GPIO_Init(GPIOF, &gpio_init_f);
 }
 
 void backlightEnable(uint8_t level)

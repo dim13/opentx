@@ -33,7 +33,7 @@ enum FrSkyDataState {
 
 #if defined(PXX2)
 #include "io/pxx2.h"
-#define FRSKY_SPORT_BAUDRATE      PXX2_BAUDRATE
+#define FRSKY_SPORT_BAUDRATE      230400
 #else
 #define FRSKY_SPORT_BAUDRATE      57600
 #endif
