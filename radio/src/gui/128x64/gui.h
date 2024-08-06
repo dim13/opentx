@@ -348,11 +348,7 @@ void showAlertBox(const char * title, const char * text, const char * action , u
 
 void editCurveRef(coord_t x, coord_t y, CurveRef & curve, event_t event, LcdFlags flags);
 
-#if defined(FLIGHT_MODES)
 void displayFlightModes(coord_t x, coord_t y, FlightModesType value);
 FlightModesType editFlightModes(coord_t x, coord_t y, event_t event, FlightModesType value, uint8_t attr);
-#else
-#define displayFlightModes(...)
-#endif
 
 #endif // _GUI_H_

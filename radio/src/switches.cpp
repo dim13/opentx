@@ -401,15 +401,11 @@ bool getSwitch(swsrc_t swtch, uint8_t flags)
     result = TELEMETRY_STREAMING();
   }
   else if (cs_idx >= SWSRC_FIRST_FLIGHT_MODE) {
-#if defined(FLIGHT_MODES)
     uint8_t idx = cs_idx - SWSRC_FIRST_FLIGHT_MODE;
     if (flags & GETSWITCH_MIDPOS_DELAY)
       result = (idx == flightModeTransitionLast);
     else
       result = (idx == mixerCurrentFlightMode);
-#else
-    result = false;
-#endif
    }
   else {
     cs_idx -= SWSRC_FIRST_LOGICAL_SWITCH;

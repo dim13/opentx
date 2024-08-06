@@ -88,11 +88,7 @@
 
   #define CASE_HELI(x)
 
-#if defined(FLIGHT_MODES)
   #define CASE_FLIGHT_MODES(x) x,
-#else
-  #define CASE_FLIGHT_MODES(x)
-#endif
 
 #if defined(GVARS)
   #define CASE_GVARS(x) x,
@@ -336,11 +332,7 @@ swsrc_t getMovedSwitch();
 int8_t getMovedSource(GET_MOVED_SOURCE_PARAMS);
 #define GET_MOVED_SOURCE(min, max) getMovedSource(min)
 
-#if defined(FLIGHT_MODES)
   extern uint8_t getFlightMode();
-#else
-  #define getFlightMode() 0
-#endif
 
 #define getTrimFlightMode(phase, idx) (phase)
 

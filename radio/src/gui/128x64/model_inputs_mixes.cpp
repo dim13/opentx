@@ -281,11 +281,9 @@ void menuModelExpoOne(event_t event)
         }
         break;
 
-#if defined(FLIGHT_MODES)
       case EXPO_FIELD_FLIGHT_MODES:
         ed->flightModes = editFlightModes(EXPO_ONE_2ND_COLUMN-EXPO_ONE_FM_WIDTH, y, event, ed->flightModes, attr);
         break;
-#endif
 
       case EXPO_FIELD_SWITCH:
         ed->swtch = editSwitch(EXPO_ONE_2ND_COLUMN-3*FW, y, ed->swtch, attr, event);
@@ -466,11 +464,9 @@ void menuModelMixOne(event_t event)
         }
         break;
       }
-#if defined(FLIGHT_MODES)
       case MIX_FIELD_FLIGHT_PHASE:
         md2->flightModes = editFlightModes(COLUMN_X+MIXES_2ND_COLUMN, y, event, md2->flightModes, attr);
         break;
-#endif
       case MIX_FIELD_SWITCH:
         md2->swtch = editSwitch(COLUMN_X+MIXES_2ND_COLUMN, y, md2->swtch, attr, event);
         break;

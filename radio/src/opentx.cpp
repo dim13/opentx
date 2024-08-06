@@ -353,7 +353,7 @@ void modelDefault(uint8_t id) {
   checkModelIdUnique(id, 0);
 #endif
 
-#if defined(FLIGHT_MODES) && defined(GVARS)
+#if defined(GVARS)
   for (int p = 1; p < MAX_FLIGHT_MODES; p++) {
     for (int i = 0; i < MAX_GVARS; i++) {
       g_model.flightModeData[p].gvars[i] = GVAR_MAX + 1;
@@ -423,7 +423,6 @@ int8_t getMovedSource(GET_MOVED_SOURCE_PARAMS) {
 }
 #endif
 
-#if defined(FLIGHT_MODES)
 uint8_t getFlightMode() {
   for (uint8_t i = 1; i < MAX_FLIGHT_MODES; i++) {
     FlightModeData *phase = &g_model.flightModeData[i];
@@ -433,7 +432,6 @@ uint8_t getFlightMode() {
   }
   return 0;
 }
-#endif
 
 trim_t getRawTrimValue(uint8_t phase, uint8_t idx) {
   FlightModeData *p = flightModeAddress(phase);

@@ -25,7 +25,6 @@ void lcdDrawMMM(coord_t x, coord_t y, LcdFlags flags)
   lcdDrawTextAtIndex(x, y, STR_MMMINV, 0, flags);
 }
 
-#if defined(FLIGHT_MODES)
 void drawFlightMode(coord_t x, coord_t y, int8_t idx, LcdFlags att)
 {
   if (idx==0) {
@@ -45,4 +44,3 @@ void drawFlightMode(coord_t x, coord_t y, int8_t idx, LcdFlags att)
 #endif
   drawStringWithIndex(x, y, STR_FM, idx-1, att);
 }
-#endif

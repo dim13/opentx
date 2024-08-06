@@ -140,7 +140,6 @@ void menuModelExpoOne(event_t event)
         editCurveRef(EXPO_ONE_2ND_COLUMN, y, ed->curve, s_editMode > 0 ? event : 0, RIGHT | attr);
         break;
 
-#if defined(FLIGHT_MODES)
       case EXPO_FIELD_FLIGHT_MODES_LABEL:
         lcdDrawTextAlignedLeft(y, STR_FLMODE);
         break;
@@ -148,7 +147,6 @@ void menuModelExpoOne(event_t event)
       case EXPO_FIELD_FLIGHT_MODES:
         ed->flightModes = editFlightModes(EXPO_ONE_2ND_COLUMN-9*FW+1, y, event, ed->flightModes, attr);
         break;
-#endif
 
       case EXPO_FIELD_SWITCH:
         ed->swtch = editSwitch(EXPO_ONE_2ND_COLUMN, y, ed->swtch, RIGHT | attr, event);

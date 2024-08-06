@@ -78,9 +78,7 @@ bool modelHasNotes();
 #define IS_INSTANT_TRIM_ALLOWED()      true
 #endif
 
-#if defined(FLIGHT_MODES)
 void drawFlightMode(coord_t x, coord_t y, int8_t idx, LcdFlags att=0);
-#endif
 
 swsrc_t checkIncDecMovedSwitch(swsrc_t val);
 
